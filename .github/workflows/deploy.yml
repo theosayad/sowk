@@ -1,7 +1,7 @@
 name: Deploy Astro site to GitHub Pages
 
 on:
-  push: 
+  push:
     branches: [main]
 
 permissions:
@@ -10,14 +10,14 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: "pages"
   cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Node
@@ -28,10 +28,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build Astro
+      - name: Build site with Astro
         run: npm run build
 
-      - name: Upload GitHub Pages artifact
+      - name: Upload static site to Pages
         uses: actions/upload-pages-artifact@v2
         with:
           path: ./dist
