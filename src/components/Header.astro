@@ -1,0 +1,176 @@
+---
+const toggleMenu = () => {
+  const nav = document.getElementById("nav-menu");
+  nav.classList.toggle("open");
+  const icon = document.getElementById("burger-icon");
+  icon.classList.toggle("open");
+};
+---
+
+<style>
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: box-shadow 0.3s ease, padding 0.3s ease;
+  }
+
+  header.scrolled {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem 1.25rem;
+  }
+
+  .nav-toggle {
+    display: none;
+    width: 30px;
+    height: 30px;
+    background: none;
+    border: none;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .nav-toggle span,
+  .nav-toggle span::before,
+  .nav-toggle span::after {
+    content: "";
+    display: block;
+    background-color: #1B2A41;
+    height: 3px;
+    border-radius: 2px;
+    position: absolute;
+    width: 100%;
+    transition: all 0.3s ease;
+  }
+
+  .nav-toggle span {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .nav-toggle span::before {
+    top: -10px;
+  }
+
+  .nav-toggle span::after {
+    top: 10px;
+  }
+
+  .nav-toggle.open span {
+    background-color: transparent;
+  }
+
+  .nav-toggle.open span::before {
+    top: 0;
+    transform: rotate(45deg);
+  }
+
+  .nav-toggle.open span::after {
+    top: 0;
+    transform: rotate(-45deg);
+  }
+
+  #nav-menu {
+    display: flex;
+    gap: 1.5rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+  }
+
+  #nav-menu a {
+    transition: color 0.2s ease;
+  }
+
+  #nav-menu a:hover {
+    color: #F4B942;
+  }
+
+  @media (max-width: 768px) {
+    .nav-toggle {
+      display: block;
+    }
+
+    #nav-menu {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid #ddd;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      padding: 1.5rem 2rem; /* Added spacing inside dropdown */
+    }
+
+    #nav-menu.open {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .logo {
+    height: 90px;
+    transition: height 0.3s ease;
+  }
+
+  @media (max-width: 1024px) {
+    .logo {
+      height: 60px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .logo {
+      height: 70px;
+    }
+  }
+
+</style>
+
+<header id="site-header">
+  <a href="/">
+    <img
+  src="/images/sowk_logo-min.png"
+  alt="SOWK logo"
+  class="logo"
+/>
+
+  </a>
+
+  <button class="nav-toggle" id="burger-icon" onclick="document.getElementById('nav-menu').classList.toggle('open'); this.classList.toggle('open')">
+    <span></span>
+  </button>
+
+  <nav id="nav-menu">
+    <a href="/">Home</a>
+    <a href="/gallery">Gallery</a>
+    <a href="/experience">Experience</a>
+    <a href="/contact">Contact</a>
+  </nav>
+</header>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const header = document.getElementById('site-header');
+    if (window.scrollY > 10) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+</script>

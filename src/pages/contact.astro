@@ -1,0 +1,31 @@
+---
+import Layout from '../layouts/Default.astro';
+---
+
+<Layout title="Contact · SOWK">
+  <h1 style="margin:2rem 0;">Get in touch</h1>
+
+  <p style="margin-bottom:1.5rem;max-width:540px;">
+    For availability and pricing, message us directly on Instagram.<br />
+    We usually reply within a few hours.
+  </p>
+
+  <a class="btn" href="https://instagram.com/sowk.smarjbeil" target="_blank">
+    Book via Instagram
+  </a>
+
+  <hr style="margin:3rem 0;" />
+
+  <h2 style="margin-bottom:1rem;">Or use the form below</h2>
+
+  <form
+    action="https://formspree.io/f/xpwrygqr"
+    method="POST"
+    style="display:grid;gap:1rem;max-width:500px;"
+  >
+    <input type="text" name="name" placeholder="Name" required />
+    <input type="email" name="_replyto" placeholder="Email" required />
+    <textarea rows="4" name="message" placeholder="Your message" required></textarea>
+    <button type="submit" class="btn">Send Enquiry</button>
+  </form>
+</Layout>
