@@ -3,7 +3,7 @@
   Front-matter
   ──────────────────────────────────────────────────────────────
   • Same toggleMenu helper you asked to keep
-  • `base` makes links work in dev ( / ) *and* on GitHub Pages ( /sowk/ )
+  • Removed `base` because Netlify serves from root — no subfolder
 */
 const toggleMenu = () => {
   const nav  = document.getElementById('nav-menu');
@@ -11,8 +11,6 @@ const toggleMenu = () => {
   nav?.classList.toggle('open');
   icon?.classList.toggle('open');
 };
-
-const base = import.meta.env.BASE_URL;   // "/" locally, "/sowk/" in prod
 ---
 
 <style>
@@ -111,7 +109,7 @@ const base = import.meta.env.BASE_URL;   // "/" locally, "/sowk/" in prod
 
 <header id="site-header">
   <!-- logo served straight from /public/images -->
-  <a href={base}>
+  <a href="/">
     <img src="/images/sowk_logo-min.png" alt="SOWK logo" class="logo" />
   </a>
 
@@ -122,10 +120,10 @@ const base = import.meta.env.BASE_URL;   // "/" locally, "/sowk/" in prod
 
   <!-- navigation -->
   <nav id="nav-menu">
-    <a href={base}>Home</a>
-    <a href={`${base}gallery`}>Gallery</a>
-    <a href={`${base}experience`}>Experience</a>
-    <a href={`${base}contact`}>Contact</a>
+    <a href="/">Home</a>
+    <a href="/gallery">Gallery</a>
+    <a href="/experience">Experience</a>
+    <a href="/contact">Contact</a>
   </nav>
 </header>
 
