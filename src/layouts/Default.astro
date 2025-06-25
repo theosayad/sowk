@@ -1,6 +1,5 @@
 ---
-/* Default site-wide layout */
-const BASE = import.meta.env.BASE_URL;   // "/" in dev, "/sowk/" in prod
+const BASE = import.meta.env.BASE_URL; // Optional if base is "/" — but fine to keep
 ---
 
 <!DOCTYPE html>
@@ -9,21 +8,17 @@ const BASE = import.meta.env.BASE_URL;   // "/" in dev, "/sowk/" in prod
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- favicon, manifest, etc. -->
-    <link rel="icon" href={`${BASE}images/favicon.svg`} />
-    <!-- if you have more icons, use the same BASE prefix -->
-    <!-- <link rel="apple-touch-icon" sizes="180x180" href={`${BASE}images/apple-touch-icon.png`} /> -->
+    <!-- favicon -->
+    <link rel="icon" href="/images/favicon.svg" />
 
+    <!-- page title -->
     <title><slot name="title" /> | SOWK</title>
 
-    <!-- site-wide styles -->
-    <link rel="stylesheet" href={`${BASE}styles/global.css`} />
+    <!-- global stylesheet -->
+    <link rel="stylesheet" href="/styles/global.css" />
   </head>
 
   <body>
-    <!-- page content -->
     <slot />
-
-    <!-- optional footer -->
   </body>
 </html>
