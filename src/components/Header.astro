@@ -66,13 +66,15 @@ const toggleMenu = () => {
     display: block;
   }
 
+@media (max-width: 768px) {
+  .nav-toggle { display: block; }
+
   #nav-menu {
     display: none;
     flex-direction: column;
     position: absolute;
-    /* push it 0.5rem below the header */
-    top: 100%;
-    margin-top: 0.5rem;
+    /* push it down by an extra 0.5rem so it clears the header */
+    top: calc(100% + 0.5rem);
     left: 0;
     width: 100%;
     background: rgba(255, 255, 255, 0.95);
@@ -85,13 +87,13 @@ const toggleMenu = () => {
     transition: all 0.3s ease;
     padding: 1.5rem 2rem; /* spacing inside dropdown */
   }
-
   #nav-menu.open {
     display: flex;
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 
 </style>
 
