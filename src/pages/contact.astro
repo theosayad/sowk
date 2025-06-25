@@ -1,11 +1,18 @@
 ---
+/*
+  Contact page
+  ─────────────────────────────────────────────────────
+  • Instagram CTA + fallback form via Formspree
+  • Safe for static output — no base issues
+  • Uses Layout component (already Netlify-cleaned)
+*/
 import Layout from '../layouts/Default.astro';
 ---
 
 <Layout title="Contact · SOWK">
   <h1 style="margin:2rem 0;">Get in touch</h1>
 
-  <p style="margin-bottom:1.5rem;max-width:540px;">
+  <p style="margin-bottom:1.5rem; max-width:540px;">
     For availability and pricing, message us directly on Instagram.<br />
     We usually reply within a few hours.
   </p>
@@ -21,7 +28,7 @@ import Layout from '../layouts/Default.astro';
   <form
     action="https://formspree.io/f/xpwrygqr"
     method="POST"
-    style="display:grid;gap:1rem;max-width:500px;"
+    style="display:grid; gap:1rem; max-width:500px;"
   >
     <input type="text" name="name" placeholder="Name" required />
     <input type="email" name="_replyto" placeholder="Email" required />
