@@ -2,7 +2,7 @@
 import Layout from '../../../layouts/Default.astro';
 import activities from '../../../data/activities.json' assert { type: 'json' };
 
-/* ── helpers ──────────────────────────────────────────────── */
+/* ── helper (function-form = hoisted, always defined) ── */
 function slugify(str) {
   return str
     .toLowerCase()
@@ -10,46 +10,82 @@ function slugify(str) {
     .replace(/(^-|-$)/g, '');
 }
 
-/* ── 1. build-time paths for every category ───────────────── */
+/* ── 1. dynamic paths for every category ── */
 export function getStaticPaths() {
   const cats = [...new Set(activities.map(a => a.category).filter(Boolean))];
   return cats.map(cat => ({ params: { cat: slugify(cat) } }));
 }
 
-/* ── 2. data for this specific page ───────────────────────── */
-const { cat } = Astro.params;
-const list = activities.filter(a => slugify(a.category || '') === cat);
-const humanCat = list.length ? list[0].category : cat.replace(/-/g, ' ');
+/* ── 2. data for *this* category page ── */
+const { cat }   = Astro.params;
+const list      = activities.filter(a => slugify(a.category || '') === cat);
+const humanCat  = list.length ? list[0].category : cat.replace(/-/g, ' ');
 ---
 
 <Layout title={`${humanCat} · SOWK`}>
-  <h1 style="padding:2rem 2.5rem;font-family:Poppins,sans-serif;">
-    {humanCat}
-  </h1>
+  <h1 class="cat-title">{humanCat}</h1>
 
-  <div
-    style="
-      display:grid;
-      gap:1.5rem;
-      padding:0 2.5rem 3rem;
-      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    "
-  >
+  <div class="cat-grid">
     {list.map(a => (
-      <a href={`/experience/${a.slug}`}
-         style="color:inherit;text-decoration:none;border-radius:.75rem;overflow:hidden;
-                background:#fff;box-shadow:0 12px 32px rgba(0,0,0,.06);">
-        <img src={a.image} alt={a.name}
-             style="width:100%;height:180px;object-fit:cover;">
-        <div style="padding:1rem;">
-          <h2 style="font-size:1.1rem;font-weight:600;margin-bottom:.4rem;">
-            {a.name}
-          </h2>
-          <p style="font-size:.85rem;color:#667;">
-            {a.distance.toFixed(1)}&nbsp;km&nbsp;away
-          </p>
+      <a href={`/experience/${a.slug}`} class="cat-card">
+        <img src={a.image} alt={a.name} loading="lazy" />
+
+        <div class="cat-body">
+          <h2>{a.name}</h2>
+          <p>{a.distance.toFixed(1)}&nbsp;km&nbsp;away</p>
         </div>
       </a>
     ))}
   </div>
 </Layout>
+
+<style>
+/* global Poppins override */
+body,h1,h2,p,a{font-family:Poppins,sans-serif}
+
+/* page title */
+.cat-title{
+  padding:2rem 2.5rem;
+  font-size:2rem;
+  font-weight:700;
+}
+
+/* masonry-like responsive grid */
+.cat-grid{
+  display:grid;
+  gap:1.5rem;
+  padding:0 2.5rem 3rem;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+}
+
+/* card */
+.cat-card{
+  display:flex;
+  flex-direction:column;
+  background:#fff;
+  border-radius:.8rem;
+  overflow:hidden;
+  text-decoration:none;
+  color:inherit;
+  box-shadow:0 12px 32px rgba(0,0,0,.06);
+  transition:transform .25s ease;
+}
+.cat-card:hover{transform:translateY(-4px)}
+
+.cat-card img{
+  width:100%;
+  height:170px;
+  object-fit:cover;
+}
+
+.cat-body{padding:1rem}
+.cat-body h2{
+  font-size:1rem;
+  font-weight:600;
+  margin:.3rem 0;
+}
+.cat-body p{
+  font-size:.85rem;
+  color:#667;
+}
+</style>
