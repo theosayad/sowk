@@ -1,0 +1,51 @@
+---
+import Layout from '../../layouts/Default.astro';
+import activities from '../../data/activities.json' assert { type: 'json' };
+
+const { slug } = Astro.params;
+const activity = activities.find(a => a.slug === slug);
+
+if (!activity) throw new Error(`Activity "${slug}" not found`);
+---
+
+<Layout title={`${activity.name} · SOWK`}>
+  <article class="activity-detail">
+    <img
+      src={activity.image}
+      alt={activity.name}
+      class="activity-hero"
+      width="1200"
+      height="600"
+    />
+
+    <h1>{activity.name}</h1>
+    <p class="activity-meta">
+      {activity.location} · {activity.distance.toFixed(1)} km
+    </p>
+
+    <p class="activity-copy">{activity.copy}</p>
+
+    <a href={activity.link} target="_blank" rel="noopener" class="more-link">
+      Official page / source ↗
+    </a>
+  </article>
+
+  <a href="/experience" class="back-link">← Back to all experiences</a>
+</Layout>
+
+<style>
+body, h1, p, a { font-family:'Poppins', sans-serif; }
+
+.activity-detail   { max-width:780px; margin:3rem auto; padding:0 1rem; }
+.activity-hero     { width:100%; border-radius:1rem; object-fit:cover; }
+
+h1                 { font-size:2rem; margin:1.5rem 0 0.75rem; }
+.activity-meta     { color:#667; margin-bottom:1.5rem; }
+
+.activity-copy     { font-size:1.05rem; line-height:1.8; margin-bottom:2rem; }
+.more-link         { font-weight:600; color:#c89a2a; text-decoration:none; }
+.more-link:hover   { text-decoration:underline; }
+
+.back-link         { display:block; text-align:center; margin:3rem 0 4rem;
+                     color:#294534; font-weight:600; }
+</style>
