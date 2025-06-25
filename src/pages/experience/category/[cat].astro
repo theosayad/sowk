@@ -1,85 +1,102 @@
 ---
-/*  ⸺⸺ 1. Imports ⸺⸺ */
 import Layout from '../../../layouts/Default.astro';
 import activities from '../../../data/activities.json' assert { type: 'json' };
 
-/*  ⸺⸺ 2. Helper (DECLARATION form → hoisted) ⸺⸺ */
-function slugify(str) {
-  return str
+/** helper to turn “My Category” → “my-category” */
+const slugify = (s: string) =>
+  s
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
+
+/** Tell Astro which slugs to build at compile time */
+export async function getStaticPaths() {
+  const categories = [
+    ...new Set(activities.map((a) => a.category).filter(Boolean))
+  ];
+  return categories.map((cat) => ({
+    params: { cat: slugify(cat) }
+  }));
 }
 
-/*  ⸺⸺ 3. Dynamic paths for every category ⸺⸺ */
-export function getStaticPaths() {
-  const cats = [...new Set(activities.map(a => a.category).filter(Boolean))];
-  return cats.map(cat => ({ params: { cat: slugify(cat) } }));
-}
-
-/*  ⸺⸺ 4. Data for this category page ⸺⸺ */
+// Grab the requested slug from the URL
 const { cat } = Astro.params;
-const list    = activities.filter(a => slugify(a.category || '') === cat);
-const title   = list.length ? list[0].category : cat.replace(/-/g, ' ');
+// Recover the human-readable category name
+const decodedCategory = [
+  ...new Set(activities.map((a) => a.category).filter(Boolean))
+].find((c) => slugify(c) === cat);
 ---
 
-<Layout title={`${title} · SOWK`}>
-  <h1 class="cat-title">{title}</h1>
+<Layout title={`Experience · ${decodedCategory}`}>
+  <section class="experience-hero">
+    <h1>Things to do in &amp; around {decodedCategory}</h1>
+  </section>
 
-  <div class="cat-grid">
-    {list.map(a => (
-      <a href={`/experience/${a.slug}`} class="cat-card">
-        <img src={a.image} alt={a.name} loading="lazy" />
-
-        <div class="cat-body">
-          <h2>{a.name}</h2>
-          <p>{a.distance.toFixed(1)} km&nbsp;away</p>
-        </div>
-      </a>
+  <div class="experience-grid">
+    {activities
+      .filter((a) => a.category === decodedCategory)
+      .map((a) => (
+        <a href={`/experience/${a.slug}`} class="experience-card">
+          <img
+            src={a.image}
+            alt={a.name}
+            class="experience-thumb"
+            loading="lazy"
+            width="300"
+            height="200"
+          />
+          <h3>{a.name}</h3>
+          <p class="experience-meta">{a.distance.toFixed(1)} km away</p>
+          <span class="experience-link">More info ↗</span>
+        </a>
     ))}
   </div>
 </Layout>
 
 <style>
-/* force Poppins everywhere */
-body,h1,h2,p,a{font-family:Poppins,sans-serif}
+  /* keep Poppins everywhere */
+  body, h1, h3, p, a { font-family: 'Poppins', sans-serif; }
 
-/* title */
-.cat-title{
-  padding:2rem 2.5rem;
-  font-size:2rem;
-  font-weight:700;
-}
+  .experience-hero    { text-align:center; margin:4rem 0 2rem; }
+  .experience-hero h1 { font-size:2.2rem; font-weight:700; }
 
-/* responsive grid */
-.cat-grid{
-  display:grid;
-  gap:1.5rem;
-  padding:0 2.5rem 3rem;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-}
+  .experience-grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    padding: 0 2rem; /* extra side padding */
+  }
 
-/* card */
-.cat-card{
-  display:flex;
-  flex-direction:column;
-  background:#fff;
-  border-radius:.8rem;
-  overflow:hidden;
-  text-decoration:none;
-  color:inherit;
-  box-shadow:0 12px 32px rgba(0,0,0,.06);
-  transition:transform .25s ease;
-}
-.cat-card:hover{transform:translateY(-4px)}
+  .experience-card {
+    background:#fff;
+    border-radius:0.75rem;
+    overflow:hidden;
+    box-shadow:0 12px 32px rgba(0,0,0,0.06);
+    display:flex;
+    flex-direction:column;
+    cursor:pointer;
+    transition:transform .2s ease;
+  }
+  .experience-card:hover { transform:translateY(-4px); }
 
-.cat-card img{
-  width:100%;
-  height:170px;
-  object-fit:cover;
-}
+  .experience-thumb { width:100%; height:160px; object-fit:cover; }
 
-.cat-body{padding:1rem}
-.cat-body h2{font-size:1rem;font-weight:600;margin:.3rem 0}
-.cat-body p{font-size:.85rem;color:#667}
+  .experience-card h3 {
+    font-size:1.1rem;
+    font-weight:600;
+    margin:0.75rem 1rem 0.25rem;
+  }
+  .experience-meta {
+    font-size:0.85rem;
+    color:#667;
+    margin:0 1rem 0.75rem;
+  }
+  .experience-link {
+    margin: auto 1rem 1rem;
+    font-size:0.9rem;
+    font-weight:600;
+    color:#c89a2a;
+    text-decoration:none;
+  }
+  .experience-link:hover { text-decoration:underline; }
 </style>
