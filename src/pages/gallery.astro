@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Default.astro';
+import { Astro } from 'astro';
 
 const images = [
   'pool.jpg',
@@ -9,12 +10,18 @@ const images = [
   'citadel.jpg',
   'breakfast.jpg'
 ];
----
 
+const getWebp = (file) => file.replace('.jpg', '.webp');
+const resolveImagePath = (file) => Astro.resolve(`/images/${file}`);
+---
 <Layout title="Gallery · SOWK">
   <h1 style="margin:2rem 0;">Photo Gallery</h1>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;">
     {images.map((file) => (
       <picture>
-        <source srcset={`/images/${file.replace('.jpg', '.webp')}`} type="image/webp" />
-        <img
+        <source srcSet={Astro.resolve(`/images/${getWebp(file)}`)} type="image/webp" />
+        <img src={Astro.resolve(`/images/${file}`)} alt={file.split('.')[0]} style="width:100%;border-radius:8px;" />
+      </picture>
+    ))}
+  </div>
+</Layout>

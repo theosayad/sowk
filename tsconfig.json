@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
     "jsx": "preserve",
-    "jsxImportSource": "astro"
+    "jsxImportSource": "astro",
+    "allowJs": true,
+    "moduleResolution": "bundler",
+    "types": ["astro/client"]
   },
-  "include": [".astro/types.d.ts", "**/*"],
+  "include": ["src", "astro.config.mjs", "env.d.ts"],
   "exclude": ["dist"]
 }
