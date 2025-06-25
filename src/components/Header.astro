@@ -1,10 +1,8 @@
 ---
 /*
-  Header (Moroseta-inspired)
-  ─────────────────────────────────────────────────────
-  • Logo centered, hamburger on left
-  • Taller header
-  • Mobile-optimized
+  Header ─ Moroseta-inspired navbar
+  • Mobile: hamburger left, centred logo
+  • Desktop: centred logo, nav flush right
 */
 const toggleMenu = () => {
   const nav  = document.getElementById('nav-menu');
@@ -15,141 +13,82 @@ const toggleMenu = () => {
 ---
 
 <style>
-  header {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    background: rgba(255, 255, 255, 0.96);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    padding: 1rem 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100px;
-    transition: box-shadow 0.3s ease, padding 0.3s ease;
+  /* ───────────── header shell ───────────── */
+  header{
+    position:sticky;top:0;z-index:20;
+    background:rgba(255,255,255,.96);backdrop-filter:blur(10px);
+    padding:1rem 1.5rem;height:100px;
+    display:flex;justify-content:center;align-items:center;
+    transition:box-shadow .3s ease,padding .3s ease;
+  }
+  header.scrolled{box-shadow:0 2px 12px rgba(0,0,0,.06);}
+
+  /* container lets us absolutely-position menu + burger */
+  .nav-container{
+    position:relative;width:100%;max-width:1280px;
+    display:flex;justify-content:center;align-items:center;
   }
 
-  header.scrolled {
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  }
+  /* ───────────── logo ───────────── */
+  .logo{height:72px;transition:height .3s;}
+  @media(max-width:640px){.logo{height:80px;}}
 
-  .nav-container {
-    position: relative;
-    width: 100%;
-    max-width: 1280px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  /* ───────────── burger ───────────── */
+  .nav-toggle{
+    position:absolute;left:0;top:50%;transform:translateY(-50%);
+    display:none;width:30px;height:30px;border:none;background:none;cursor:pointer;z-index:30;
   }
-
-  .logo {
-    height: 72px;
-    transition: height 0.3s ease;
-  }
-
-  .nav-toggle {
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    display: none;
-    width: 30px;
-    height: 30px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    z-index: 30;
-  }
-
   .nav-toggle span,
   .nav-toggle span::before,
-  .nav-toggle span::after {
-    content: "";
-    display: block;
-    background-color: #1B2A41;
-    height: 3px;
-    border-radius: 2px;
-    position: absolute;
-    width: 100%;
-    transition: all 0.3s ease;
+  .nav-toggle span::after{
+    content:"";display:block;width:100%;height:3px;border-radius:2px;
+    background:#1B2A41;position:absolute;transition:all .3s;
   }
+  .nav-toggle span{top:50%;transform:translateY(-50%);}
+  .nav-toggle span::before{top:-10px;}
+  .nav-toggle span::after {top: 10px;}
+  .nav-toggle.open span      {background:transparent;}
+  .nav-toggle.open span::before{top:0;transform:rotate(45deg);}
+  .nav-toggle.open span::after {top:0;transform:rotate(-45deg);}
 
-  .nav-toggle span {
-    top: 50%;
-    transform: translateY(-50%);
+  /* ───────────── nav links ───────────── */
+  #nav-menu{
+    display:flex;gap:1.5rem;font:500 1rem "Poppins",sans-serif;
+    position:absolute;right:0;top:50%;transform:translateY(-50%);
   }
-  .nav-toggle span::before { top: -10px; }
-  .nav-toggle span::after  { top:  10px; }
+  /* link styling */
+  #nav-menu a{color:#1B2A41;text-decoration:none;transition:color .2s;}
+  #nav-menu a:hover{color:#F4B942;}
 
-  .nav-toggle.open span       { background-color: transparent; }
-  .nav-toggle.open span::before { top: 0; transform: rotate(45deg); }
-  .nav-toggle.open span::after  { top: 0; transform: rotate(-45deg); }
-
-  #nav-menu {
-    display: flex;
-    gap: 1.5rem;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 500;
-    font-size: 1rem;
-  }
-
-  #nav-menu a {
-    transition: color 0.2s ease;
-  }
-
-  #nav-menu a:hover {
-    color: #F4B942;
-  }
-
-  @media (max-width: 768px) {
-    .nav-toggle {
-      display: block;
+  /* ───────────── mobile dropdown ───────────── */
+  @media(max-width:768px){
+    .nav-toggle{display:block;}          /* show burger */
+    #nav-menu{
+      position:fixed;         /* take full viewport */
+      top:100px;left:0;right:0;
+      flex-direction:column;align-items:center;
+      background:rgba(255,255,255,.96);backdrop-filter:blur(10px);
+      border-top:1px solid #ddd;border-radius:0 0 12px 12px;
+      box-shadow:0 10px 20px rgba(0,0,0,.05);
+      padding:1.5rem 2rem;gap:1.25rem;
+      opacity:0;transform:translateY(-10px);
+      transition:opacity .3s,transform .3s;
     }
-
-    #nav-menu {
-      display: none;
-      flex-direction: column;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 100%;
-      background: rgba(255, 255, 255, 0.96);
-      backdrop-filter: blur(10px);
-      border-top: 1px solid #ddd;
-      border-radius: 0 0 12px 12px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-      opacity: 0;
-      transform: translateY(-10px);
-      transition: all 0.3s ease;
-      padding: 1.5rem 2rem;
-      z-index: 20;
-    }
-
-    #nav-menu.open {
-      display: flex;
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @media (max-width: 640px) {
-    .logo {
-      height: 80px;
+    #nav-menu.open{
+      opacity:1;transform:translateY(0);
     }
   }
 </style>
 
 <header id="site-header">
   <div class="nav-container">
-    <button class="nav-toggle" id="burger-icon" onclick="toggleMenu()">
-      <span></span>
-    </button>
+    <!-- hamburger -->
+    <button class="nav-toggle" id="burger-icon" onclick="toggleMenu()"><span></span></button>
 
-    <a href="/">
-      <img src="/images/sowk_logo-min.png" alt="SOWK logo" class="logo" />
-    </a>
+    <!-- centred logo -->
+    <a href="/"><img src="/images/sowk_logo-min.png" alt="SOWK logo" class="logo"/></a>
 
+    <!-- desktop nav / mobile dropdown -->
     <nav id="nav-menu">
       <a href="/">Home</a>
       <a href="/gallery">Gallery</a>
@@ -160,15 +99,14 @@ const toggleMenu = () => {
 </header>
 
 <script is:inline>
-  function toggleMenu () {
-    const nav  = document.getElementById('nav-menu');
-    const icon = document.getElementById('burger-icon');
+  function toggleMenu(){
+    const nav=document.getElementById('nav-menu');
+    const icon=document.getElementById('burger-icon');
     nav?.classList.toggle('open');
     icon?.classList.toggle('open');
   }
-
-  window.addEventListener('scroll', () => {
+  window.addEventListener('scroll',()=>{
     document.getElementById('site-header')
-            .classList.toggle('scrolled', window.scrollY > 10);
+            .classList.toggle('scrolled',window.scrollY>10);
   });
 </script>
