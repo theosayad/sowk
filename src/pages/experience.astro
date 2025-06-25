@@ -2,104 +2,93 @@
 import Layout from '../layouts/Default.astro';
 import activities from '../data/activities.json' assert { type: 'json' };
 
-/* remove empty / undefined categories */
+/* helper to slug-ify any string (for category URLs) */
+const slugify = (s) =>
+  s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+/* unique, non-empty category list */
 const categories = [
-  ...new Set(activities.map(a => a.category).filter(Boolean))
+  ...new Set(activities.map((a) => a.category).filter(Boolean))
 ];
 ---
 
 <Layout title="Experience · SOWK">
   <section class="experience-hero">
-    <h1>Things to do in &amp; around Smar Jbeil</h1>
+    <h1>Things to do in &amp; around Smar&nbsp;Jbeil</h1>
   </section>
 
-{categories.map(cat => {
-  /* build a URL-safe slug for the category itself */
-  const catSlug = cat.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  return (
+  {categories.map((cat) => (
     <>
+      <!-- category heading (links to future /experience/category/:slug page) -->
       <h2 class="experience-category">
-        <a href={`/experience/category/${catSlug}`} class="experience-catlink">{cat}</a>
+        <a href={`/experience/category/${slugify(cat)}`}>{cat}</a>
       </h2>
 
-      {/* horizontally scrollable strip (≈ 2–3 cards visible) */}
-      <div class="experience-strip" role="list">
+      <!-- horizontally scrollable row -->
+      <div class="experience-row">
         {activities
-          .filter(a => a.category === cat)
-          .map(a => (
-            <article class="experience-card horizontal" role="listitem">
+          .filter((a) => a.category === cat)
+          .map((a) => (
+            <article class="experience-card">
               <img
                 src={a.image}
                 alt={a.name}
                 class="experience-thumb"
                 loading="lazy"
-                width="320"
+                width="300"
                 height="200"
               />
 
-              <div class="experience-body">
-                <h3>{a.name}</h3>
-                <p class="experience-meta">
-                  {a.location} · {a.distance.toFixed(1)} km
-                </p>
-                <p class="experience-desc">{a.description}</p>
+              <h3>{a.name}</h3>
+              <p class="experience-meta">{a.distance.toFixed(1)}&nbsp;km&nbsp;away</p>
 
-                <a href={`/experience/${a.slug}`} class="experience-link">
-                  More&nbsp;info&nbsp;↗
-                </a>
-              </div>
+              <a href={`/experience/${a.slug}`} class="experience-link">
+                More info&nbsp;↗
+              </a>
             </article>
         ))}
       </div>
     </>
-  );
-})}
-
+  ))}
 </Layout>
 
 <style>
-/* ========== typography – force Poppins everywhere ========== */
+/* ========== global typography override ========== */
 body, h1, h2, h3, p, a { font-family:'Poppins', sans-serif; }
 
 /* ---------- hero ---------- */
-.experience-hero      { text-align:center; margin:4rem 0 2rem; }
-.experience-hero h1   { font-size:2.4rem; font-weight:700; }
+.experience-hero    { text-align:center; margin:4rem 0 2rem; }
+.experience-hero h1 { font-size:2.2rem; font-weight:700; line-height:1.25; }
 
-/* ───────── category heading ───────── */
-.experience-category   { padding-left: 1rem; margin-top: 3rem; }
-.experience-catlink    { color: inherit; text-decoration: none; }
-.experience-catlink:hover { text-decoration: underline; }
+/* ---------- category heading ---------- */
+.experience-category      { font-size:1.35rem; font-weight:600;
+                            margin:2.5rem 0 1rem; padding-left:1rem; }
+.experience-category a    { color:#294534; text-decoration:none; }
+.experience-category a:hover { text-decoration:underline; }
 
-/* ───────── horizontal strip ───────── */
-.experience-strip {
-  display: flex;
-  gap: 1rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding-inline: 1rem;
-  scroll-padding-inline: 1rem;
+/* ---------- horizontal row ---------- */
+.experience-row {
+  display:flex; gap:1rem;
+  overflow-x:auto; scroll-snap-type:x mandatory;
+  padding:0 1rem 0.5rem;
 }
-.experience-strip::-webkit-scrollbar { display:none; }
-.experience-strip { scrollbar-width:none; }
+.experience-row::-webkit-scrollbar { display:none; } /* hide on mobile Safari */
 
-/* ───────── compact card ───────── */
-.experience-card.horizontal {
-  min-width: 190px;          /* ≈ 2½ cards on a phone */
-  flex: 0 0 auto;
-  scroll-snap-align: start;
-  border-radius: .75rem;
+/* ---------- card ---------- */
+.experience-card {
+  flex:0 0 220px;            /* ~2½ cards on 414 px iPhone width */
+  scroll-snap-align:start;
+  background:#fff; border-radius:0.75rem; overflow:hidden;
+  box-shadow:0 12px 32px rgba(0,0,0,.06);
+  display:flex; flex-direction:column;
 }
-.experience-thumb           { width:100%; height:130px; object-fit:cover; }
+.experience-thumb  { width:100%; height:140px; object-fit:cover; }
 
-.experience-body            { padding:1rem; gap:.5rem; }
-.experience-body h3         { font-size:1rem; line-height:1.3; }
-.experience-meta            { font-size:.8rem; }
-.experience-desc            { font-size:.85rem; }
-
-@media (min-width:640px){                 /* tablets / desktop */
-  .experience-card.horizontal{ min-width:250px; }
-  .experience-thumb{ height:160px; }
-  .experience-body h3{ font-size:1.15rem; }
+.experience-card h3     { font-size:1rem; font-weight:600; margin:0.65rem 0 0.35rem; padding:0 0.8rem; }
+.experience-meta        { font-size:0.8rem; color:#667; padding:0 0.8rem; }
+.experience-link {
+  margin:0.6rem 0.8rem 0.9rem auto;
+  font-size:0.85rem; font-weight:600; color:#c89a2a; text-decoration:none;
 }
-
+.experience-link:hover  { text-decoration:underline; }
 </style>
