@@ -5,7 +5,10 @@ const toggleMenu = () => {
   const icon = document.getElementById("burger-icon");
   icon.classList.toggle("open");
 };
+import logo from '/images/sowk_logo-min.png';
+import { Astro } from 'astro';
 ---
+
 
 <style>
   header {
@@ -144,12 +147,8 @@ const toggleMenu = () => {
 
 <header id="site-header">
   <a href="/">
-    <img
-  src="/images/sowk_logo-min.png"
-  alt="SOWK logo"
-  class="logo"
-/>
-
+    <img src={logo.src} alt="SOWK logo" class="logo" />
+      
   </a>
 
   <button class="nav-toggle" id="burger-icon" onclick="document.getElementById('nav-menu').classList.toggle('open'); this.classList.toggle('open')">
@@ -157,10 +156,10 @@ const toggleMenu = () => {
   </button>
 
   <nav id="nav-menu">
-    <a href="/">Home</a>
-    <a href="/gallery">Gallery</a>
-    <a href="/experience">Experience</a>
-    <a href="/contact">Contact</a>
+    <a href={Astro.resolve('/')}>Home</a>
+    <a href={Astro.resolve('/gallery')}>Gallery</a>
+    <a href={Astro.resolve('/experience')}>Experience</a>
+    <a href={Astro.resolve('/contact')}>Contact</a>
   </nav>
 </header>
 
