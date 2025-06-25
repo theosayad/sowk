@@ -138,4 +138,17 @@ const slugify = (s: string) =>
   }
   .experience-link:hover { text-decoration:underline; }
 
+  /* ───── Mobile tweaks ───── */
+  @media (max-width: 600px) {
+    .experience-row {
+      /* reduce left/right padding on phones */
+      padding: 0.75rem 1rem 1rem;
+    }
+    .experience-category {
+      /* reduce the category indent */
+      padding-left: 1rem;
+    }
+  }
+
+
 </style>
