@@ -29,24 +29,15 @@ const categories = [
         {activities
           .filter((a) => a.category === cat)
           .map((a) => (
-            <article class="experience-card">
-              <img
-                src={a.image}
-                alt={a.name}
-                class="experience-thumb"
-                loading="lazy"
-                width="300"
-                height="200"
-              />
-
+            <a href={`/experience/${a.slug}`} class="experience-card">
+              <img src={a.image} alt={a.name} class="experience-thumb"
+                   loading="lazy" width="300" height="200" />
+            
               <h3>{a.name}</h3>
-              <p class="experience-meta">{a.distance.toFixed(1)}&nbsp;km&nbsp;away</p>
-
-              <a href={`/experience/${a.slug}`} class="experience-link">
-                More info&nbsp;↗
-              </a>
-            </article>
-        ))}
+              <p class="experience-meta">{a.distance.toFixed(1)} km away</p>
+              <span class="experience-link">More info ↗</span>
+            </a>
+    )}
       </div>
     </>
   ))}
@@ -91,4 +82,21 @@ body, h1, h2, h3, p, a { font-family:'Poppins', sans-serif; }
   font-size:0.85rem; font-weight:600; color:#c89a2a; text-decoration:none;
 }
 .experience-link:hover  { text-decoration:underline; }
+
+/* extra gutter on mobile & desktop */
+.experience-row { padding: 0 2rem 0.5rem; }          /* was 1rem */
+.experience-category { padding-left: 2rem; }          /* was 1rem */
+
+/* card now a link — cursor + smaller width for 2.5-up layout */
+.experience-card {
+  flex: 0 0 180px;           /* ±2½ cards @414 px */
+  cursor: pointer;
+  transition: transform .25s ease;
+}
+.experience-card:hover { transform: translateY(-4px); }
+
+/* keep link look */
+.experience-link { display:block; margin-top:.6rem;
+                   color:#c89a2a; font-weight:600; font-size:.85rem; }
+
 </style>
