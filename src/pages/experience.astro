@@ -77,20 +77,24 @@ const slugify = (s: string) =>
   /* hide default arrow, use our own if you like */
   .experience-category::-webkit-details-marker { display:none; }
 
-  /* horizontal swipe row */
+  /* ─── horizontal swipe row ─── */
   .experience-row {
-    display: flex;                /* flex layout */
-    gap: 1rem;                    /* space between cards */
-    overflow-x: auto;             /* enable horizontal scroll */
-    scroll-snap-type: x mandatory;/* snap cards into place */
-    padding: 1rem 2rem 1.5rem;    /* top/right/left/bottom gutters */
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  
+    /* keep your overall top/right/bottom padding */
+    padding: 1rem 2rem 1.5rem;
+  
+    /* ensure every snap-stop sits 2rem from *either* edge */
+    scroll-padding-inline-start: 2rem;
+    scroll-padding-inline-end:   2rem;
   }
+  
+  /* hide the scrollbar in WebKit browsers */
   .experience-row::-webkit-scrollbar {
-    display: none;                /* hide the scrollbar on WebKit browsers */
-  }
-
-  .experience-row::-webkit-scrollbar {
-  display: none;                /* hide the scrollbar on WebKit browsers */
+    display: none;
   }
 
   /* card */
@@ -133,4 +137,8 @@ const slugify = (s: string) =>
     padding:0.6rem 0.8rem;
   }
   .experience-link:hover { text-decoration:underline; }
+
+  .experience-row {
+    scroll-padding-left: 2rem;
+  }
 </style>
