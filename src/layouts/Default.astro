@@ -1,13 +1,14 @@
 ---
 /*
-  Default site-wide layout (Netlify branch)
-  • Header & Footer are rendered everywhere
-  • BASE = "/" in dev & Netlify, "/sowk/" in the GitHub Pages branch
+  Default site-wide layout
+  ───────────────────────────────────────────────────────────────
+  • Works in dev and on any host thanks to BASE ("/" vs "/sowk/")
+  • Renders <Header /> and <Footer /> on every page
 */
 import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import Footer  from '../components/Footer.astro';
 
-const BASE = import.meta.env.BASE_URL;
+const BASE = import.meta.env.BASE_URL;     // "/" locally & Netlify, "/sowk/" on GitHub Pages
 ---
 
 <!DOCTYPE html>
@@ -16,35 +17,35 @@ const BASE = import.meta.env.BASE_URL;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- ─────── favicon, manifest, … ─────── -->
+    <!-- ─────────── Favicon & web-manifest ─────────── -->
     <link rel="icon" href={`${BASE}images/favicon.svg`} />
 
-    <!-- ─────── Google Fonts (Poppins + Quicksand) ─────── -->
+    <!-- ─────────── Google Fonts (Playfair Display + DM Sans) ─────────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Quicksand:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+    <!--  Self-host / add more fonts (e.g. “canopee”) here if needed  -->
 
-    <!-- you’ll still need to self-host or import “canopee” the same way -->
+    <!-- ─────────── Page Title (fallback → “SOWK”) ─────────── -->
+    <title><slot name="title">SOWK</slot></title>
 
-    <title><slot name="title" /> | SOWK</title>
-
-    <!-- site-wide CSS -->
+    <!-- ─────────── Site-wide stylesheet ─────────── -->
     <link rel="stylesheet" href={`${BASE}styles/global.css`} />
   </head>
 
   <body>
-    <!-- ---------- header ---------- -->
+    <!-- ─────────── Header ─────────── -->
     <Header />
 
-    <!-- ---------- page content ---------- -->
+    <!-- ─────────── Page content ─────────── -->
     <main>
       <slot />
     </main>
 
-    <!-- ---------- footer ---------- -->
+    <!-- ─────────── Footer ─────────── -->
     <Footer />
   </body>
 </html>
