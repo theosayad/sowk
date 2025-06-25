@@ -22,7 +22,12 @@ import Layout from '../layouts/Default.astro';
         Where mornings begin in stillness and nights end beside the fire.
       </p>
 
-      <a href="https://instagram.com/sowk.smarjbeil" class="btn" target="_blank">
+      <a
+        href="https://instagram.com/sowklb"
+        class="btn"
+        target="_blank"
+        style="text-decoration: none; color: #000;"
+      >
         Book Your Stay
       </a>
 
@@ -128,7 +133,7 @@ import Layout from '../layouts/Default.astro';
 </script>
 
 <script>
-  /* Title + location fade-in */
+  // Hero title & location fade-in
   const title = document.querySelector('.hero-title');
   const locationText = document.querySelector('.hero-location');
   const observerTitle = new IntersectionObserver(([entry]) => {
@@ -139,7 +144,18 @@ import Layout from '../layouts/Default.astro';
     }
   }, { threshold: 0.4 });
   observerTitle.observe(title);
+
+  // “What To Expect” section heading fade-in
+  const sectionTitle = document.querySelector('.fade-title');
+  const observerSection = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) {
+      sectionTitle.classList.add('visible');
+      observerSection.disconnect();
+    }
+  }, { threshold: 0.1 });
+  observerSection.observe(sectionTitle);
 </script>
+
 
 <script>
   /* Background slideshow */
@@ -195,6 +211,6 @@ import Layout from '../layouts/Default.astro';
   .scroll-indicator { margin-top: 2.5rem; animation: bounce 1.8s infinite ease-in-out; opacity: 0.6; }
   @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
 
-  .fade-title         { opacity: 0; transform: translateY(20px); transition: all 0.7s ease; }
+  .fade-title { opacity: 0; transform: translateY(20px); transition: all 0.7s ease; }
   .fade-title.visible { opacity: 1; transform: translateY(0); }
 </style>
