@@ -2,15 +2,26 @@
 import Layout from '../../../layouts/Default.astro';
 import activities from '../../../data/activities.json' assert { type: 'json' };
 
+/* helper shared by list + path-builder */
+const slugify = (s) =>
+  s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+/* 1) build-time paths for every unique category  */
+export function getStaticPaths() {
+  const cats = [...new Set(activities.map(a => a.category).filter(Boolean))];
+  return cats.map(c => ({ params: { cat: slugify(c) } }));
+}
+
+/* 2) data for this specific category page */
 const { cat } = Astro.params;
-const humanCat = cat.replace(/-/g, ' ');
-const list = activities.filter(
-  a => a.category && cat === a.category.toLowerCase().replace(/[^a-z0-9]+/g,'-')
-);
+const list = activities.filter(a => slugify(a.category || '') === cat);
+const humanCat = list.length ? list[0].category : cat.replace(/-/g, ' ');
 ---
 
 <Layout title={`${humanCat} · SOWK`}>
-  <h1 style="padding:2rem 2.5rem;font-family:Poppins,sans-serif;">{humanCat}</h1>
+  <h1 style="padding:2rem 2.5rem;font-family:Poppins,sans-serif;">
+    {humanCat}
+  </h1>
 
   <div
     style="
@@ -27,8 +38,12 @@ const list = activities.filter(
         <img src={a.image} alt={a.name}
              style="width:100%;height:180px;object-fit:cover;">
         <div style="padding:1rem;">
-          <h2 style="font-size:1.1rem;font-weight:600;margin-bottom:.4rem;">{a.name}</h2>
-          <p style="font-size:.85rem;color:#667;">{a.distance.toFixed(1)} km away</p>
+          <h2 style="font-size:1.1rem;font-weight:600;margin-bottom:.4rem;">
+            {a.name}
+          </h2>
+          <p style="font-size:.85rem;color:#667;">
+            {a.distance.toFixed(1)}&nbsp;km&nbsp;away
+          </p>
         </div>
       </a>
     ))}
