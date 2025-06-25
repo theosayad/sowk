@@ -1,12 +1,13 @@
 ---
+// experience.astro  ───────────────────────────────────────────
 import Layout from '../layouts/Default.astro';
 import activities from '../data/activities.json' assert { type: 'json' };
 
-/* helper to slug-ify any string (for category URLs) */
+// helper → nice url-slug
 const slugify = (s) =>
   s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
-/* unique, non-empty category list */
+// list unique categories
 const categories = [
   ...new Set(activities.map((a) => a.category).filter(Boolean))
 ];
@@ -14,30 +15,36 @@ const categories = [
 
 <Layout title="Experience · SOWK">
   <section class="experience-hero">
-    <h1>Things to do in &amp; around Smar&nbsp;Jbeil</h1>
+    <h1>Things to do in &amp; around&nbsp;Smar&nbsp;Jbeil</h1>
   </section>
 
   {categories.map((cat) => (
     <>
-      <!-- category heading (links to future /experience/category/:slug page) -->
+      <!-- category heading links to /experience/category/:slug -->
       <h2 class="experience-category">
         <a href={`/experience/category/${slugify(cat)}`}>{cat}</a>
       </h2>
 
-      <!-- horizontally scrollable row -->
+      <!-- Netflix-style horizontal scroller -->
       <div class="experience-row">
         {activities
           .filter((a) => a.category === cat)
           .map((a) => (
             <a href={`/experience/${a.slug}`} class="experience-card">
-              <img src={a.image} alt={a.name} class="experience-thumb"
-                   loading="lazy" width="300" height="200" />
-            
+              <img
+                src={a.image}
+                alt={a.name}
+                class="experience-thumb"
+                loading="lazy"
+                width="240"
+                height="160"
+              />
+
               <h3>{a.name}</h3>
               <p class="experience-meta">{a.distance.toFixed(1)} km away</p>
-              <span class="experience-link">More info ↗</span>
+              <span class="experience-link">More&nbsp;info ↗</span>
             </a>
-    )}
+        ))}
       </div>
     </>
   ))}
@@ -53,7 +60,7 @@ body, h1, h2, h3, p, a { font-family:'Poppins', sans-serif; }
 
 /* ---------- category heading ---------- */
 .experience-category      { font-size:1.35rem; font-weight:600;
-                            margin:2.5rem 0 1rem; padding-left:1rem; }
+                            margin:2.5rem 0 1rem; padding-left:2.5rem; }
 .experience-category a    { color:#294534; text-decoration:none; }
 .experience-category a:hover { text-decoration:underline; }
 
@@ -61,42 +68,30 @@ body, h1, h2, h3, p, a { font-family:'Poppins', sans-serif; }
 .experience-row {
   display:flex; gap:1rem;
   overflow-x:auto; scroll-snap-type:x mandatory;
-  padding:0 1rem 0.5rem;
+  padding:0 2.5rem 0.75rem;          /* extra left gutter */
 }
-.experience-row::-webkit-scrollbar { display:none; } /* hide on mobile Safari */
+.experience-row::-webkit-scrollbar { display:none; }
 
-/* ---------- card ---------- */
+/* ---------- compact card ---------- */
 .experience-card {
-  flex:0 0 220px;            /* ~2½ cards on 414 px iPhone width */
+  flex:0 0 180px;                    /* shows ~2½ cards on 414 px */
   scroll-snap-align:start;
   background:#fff; border-radius:0.75rem; overflow:hidden;
   box-shadow:0 12px 32px rgba(0,0,0,.06);
   display:flex; flex-direction:column;
+  cursor:pointer; transition:transform .25s ease;
+  color:inherit; text-decoration:none;
 }
-.experience-thumb  { width:100%; height:140px; object-fit:cover; }
+.experience-card:hover { transform:translateY(-4px); }
 
-.experience-card h3     { font-size:1rem; font-weight:600; margin:0.65rem 0 0.35rem; padding:0 0.8rem; }
-.experience-meta        { font-size:0.8rem; color:#667; padding:0 0.8rem; }
-.experience-link {
-  margin:0.6rem 0.8rem 0.9rem auto;
-  font-size:0.85rem; font-weight:600; color:#c89a2a; text-decoration:none;
-}
-.experience-link:hover  { text-decoration:underline; }
+.experience-thumb { width:100%; height:140px; object-fit:cover; }
 
-/* extra gutter on mobile & desktop */
-.experience-row { padding: 0 2rem 0.5rem; }          /* was 1rem */
-.experience-category { padding-left: 2rem; }          /* was 1rem */
+.experience-card h3 { font-size:1rem; font-weight:600;
+                      margin:0.65rem 0 0.35rem; padding:0 0.8rem; }
 
-/* card now a link — cursor + smaller width for 2.5-up layout */
-.experience-card {
-  flex: 0 0 180px;           /* ±2½ cards @414 px */
-  cursor: pointer;
-  transition: transform .25s ease;
-}
-.experience-card:hover { transform: translateY(-4px); }
+.experience-meta { font-size:0.8rem; color:#667; padding:0 0.8rem; }
 
-/* keep link look */
-.experience-link { display:block; margin-top:.6rem;
-                   color:#c89a2a; font-weight:600; font-size:.85rem; }
-
+.experience-link { display:block; margin:0.6rem 0.8rem 0.9rem auto;
+                   font-size:0.82rem; font-weight:600; color:#c89a2a; }
+.experience-link:hover { text-decoration:underline; }
 </style>
