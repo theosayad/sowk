@@ -13,42 +13,47 @@ const categories = [
     <h1>Things to do in &amp; around Smar Jbeil</h1>
   </section>
 
-{categories.map(cat => (
-  /*  Mobile (<640 px)  → collapsible “accordion”
-      Desktop         → always open, behaves exactly like before  */
-  <details class="experience-section" open>
-    <summary class="experience-category">{cat}</summary>
+{categories.map(cat => {
+  /* build a URL-safe slug for the category itself */
+  const catSlug = cat.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  return (
+    <>
+      <h2 class="experience-category">
+        <a href={`/experience/category/${catSlug}`}>{cat}</a>   {/* opens the full list page */}
+      </h2>
 
-    <div class="experience-grid">
-      {activities
-        .filter(a => a.category === cat)
-        .map(a => (
-          <article class="experience-card">
-            <img
-              src={a.image}
-              alt={a.name}
-              class="experience-thumb"
-              loading="lazy"
-              width="400"
-              height="260"
-            />
+      {/* horizontally scrollable strip (≈ 2–3 cards visible) */}
+      <div class="experience-strip" role="list">
+        {activities
+          .filter(a => a.category === cat)
+          .map(a => (
+            <article class="experience-card horizontal" role="listitem">
+              <img
+                src={a.image}
+                alt={a.name}
+                class="experience-thumb"
+                loading="lazy"
+                width="320"
+                height="200"
+              />
 
-            <div class="experience-body">
-              <h3>{a.name}</h3>
-              <p class="experience-meta">
-                {a.location} · {a.distance.toFixed(1)} km
-              </p>
-              <p class="experience-desc">{a.description}</p>
+              <div class="experience-body">
+                <h3>{a.name}</h3>
+                <p class="experience-meta">
+                  {a.location} · {a.distance.toFixed(1)} km
+                </p>
+                <p class="experience-desc">{a.description}</p>
 
-              <a href={`/experience/${a.slug}`} class="experience-link">
-                More&nbsp;info&nbsp;↗
-              </a>
-            </div>
-          </article>
+                <a href={`/experience/${a.slug}`} class="experience-link">
+                  More&nbsp;info&nbsp;↗
+                </a>
+              </div>
+            </article>
         ))}
-    </div>
-  </details>
-))}
+      </div>
+    </>
+  );
+})}
 
 </Layout>
 
@@ -107,6 +112,37 @@ body, h1, h2, h3, p, a { font-family:'Poppins', sans-serif; }
   .experience-section summary::after{ display:none; }
   .experience-section[open] summary::after{ display:none; }
   .experience-section[open] > .experience-grid{ display:grid; }
+}
+
+/* ─────────── category heading padding ─────────── */
+.experience-category { padding-left: 1rem; }   /* more breathing-room on the left */
+
+/* ─────────── horizontal strip ─────────── */
+.experience-strip {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-inline: 1rem;        /* left & right padding */
+  scroll-padding-inline: 1rem; /* first card not glued to the edge */
+}
+
+/* hide scroll-bar on WebKit / Firefox */
+.experience-strip::-webkit-scrollbar { display:none; }
+.experience-strip { scrollbar-width:none; }
+
+/* ─────────── compact card within a strip ─────────── */
+.experience-card.horizontal {
+  min-width: 260px;            /* ~2½ cards on a  mobile  viewport */
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+
+/* tighten text inside compact cards */
+@media (max-width: 639px){
+  .experience-body { padding: 1rem; gap: 0.5rem; }
+  .experience-body h3 { font-size: 1.1rem; }
+  .experience-desc   { font-size: 0.9rem; }
 }
 
 </style>
