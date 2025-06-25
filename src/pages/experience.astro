@@ -79,13 +79,19 @@ const slugify = (s: string) =>
 
   /* horizontal swipe row */
   .experience-row {
-    display:flex;
-    gap:1rem;
-    overflow-x:auto;
-    scroll-snap-type:x mandatory;
-    padding:1rem 2rem 1.5rem;
+    display: flex;                /* flex layout */
+    gap: 1rem;                    /* space between cards */
+    overflow-x: auto;             /* enable horizontal scroll */
+    scroll-snap-type: x mandatory;/* snap cards into place */
+    padding: 1rem 2rem 1.5rem;    /* top/right/left/bottom gutters */
   }
-  .experience-row::-webkit-scrollbar { display:none; }
+  .experience-row::-webkit-scrollbar {
+    display: none;                /* hide the scrollbar on WebKit browsers */
+  }
+
+  .experience-row::-webkit-scrollbar {
+  display: none;                /* hide the scrollbar on WebKit browsers */
+  }
 
   /* card */
   .experience-card {
