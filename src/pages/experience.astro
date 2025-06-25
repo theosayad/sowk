@@ -1,18 +1,40 @@
 ---
-import data from '../data/activities.json';
-const grouped = Object.groupBy(data, (d) => d.category);
+import Layout from '../layouts/Default.astro';
+import data   from '../data/activities.json';   // ← path to your JSON
+
+/* ---------- group activities by category ---------- */
+const grouped = data.reduce((acc, item) => {
+  (acc[item.category] ||= []).push(item);
+  return acc;
+}, {});
 ---
-{Object.entries(grouped).map(([cat, items]) => (
-  <section>
-    <h2>{cat}</h2>
-    <ul>
-      {items.map((a) => (
-        <li>
-          <strong>{a.name}</strong><br />
-          {a.description}<br />
-          <a href={a.link} target="_blank">More&nbsp;info</a>
-        </li>
-      ))}
-    </ul>
-  </section>
-))}
+
+<Layout title="Things to do · SOWK">
+  <h1 style="margin:3rem 0 2rem;text-align:center;">Things to do in &amp; around Smar Jbeil</h1>
+
+  {Object.entries(grouped).map(([category, items]) => (
+    <section style="margin-bottom:4rem;">
+      <h2 style="font-size:1.75rem;color:#415D43;margin-bottom:1.5rem;text-align:center;">
+        {category}
+      </h2>
+
+      <ul style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+                 gap:1.5rem;list-style:none;padding:0;margin:0;">
+        {items.map((a) => (
+          <li style="background:#fff;border-radius:12px;padding:1.5rem;
+                     box-shadow:0 10px 20px rgba(0,0,0,.05);">
+            <strong style="font-size:1.1rem;display:block;margin-bottom:.5rem;">
+              {a.name}
+            </strong>
+            <p style="font-size:.95rem;line-height:1.6;margin-bottom:.75rem;">
+              {a.description}
+            </p>
+            <a href={a.link} target="_blank" style="color:#F4B942;font-weight:500;">
+              More&nbsp;info&nbsp;↗
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</Layout>
