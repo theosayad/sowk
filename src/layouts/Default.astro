@@ -1,9 +1,12 @@
 ---
-/* Default site-wide layout (Netlify branch) */
+/*
+  Default site-wide layout (Netlify branch)
+  • Header & Footer are rendered everywhere
+  • BASE = "/" in dev & Netlify, "/sowk/" in the GitHub Pages branch
+*/
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-/* Will be “/” in dev and “/” on Netlify (GitHub Pages branch sets it to “/sowk/”) */
 const BASE = import.meta.env.BASE_URL;
 ---
 
@@ -13,17 +16,27 @@ const BASE = import.meta.env.BASE_URL;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- favicon & manifest -->
+    <!-- ─────── favicon, manifest, … ─────── -->
     <link rel="icon" href={`${BASE}images/favicon.svg`} />
+
+    <!-- ─────── Google Fonts (Poppins + Quicksand) ─────── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Quicksand:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- you’ll still need to self-host or import “canopee” the same way -->
 
     <title><slot name="title" /> | SOWK</title>
 
-    <!-- global CSS -->
+    <!-- site-wide CSS -->
     <link rel="stylesheet" href={`${BASE}styles/global.css`} />
   </head>
 
   <body>
-    <!-- ---------- site header ---------- -->
+    <!-- ---------- header ---------- -->
     <Header />
 
     <!-- ---------- page content ---------- -->
@@ -31,7 +44,7 @@ const BASE = import.meta.env.BASE_URL;
       <slot />
     </main>
 
-    <!-- ---------- site footer ---------- -->
+    <!-- ---------- footer ---------- -->
     <Footer />
   </body>
 </html>
