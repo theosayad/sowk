@@ -13,43 +13,43 @@ const categories = [
     <h1>Things to do in &amp; around Smar Jbeil</h1>
   </section>
 
-  {categories.map(cat => (
-    <>
-      <h2 class="experience-category">{cat}</h2>
+{categories.map(cat => (
+  /*  Mobile (<640 px)  → collapsible “accordion”
+      Desktop         → always open, behaves exactly like before  */
+  <details class="experience-section" open>
+    <summary class="experience-category">{cat}</summary>
 
-      <div class="experience-grid">
-        {activities
-          .filter(a => a.category === cat)
-          .map(a => (
-            <article class="experience-card">
-              <img
-                src={a.image}
-                alt={a.name}
-                class="experience-thumb"
-                loading="lazy"
-                width="400"
-                height="260"
-              />
+    <div class="experience-grid">
+      {activities
+        .filter(a => a.category === cat)
+        .map(a => (
+          <article class="experience-card">
+            <img
+              src={a.image}
+              alt={a.name}
+              class="experience-thumb"
+              loading="lazy"
+              width="400"
+              height="260"
+            />
 
-              <div class="experience-body">
-                <h3>{a.name}</h3>
-                <p class="experience-meta">
-                  {a.location} · {a.distance.toFixed(1)} km
-                </p>
-                <p class="experience-desc">{a.description}</p>
+            <div class="experience-body">
+              <h3>{a.name}</h3>
+              <p class="experience-meta">
+                {a.location} · {a.distance.toFixed(1)} km
+              </p>
+              <p class="experience-desc">{a.description}</p>
 
-                <a
-                  href={`/experience/${a.slug}`}
-                  class="experience-link"
-                >
-                  More info ↗
-                </a>
-              </div>
-            </article>
+              <a href={`/experience/${a.slug}`} class="experience-link">
+                More&nbsp;info&nbsp;↗
+              </a>
+            </div>
+          </article>
         ))}
-      </div>
-    </>
-  ))}
+    </div>
+  </details>
+))}
+
 </Layout>
 
 <style>
@@ -83,4 +83,30 @@ body, h1, h2, h3, p, a { font-family:'Poppins', sans-serif; }
 .experience-link      { margin-top:auto; font-weight:600; color:#c89a2a;
                         text-decoration:none; }
 .experience-link:hover{ text-decoration:underline; }
+
+/* ────────── extra horizontal breathing-room ────────── */
+.experience-grid     { padding-inline: 1rem; }   /* both mobile & desktop */
+@media (min-width: 640px){                       /* ≥640 px keeps previous look */
+  .experience-grid { padding-inline: 0; }
+}
+
+/* ────────── accordion behaviour on phones ────────── */
+.experience-section           { border: none; margin: 0 0 2rem; }
+.experience-section summary   { list-style:none; cursor:pointer; }
+.experience-section summary::-webkit-details-marker{ display:none; }
+
+/* nicer arrow  */
+.experience-section summary::after{
+  content:"▾"; font-size:1rem; margin-left:.4rem; transition:.2s;
+}
+.experience-section[open] summary::after{ transform:rotate(180deg); }
+
+/* desktop: keep all sections open & hide arrow */
+@media (min-width:640px){
+  .experience-section         { display:block; }
+  .experience-section summary::after{ display:none; }
+  .experience-section[open] summary::after{ display:none; }
+  .experience-section[open] > .experience-grid{ display:grid; }
+}
+
 </style>
