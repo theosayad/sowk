@@ -61,40 +61,36 @@ const toggleMenu = () => {
   #nav-menu a:hover{color:#F4B942;}
 
   /* ───────────── mobile dropdown ───────────── */
-  @media (max-width: 768px) {
-    .nav-toggle {
-      display: block;
-    }
-  
-    #nav-menu {
-      display: none;
-      flex-direction: column;
-  
-      /* anchored directly under header, no vertical gap */
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-  
-      background: rgba(255, 255, 255, 0.96);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-  
-      /* only round the bottom */
-      border-radius: 0 0 12px 12px;
-  
-      padding: 1.5rem 2rem;
-      opacity: 0;
-      transform: translateY(-10px);
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-  
-    #nav-menu.open {
-      display: flex;
-      opacity: 1;
-      transform: translateY(0);
-    }
+@media (max-width: 768px) {
+  header {
+    height: 90px; /* match your logo height for consistent positioning */
   }
+
+  #nav-menu {
+    position: absolute;
+    top: 90px; /* directly below the header */
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid #ddd;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    padding: 1.5rem 2rem;
+    display: none;
+    flex-direction: column;
+  }
+
+  #nav-menu.open {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
 </style>
 
