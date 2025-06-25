@@ -3,39 +3,29 @@ import Layout from '../layouts/Default.astro';
 ---
 
 <Layout>
-  <!-- ───────────────────── Hero Section ───────────────────── -->
-  <section style="position: relative; height: 100vh; overflow: hidden; display: flex; align-items: center;">
-    <!-- Background slideshow -->
-    <div class="hero-slideshow">
-      <img src="/images/smarcitadel.jpg"      class="bg-image active" />
-      <img src="/images/smarjbeilcitadel.jpg" class="bg-image" />
-    </div>
-
-    <!-- Overlay text block -->
-    <div class="hero-overlay">
-      <span class="hero-location">Smar Jbeil, Lebanon</span>
-
-      <h1 class="hero-title">Somewhere Only<br />We Know</h1>
-
-      <p class="hero-description">
-        A private villa hidden in the pine hills and stone walls of Smar Jbeil.<br />
-        Where mornings begin in stillness and nights end beside the fire.
-      </p>
-      
-      <a href="https://instagram.com/sowklb" class="btn btn--hero" target="_blank">
-        Book&nbsp;Your&nbsp;Stay
-      </a>
-
-      <div class="scroll-indicator">
-        <svg width="24" height="24" stroke="#1B2A41" fill="none" stroke-width="1.5"
-             stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6 9l6 6 6-6" />
-        </svg>
+  <!-- ⸺⸺⸺ Swipable Hero Image Slider ⸺⸺⸺ -->
+  <section class="hero-swiper">
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><img src="/images/smarcitadel.jpg" alt="Citadel view" /></div>
+        <div class="swiper-slide"><img src="/images/smarjbeilcitadel.jpg" alt="Smar Jbeil walls" /></div>
+        <div class="swiper-slide"><img src="/images/hero.jpg" alt="Villa overview" /></div>
       </div>
+      <div class="swiper-pagination"></div>
     </div>
   </section>
 
-  <div style="width: 60px; height: 2px; background: #C8B7A6; margin: 4rem auto 3rem; opacity: 0.5;"></div>
+  <!-- Optional intro overlay after the slider if needed -->
+  <div class="hero-overlay-text">
+    <h1 class="hero-title">Somewhere Only We Know</h1>
+    <p class="hero-description">
+      A private villa hidden in the pine hills and stone walls of Smar Jbeil.<br />
+      Where mornings begin in stillness and nights end beside the fire.
+    </p>
+    <a href="https://instagram.com/sowklb" class="btn btn--hero" target="_blank">
+      Book&nbsp;Your&nbsp;Stay
+    </a>
+  </div>
 
   <!-- ──────────────────── Features Section ─────────────────── -->
   <section style="background: #fdfdfd; padding: 5rem 1.5rem; text-align: center; position: relative; overflow: hidden;">
@@ -153,17 +143,6 @@ import Layout from '../layouts/Default.astro';
 
 
 <script>
-  /* Background slideshow */
-  const images = document.querySelectorAll('.bg-image');
-  let index = 0;
-  setInterval(() => {
-    images[index].classList.remove('active');
-    index = (index + 1) % images.length;
-    images[index].classList.add('active');
-  }, 7000);
-</script>
-
-<script>
   /* Scroll-indicator fade */
   const indicator = document.querySelector('.scroll-indicator');
   window.addEventListener('scroll', () => {
@@ -219,6 +198,81 @@ import Layout from '../layouts/Default.astro';
   }
   .btn--hero:hover {
     background: #FFF;
+    border-color: #F4B942;
+    transform: translateY(-3px);
+  }
+</style>
+
+<!-- Swiper Styles & Script -->
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+/>
+<script type="module">
+  import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs';
+  new Swiper('.swiper', {
+    loop: true,
+    autoplay: { delay: 3000, disableOnInteraction: false },
+    pagination: { el: '.swiper-pagination', clickable: true },
+    effect: 'fade',
+    speed: 1000
+  });
+</script>
+
+<style>
+  .hero-swiper {
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+  .swiper,
+  .swiper-slide {
+    width: 100%;
+    height: 100%;
+  }
+  .swiper-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero-overlay-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(10px);
+    padding: 2rem 2rem 2.5rem;
+    border-radius: 1rem;
+    text-align: center;
+    max-width: 700px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.3rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+  }
+  .hero-description {
+    font-size: 1.05rem;
+    line-height: 1.9;
+    opacity: 0.85;
+    margin-bottom: 2rem;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn--hero {
+    background: #F4B942;
+    color: #1B2A41;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    text-decoration: none;
+    transition: background 0.25s ease, transform 0.25s ease;
+  }
+  .btn--hero:hover {
+    background: #fff;
     border-color: #F4B942;
     transform: translateY(-3px);
   }
