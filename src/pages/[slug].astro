@@ -1,12 +1,17 @@
 ---
-import Layout from '../../layouts/Default.astro';
-import activities from '../../data/activities.json' assert { type: 'json' };
+// front-matter - dynamic activity page
+import Layout from '../layouts/Default.astro';   // ✅ correct relative path
+import activities from '../data/activities.json';
+
+export function getStaticPaths() {
+  return activities.map(a => ({ params: { slug: a.slug } }));
+}
 
 const { slug } = Astro.params;
 const activity = activities.find(a => a.slug === slug);
-
-if (!activity) throw new Error(`Activity "${slug}" not found`);
+if (!activity) throw new Error(`No activity for slug “${slug}”`);
 ---
+
 
 <Layout title={`${activity.name} · SOWK`}>
   <article class="activity-detail">
