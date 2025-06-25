@@ -61,23 +61,38 @@ const toggleMenu = () => {
   #nav-menu a:hover{color:#F4B942;}
 
   /* ───────────── mobile dropdown ───────────── */
-  @media(max-width:768px){
-    .nav-toggle{display:block;}          /* show burger */
-    #nav-menu{
-      position:fixed;         /* take full viewport */
-      top:100px;left:0;right:0;
-      flex-direction:column;align-items:center;
-      background:rgba(255,255,255,.96);backdrop-filter:blur(10px);
-      border-top:1px solid #ddd;border-radius:0 0 12px 12px;
-      box-shadow:0 10px 20px rgba(0,0,0,.05);
-      padding:1.5rem 2rem;gap:1.25rem;
-      opacity:0;transform:translateY(-10px);
-      transition:opacity .3s,transform .3s;
-    }
-    #nav-menu.open{
-      opacity:1;transform:translateY(0);
-    }
+@media (max-width: 768px) {
+  .nav-toggle {
+    display: block;
   }
+
+  #nav-menu {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    /* push it 0.5rem below the header */
+    top: 100%;
+    margin-top: 0.5rem;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid #ddd;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    padding: 1.5rem 2rem; /* spacing inside dropdown */
+  }
+
+  #nav-menu.open {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 </style>
 
 <header id="site-header">
