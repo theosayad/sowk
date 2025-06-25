@@ -1,8 +1,24 @@
 ---
+/*
+  Footer component
+  ─────────────────────────────────────────────────────
+  • Dynamically inserts the current year
+  • Links to Instagram
+  • Safe for static build (no client JS)
+*/
 const year = new Date().getFullYear();
 ---
 
-<footer style="margin-top:4rem;padding:2rem 0;border-top:1px solid #eee;text-align:center;font-size:.9rem;color:#555;">
+<footer
+  style="
+    margin-top: 4rem;
+    padding: 2rem 0;
+    border-top: 1px solid #eee;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #555;
+  "
+>
   © {year} SOWK · Smar Jbeil, Lebanon ·
   <a href="https://instagram.com/sowk.smarjbeil" target="_blank">@sowk.smarjbeil</a>
 </footer>
