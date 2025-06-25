@@ -1,8 +1,9 @@
 ---
-import Layout from '../../../layouts/Default.astro';
-import activities from '../../../data/activities.json' assert { type: 'json' };
+/*  ⸺⸺ 1. Imports ⸺⸺ */
+import Layout from '../../layouts/Default.astro';
+import activities from '../../data/activities.json' assert { type: 'json' };
 
-/* ── helper (function-form = hoisted, always defined) ── */
+/*  ⸺⸺ 2. Helper (DECLARATION form → hoisted) ⸺⸺ */
 function slugify(str) {
   return str
     .toLowerCase()
@@ -10,20 +11,20 @@ function slugify(str) {
     .replace(/(^-|-$)/g, '');
 }
 
-/* ── 1. dynamic paths for every category ── */
+/*  ⸺⸺ 3. Dynamic paths for every category ⸺⸺ */
 export function getStaticPaths() {
   const cats = [...new Set(activities.map(a => a.category).filter(Boolean))];
   return cats.map(cat => ({ params: { cat: slugify(cat) } }));
 }
 
-/* ── 2. data for *this* category page ── */
-const { cat }   = Astro.params;
-const list      = activities.filter(a => slugify(a.category || '') === cat);
-const humanCat  = list.length ? list[0].category : cat.replace(/-/g, ' ');
+/*  ⸺⸺ 4. Data for this category page ⸺⸺ */
+const { cat } = Astro.params;
+const list    = activities.filter(a => slugify(a.category || '') === cat);
+const title   = list.length ? list[0].category : cat.replace(/-/g, ' ');
 ---
 
-<Layout title={`${humanCat} · SOWK`}>
-  <h1 class="cat-title">{humanCat}</h1>
+<Layout title={`${title} · SOWK`}>
+  <h1 class="cat-title">{title}</h1>
 
   <div class="cat-grid">
     {list.map(a => (
@@ -32,7 +33,7 @@ const humanCat  = list.length ? list[0].category : cat.replace(/-/g, ' ');
 
         <div class="cat-body">
           <h2>{a.name}</h2>
-          <p>{a.distance.toFixed(1)}&nbsp;km&nbsp;away</p>
+          <p>{a.distance.toFixed(1)} km&nbsp;away</p>
         </div>
       </a>
     ))}
@@ -40,17 +41,17 @@ const humanCat  = list.length ? list[0].category : cat.replace(/-/g, ' ');
 </Layout>
 
 <style>
-/* global Poppins override */
+/* force Poppins everywhere */
 body,h1,h2,p,a{font-family:Poppins,sans-serif}
 
-/* page title */
+/* title */
 .cat-title{
   padding:2rem 2.5rem;
   font-size:2rem;
   font-weight:700;
 }
 
-/* masonry-like responsive grid */
+/* responsive grid */
 .cat-grid{
   display:grid;
   gap:1.5rem;
@@ -79,13 +80,6 @@ body,h1,h2,p,a{font-family:Poppins,sans-serif}
 }
 
 .cat-body{padding:1rem}
-.cat-body h2{
-  font-size:1rem;
-  font-weight:600;
-  margin:.3rem 0;
-}
-.cat-body p{
-  font-size:.85rem;
-  color:#667;
-}
+.cat-body h2{font-size:1rem;font-weight:600;margin:.3rem 0}
+.cat-body p{font-size:.85rem;color:#667}
 </style>
