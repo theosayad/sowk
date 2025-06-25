@@ -46,6 +46,26 @@ const slugify = (s: string) =>
       </details>
     );
   })}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const rows = document.querySelectorAll('.experience-row');
+    rows.forEach((row, i) => {
+      // how far to nudge (px)
+      const distance = 80;
+      // delay each row so it feels staggered
+      const delay = 600 + i * 200;
+      setTimeout(() => {
+        row.scrollBy({ left: distance, behavior: 'smooth' });
+        // scroll back after a short pause
+        setTimeout(() => {
+          row.scrollBy({ left: -distance, behavior: 'smooth' });
+        }, 800);
+      }, delay);
+    });
+  });
+</script>
+
 </Layout>
 
 <style>
@@ -150,5 +170,11 @@ const slugify = (s: string) =>
     }
   }
 
-
+  /* ───── Mobile headline tweak ───── */
+  @media (max-width: 600px) {
+    .experience-hero h1 {
+      font-size: 1.5rem;    /* adjust as needed */
+      line-height: 1.2;
+    }
+  }
 </style>
