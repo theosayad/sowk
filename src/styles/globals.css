@@ -34,6 +34,11 @@ h1, h2, h3 {
   color: #1B2A41;
   letter-spacing: -0.2px;
 }
+
+body, .hero-description, .btn, p, li, label, input, textarea {
+  font-family: 'Poppins', sans-serif;
+}
+
 /* ==========================================================================
    4.  Layout Utilities
    ========================================================================== */
