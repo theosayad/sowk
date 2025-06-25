@@ -7,207 +7,105 @@ import Layout from '../layouts/Default.astro';
   <section class="hero-swiper">
     <div class="swiper">
       <div class="swiper-wrapper">
-        <div class="swiper-slide"><img src="/images/smarcitadel-skyview.jpg" alt="Citadel view" /></div>
-        <div class="swiper-slide"><img src="/images/smarjbeilcitadel.jpg" alt="Smar Jbeil walls" /></div>
-        <div class="swiper-slide"><img src="/images/batroun-port.jpg" alt="Batroun Port" /></div>
+        <div class="swiper-slide">
+          <img src="/images/smarcitadel-skyview.jpg" alt="Citadel view" />
+        </div>
+        <div class="swiper-slide">
+          <img src="/images/smarjbeilcitadel.jpg" alt="Smar Jbeil walls" />
+        </div>
+        <div class="swiper-slide">
+          <img src="/images/batroun-port.jpg" alt="Batroun Port" />
+        </div>
       </div>
       <div class="swiper-pagination"></div>
     </div>
   </section>
 
-  <!-- Optional intro overlay after the slider if needed -->
+  <!-- ────────────── Hero Overlay Text ────────────── -->
   <div class="hero-overlay-text">
     <h1 class="hero-title">Somewhere Only We Know</h1>
     <p class="hero-description">
       A private villa hidden in the pine hills and stone walls of Smar Jbeil.<br />
       Where mornings begin in stillness and nights end beside the fire.
     </p>
-    <a href="https://instagram.com/sowklb" class="btn btn--hero" target="_blank">
-      Book&nbsp;Your&nbsp;Stay
+    <a href="https://instagram.com/sowklb" class="btn--hero" target="_blank">
+      Book Your Stay
     </a>
   </div>
 
-  <!-- ──────────────────── Features Section ─────────────────── -->
-  <section style="background: #fdfdfd; padding: 5rem 1.5rem; text-align: center; position: relative; overflow: hidden;">
-    <h2 style="font-size: 2rem; color: #415D43; margin-bottom: 3rem;" class="fade-title">What To Expect</h2>
+  <!-- ────────────── Features Section ────────────── -->
+  <section class="features">
+    <h2 class="fade-title">What To Expect</h2>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 3rem; max-width: 1100px; margin-inline: auto;">
+    <div class="features-grid">
       <!-- Card 1 -->
-      <div class="feature-card" style="padding: 3rem 2rem; background: #fff; border-radius: 1rem;
-           box-shadow: 0 20px 40px rgba(0,0,0,0.04); transition: transform 0.4s ease, box-shadow 0.4s ease;">
+      <div class="feature-card">
         <div class="icon-wrap">
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none"
-               stroke="#415D43" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
-               class="lucide lucide-leaf">
+               stroke="#415D43" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
             <path d="M2 22c0-10 10-20 20-20 0 10-10 20-20 20z"/>
           </svg>
         </div>
-        <h3 style="font-size: 1.25rem; margin-bottom: 0.75rem;">Private by Design</h3>
-        <p style="font-size: 0.95rem; color: #444; opacity: 0.95;">Your own gated villa with pool,
-           stone garden, and campfire — completely to yourself.</p>
+        <h3>Private by Design</h3>
+        <p>Your own gated villa with pool, stone garden, and campfire — completely to yourself.</p>
       </div>
 
       <!-- Card 2 -->
-      <div class="feature-card" style="padding: 3rem 2rem; background: #fff; border-radius: 1rem;
-           box-shadow: 0 20px 40px rgba(0,0,0,0.04); transition: transform 0.4s ease, box-shadow 0.4s ease;">
+      <div class="feature-card">
         <div class="icon-wrap">
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none"
-               stroke="#415D43" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
-               class="lucide lucide-landmark">
+               stroke="#415D43" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
             <path d="M3 22h18M4 18h16M5 14h14M6 10h12M7 6h10M8 2h8"/>
           </svg>
         </div>
-        <h3 style="font-size: 1.25rem; margin-bottom: 0.75rem;">Steeped in History</h3>
-        <p style="font-size: 0.95rem; color: #444; opacity: 0.95;">Located in one of Lebanon’s oldest
-           villages, footsteps from a Crusader-era church and stone fortress.</p>
+        <h3>Steeped in History</h3>
+        <p>Located in one of Lebanon’s oldest villages, footsteps from a Crusader-era church and stone fortress.</p>
       </div>
 
       <!-- Card 3 -->
-      <div class="feature-card" style="padding: 3rem 2rem; background: #fff; border-radius: 1rem;
-           box-shadow: 0 20px 40px rgba(0,0,0,0.04); transition: transform 0.4s ease, box-shadow 0.4s ease;">
+      <div class="feature-card">
         <div class="icon-wrap">
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none"
-               stroke="#415D43" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
-               class="lucide lucide-flame">
+               stroke="#415D43" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 2s4 5 4 9a4 4 0 0 1-8 0c0-4 4-9 4-9z"/>
             <path d="M8 14a4 4 0 0 1 8 0c0 4-4 8-4 8s-4-4-4-8z"/>
           </svg>
         </div>
-        <h3 style="font-size: 1.25rem; margin-bottom: 0.75rem;">Soulful Comfort</h3>
-        <p style="font-size: 0.95rem; color: #444; opacity: 0.95;">Cozy interiors, handmade breakfast,
-           and firewood blankets — designed to slow you down.</p>
+        <h3>Soulful Comfort</h3>
+        <p>Cozy interiors, handmade breakfast, and firewood blankets — designed to slow you down.</p>
       </div>
     </div>
   </section>
 
-  <!-- ───────────────────── Hero Strip ───────────────────── -->
-  <section style="position: relative; width: 100%; height: 65vh; overflow: hidden;">
-    <img
-      src="/images/hero.jpg"
-      alt="SOWK villa view"
-      style="width: 100%; height: 100%; object-fit: cover; object-position: center;"
-    />
-    <div style="position: absolute; inset: 0; background: linear-gradient(to bottom,
-                rgba(0,0,0,0.05), rgba(0,0,0,0.4)); display: flex; align-items: flex-end;
-                justify-content: center; padding: 4rem 1.5rem;">
-      <p style="font-size: 1.6rem; color: #fff;
-                text-align: center; max-width: 700px; line-height: 1.5; font-weight: 400;
-                opacity: 0.9;">
-        “Breathe deep. <span style='font-weight: 600;'>This place was made for slowing down.</span>”
-      </p>
+  <!-- ────────────── Quote Strip ────────────── -->
+  <section class="quote-strip">
+    <img src="/images/hero.jpg" alt="Evening view" />
+    <div class="quote-overlay">
+      “Breathe deep. <span>This place was made for slowing down.</span>”
     </div>
   </section>
 </Layout>
 
-<!-- ──────────────────── JavaScript ──────────────────── -->
+<!-- ────────────── Feature-card Fade Script ────────────── -->
 <script>
-  /* Fade-in animation for feature cards */
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
+    entries.forEach((entry, idx) => {
       if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('fade-in'), index * 120);
+        setTimeout(() => entry.target.classList.add('fade-in'), idx * 120);
         observer.unobserve(entry.target);
       }
     });
   }, { threshold: 0.1 });
 
-  document.querySelectorAll('.feature-card').forEach((el) => {
+  document.querySelectorAll('.feature-card').forEach(el => {
     el.classList.add('pre-fade');
     observer.observe(el);
   });
 </script>
 
-<script>
-  // Hero title & location fade-in
-  const title = document.querySelector('.hero-title');
-  const locationText = document.querySelector('.hero-location');
-  const observerTitle = new IntersectionObserver(([entry]) => {
-    if (entry.isIntersecting) {
-      title.classList.add('visible');
-      locationText.classList.add('visible');
-      observerTitle.disconnect();
-    }
-  }, { threshold: 0.4 });
-  observerTitle.observe(title);
-
-  // “What To Expect” section heading fade-in
-  const sectionTitle = document.querySelector('.fade-title');
-  const observerSection = new IntersectionObserver(([entry]) => {
-    if (entry.isIntersecting) {
-      sectionTitle.classList.add('visible');
-      observerSection.disconnect();
-    }
-  }, { threshold: 0.1 });
-  observerSection.observe(sectionTitle);
-</script>
-
-
-<script>
-  /* Scroll-indicator fade */
-  const indicator = document.querySelector('.scroll-indicator');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 100) {
-      indicator.style.opacity = '0';
-      indicator.style.pointerEvents = 'none';
-    } else {
-      indicator.style.opacity = '0.6';
-      indicator.style.pointerEvents = 'auto';
-    }
-  });
-</script>
-
-<!-- ───────────────────── Styles ───────────────────── -->
-<style>
-  .pre-fade { opacity: 0; transform: translateY(20px); transition: all 0.7s ease; }
-  .fade-in  { opacity: 1 !important; transform: translateY(0) !important; }
-
-  .icon-wrap { display: flex; justify-content: center; align-items: center;
-               transition: transform 0.4s ease, filter 0.4s ease; }
-  .feature-card:hover .icon-wrap { transform: scale(1.06);
-                                   filter: drop-shadow(0 3px 5px rgba(0,0,0,0.05)); }
-
-  .hero-slideshow { position: absolute; inset: 0; z-index: -1; }
-  .bg-image       { position: absolute; width: 100%; height: 100%; object-fit: cover;
-                    opacity: 0; transition: opacity 1.5s ease; }
-  .bg-image.active { opacity: 1; }
-
-  .hero-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-                  background: rgba(255,255,255,0.72); backdrop-filter: blur(8px);
-                  padding: 2rem 2rem 2.5rem; border-radius: 1.25rem; text-align: center;
-                  max-width: 700px; width: 90%; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-
-  .hero-location  { font-size: 0.8rem; text-transform: uppercase; color: #888;
-                    letter-spacing: 1px; display: block; margin-bottom: 1.25rem; }
-  .hero-title     { font-size: 2.3rem; line-height: 1.4;
-                    font-weight: 400; margin-bottom: 1.5rem; }
-  .hero-description { font-size: 1.05rem; line-height: 1.9; opacity: 0.85; margin-bottom: 2rem; }
-
-  .scroll-indicator { margin-top: 2.5rem; animation: bounce 1.8s infinite ease-in-out; opacity: 0.6; }
-  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
-
-  .fade-title { opacity: 1; transform: none; transition: none; }
-
-  .btn--hero {
-    background: #F4B942;
-    color: #1B2A41;
-    font-weight: 600;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    border: 2px solid transparent;
-    transition: background 0.25s ease, transform 0.25s ease;
-  }
-  .btn--hero:hover {
-    background: #FFF;
-    border-color: #F4B942;
-    transform: translateY(-3px);
-  }
-</style>
-
-<!-- Swiper Styles & Script -->
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
-/>
+<!-- ────────────── Swiper (Autoplay + Fade) ────────────── -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <script type="module">
   import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs';
   new Swiper('.swiper', {
@@ -219,59 +117,69 @@ import Layout from '../layouts/Default.astro';
   });
 </script>
 
+<!-- ────────────── Page-specific Styles ────────────── -->
 <style>
-  .hero-swiper {
-    height: 100vh;
-    position: relative;
-    overflow: hidden;
-  }
-  .swiper,
-  .swiper-slide {
-    width: 100%;
-    height: 100%;
-  }
-  .swiper-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .hero-overlay-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(255,255,255,0.72);
-    backdrop-filter: blur(10px);
-    padding: 2rem 2rem 2.5rem;
-    border-radius: 1rem;
-    text-align: center;
-    max-width: 700px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-  }
-  .hero-title {
-    font-size: 2.3rem;
-    font-weight: 500;
-    margin-bottom: 1.5rem;
-  }
-  .hero-description {
-    font-size: 1.05rem;
-    line-height: 1.9;
-    opacity: 0.85;
-    margin-bottom: 2rem;
-  }
-  .btn--hero {
-    background: #F4B942;
-    color: #1B2A41;
-    font-weight: 600;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    border: 2px solid transparent;
-    text-decoration: none;
-    transition: background 0.25s ease, transform 0.25s ease;
-  }
-  .btn--hero:hover {
-    background: #fff;
-    border-color: #F4B942;
-    transform: translateY(-3px);
-  }
+/* ——— force Poppins everywhere ——— */
+body, h1, h2, h3, p, a, button { font-family: 'Poppins', sans-serif; }
+
+/* ---------- Hero Swiper ---------- */
+.hero-swiper { height: 100vh; overflow:hidden; position:relative; }
+.swiper, .swiper-slide { width:100%; height:100%; }
+.swiper-slide img { width:100%; height:100%; object-fit:cover; }
+
+/* ---------- Overlay box ---------- */
+.hero-overlay-text{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  background:rgba(255,255,255,.72); backdrop-filter:blur(10px);
+  padding:2rem 2rem 2.5rem; border-radius:1rem; text-align:center;
+  max-width:700px; box-shadow:0 10px 20px rgba(0,0,0,.05);
+}
+.hero-title{ font-size:2.3rem; font-weight:600; margin:0 0 1.25rem; }
+.hero-description{ font-size:1.05rem; line-height:1.9; margin-bottom:2rem; }
+
+/* ---------- CTA button ---------- */
+.btn--hero{
+  background:#F4B942; color:#1B2A41; font-weight:600;
+  padding:.75rem 1.5rem; border-radius:8px; border:2px solid transparent;
+  text-decoration:none; transition:background .25s ease,transform .25s ease;
+}
+.btn--hero:hover{ background:#FFF; border-color:#F4B942; transform:translateY(-3px); }
+
+/* ---------- Features ---------- */
+.features{ background:#fdfdfd; padding:5rem 1.5rem; text-align:center; }
+.features h2{ font-size:2rem; color:#415D43; margin-bottom:3rem; }
+
+.features-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:3rem; max-width:1100px; margin-inline:auto;
+}
+.feature-card{
+  padding:3rem 2rem; background:#fff; border-radius:1rem;
+  box-shadow:0 20px 40px rgba(0,0,0,.04);
+  transition:transform .4s ease, box-shadow .4s ease;
+}
+.icon-wrap{ display:flex; justify-content:center; margin-bottom:1.25rem; }
+.feature-card h3{ font-size:1.25rem; margin-bottom:.75rem; }
+.feature-card p{ font-size:.95rem; color:#444; }
+
+/* ---------- Fade utils ---------- */
+.pre-fade{ opacity:0; transform:translateY(20px); transition:all .7s ease; }
+.fade-in { opacity:1!important; transform:translateY(0)!important; }
+
+/* ---------- Quote strip ---------- */
+.quote-strip{ position:relative; width:100%; height:65vh; overflow:hidden; }
+.quote-strip img{ width:100%; height:100%; object-fit:cover; }
+.quote-overlay{
+  position:absolute; inset:0;
+  background:linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.4));
+  display:flex; align-items:flex-end; justify-content:center; padding:4rem 1.5rem;
+  font-size:1.4rem; color:#fff; text-align:center; max-width:700px; margin:auto;
+  font-weight:400; line-height:1.5;
+}
+.quote-overlay span{ font-weight:600; }
+
+/* ---------- Small tweaks ---------- */
+.feature-card:hover .icon-wrap{
+  transform:scale(1.06); filter:drop-shadow(0 3px 5px rgba(0,0,0,.05));
+}
 </style>
