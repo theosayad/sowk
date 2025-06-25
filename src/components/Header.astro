@@ -62,34 +62,41 @@ const toggleMenu = () => {
 
   /* ───────────── mobile dropdown ───────────── */
 @media (max-width: 768px) {
-  header {
-    height: 90px; /* match your logo height for consistent positioning */
+  .nav-toggle {
+    display: block;
   }
 
   #nav-menu {
-    position: absolute;
-    top: 90px; /* directly below the header */
-    left: 0;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    border-top: 1px solid #ddd;
-    border-radius: 0 0 12px 12px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
-    padding: 1.5rem 2rem;
+    /* hidden by default */
     display: none;
     flex-direction: column;
+
+    /* ----- perfect visual connection to header ----- */
+    position: absolute;
+    top: 100%;              /* aligns directly to bottom edge of header */
+    left: 50%;
+    transform: translateX(-50%);  /* center the panel */
+    
+    width: calc(100% - 3rem);   /* 1.5rem side padding */
+    margin-top: 0;              /* remove vertical gap */
+
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(10px);
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    
+    padding: 1.5rem 2rem;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
   #nav-menu.open {
     display: flex;
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(-50%);
   }
 }
+
 
 
 </style>
