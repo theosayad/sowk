@@ -2,17 +2,21 @@
 import Layout from '../../../layouts/Default.astro';
 import activities from '../../../data/activities.json' assert { type: 'json' };
 
-/* helper shared by list + path-builder */
-const slugify = (s) =>
-  s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-
-/* 1) build-time paths for every unique category  */
-export function getStaticPaths() {
-  const cats = [...new Set(activities.map(a => a.category).filter(Boolean))];
-  return cats.map(c => ({ params: { cat: slugify(c) } }));
+/* ── helpers ──────────────────────────────────────────────── */
+function slugify(str) {
+  return str
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
 }
 
-/* 2) data for this specific category page */
+/* ── 1. build-time paths for every category ───────────────── */
+export function getStaticPaths() {
+  const cats = [...new Set(activities.map(a => a.category).filter(Boolean))];
+  return cats.map(cat => ({ params: { cat: slugify(cat) } }));
+}
+
+/* ── 2. data for this specific page ───────────────────────── */
 const { cat } = Astro.params;
 const list = activities.filter(a => slugify(a.category || '') === cat);
 const humanCat = list.length ? list[0].category : cat.replace(/-/g, ' ');
