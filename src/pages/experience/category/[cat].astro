@@ -1,20 +1,24 @@
 ---
-import Layout from '../../../layouts/Default.astro';
-import activities from '../../../data/activities.json' assert { type: 'json' };
+// category page stub
+import Layout from '../../layouts/Default.astro';
+import activities from '../../data/activities.json' assert { type: 'json' };
+
 const { cat } = Astro.params;
-const decoded = cat.replace(/-/g,' ');
-const list = activities.filter(a => a.category.toLowerCase() === decoded);
+const list = activities.filter(a => a.category && cat === a.category.toLowerCase().replace(/[^a-z0-9]+/g,'-'));
 ---
 
-<Layout title={`${decoded} · Experience`}>
-  <h1 class="cat-title">{decoded}</h1>
+<Layout title={`${cat.replace(/-/g,' ')} · SOWK`}>
+  <h1 style="padding:2rem;">{cat.replace(/-/g,' ')}</h1>
 
-  <div class="cat-grid">
+  <div style="display:grid;gap:1.5rem;padding:0 2rem;
+              grid-template-columns:repeat(auto-fit,minmax(300px,1fr));">
     {list.map(a => (
-      <a href={`/experience/${a.slug}`} class="cat-card">
-        <img src={a.image} alt={a.name} loading="lazy" />
-        <h3>{a.name}</h3>
-        <p>{a.distance.toFixed(1)} km away</p>
+      <a href={`/experience/${a.slug}`} style="text-decoration:none;color:inherit;">
+        <img src={a.image} alt={a.name} style="width:100%;height:180px;object-fit:cover;border-radius:.75rem .75rem 0 0;">
+        <div style="padding:1rem;border:1px solid #eee;border-top:0;border-radius:0 0 .75rem .75rem;">
+          <h2 style="font-size:1.1rem;font-weight:600;">{a.name}</h2>
+          <p style="font-size:.85rem;color:#667;">{a.distance.toFixed(1)} km away</p>
+        </div>
       </a>
     ))}
   </div>
