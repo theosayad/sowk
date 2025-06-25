@@ -1,22 +1,33 @@
 ---
-// category page stub
-import Layout from '../../layouts/Default.astro';
-import activities from '../../data/activities.json' assert { type: 'json' };
+import Layout from '../../../layouts/Default.astro';
+import activities from '../../../data/activities.json' assert { type: 'json' };
 
 const { cat } = Astro.params;
-const list = activities.filter(a => a.category && cat === a.category.toLowerCase().replace(/[^a-z0-9]+/g,'-'));
+const humanCat = cat.replace(/-/g, ' ');
+const list = activities.filter(
+  a => a.category && cat === a.category.toLowerCase().replace(/[^a-z0-9]+/g,'-')
+);
 ---
 
-<Layout title={`${cat.replace(/-/g,' ')} · SOWK`}>
-  <h1 style="padding:2rem;">{cat.replace(/-/g,' ')}</h1>
+<Layout title={`${humanCat} · SOWK`}>
+  <h1 style="padding:2rem 2.5rem;font-family:Poppins,sans-serif;">{humanCat}</h1>
 
-  <div style="display:grid;gap:1.5rem;padding:0 2rem;
-              grid-template-columns:repeat(auto-fit,minmax(300px,1fr));">
+  <div
+    style="
+      display:grid;
+      gap:1.5rem;
+      padding:0 2.5rem 3rem;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    "
+  >
     {list.map(a => (
-      <a href={`/experience/${a.slug}`} style="text-decoration:none;color:inherit;">
-        <img src={a.image} alt={a.name} style="width:100%;height:180px;object-fit:cover;border-radius:.75rem .75rem 0 0;">
-        <div style="padding:1rem;border:1px solid #eee;border-top:0;border-radius:0 0 .75rem .75rem;">
-          <h2 style="font-size:1.1rem;font-weight:600;">{a.name}</h2>
+      <a href={`/experience/${a.slug}`}
+         style="color:inherit;text-decoration:none;border-radius:.75rem;overflow:hidden;
+                background:#fff;box-shadow:0 12px 32px rgba(0,0,0,.06);">
+        <img src={a.image} alt={a.name}
+             style="width:100%;height:180px;object-fit:cover;">
+        <div style="padding:1rem;">
+          <h2 style="font-size:1.1rem;font-weight:600;margin-bottom:.4rem;">{a.name}</h2>
           <p style="font-size:.85rem;color:#667;">{a.distance.toFixed(1)} km away</p>
         </div>
       </a>
