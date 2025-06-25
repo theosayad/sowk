@@ -1,9 +1,10 @@
 ---
 /*
-  Front-matter
-  ──────────────────────────────────────────────────────────────
-  • Same toggleMenu helper you asked to keep
-  • Removed `base` because Netlify serves from root — no subfolder
+  Header (Moroseta-inspired)
+  ─────────────────────────────────────────────────────
+  • Logo centered, hamburger on left
+  • Taller header
+  • Mobile-optimized
 */
 const toggleMenu = () => {
   const nav  = document.getElementById('nav-menu');
@@ -14,35 +15,53 @@ const toggleMenu = () => {
 ---
 
 <style>
-  /*  ───────────────────────────────────────── header ───────────────────────────────────────── */
   header {
     position: sticky;
     top: 0;
     z-index: 20;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    padding: 0.75rem 1.25rem;
+    padding: 1rem 1.5rem;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    height: 100px;
     transition: box-shadow 0.3s ease, padding 0.3s ease;
   }
+
   header.scrolled {
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-    padding: 0.5rem 1.25rem;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   }
 
-  /*  ─────────────────────────────────────── burger icon ────────────────────────────────────── */
+  .nav-container {
+    position: relative;
+    width: 100%;
+    max-width: 1280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo {
+    height: 72px;
+    transition: height 0.3s ease;
+  }
+
   .nav-toggle {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
     display: none;
     width: 30px;
     height: 30px;
     background: none;
     border: none;
-    position: relative;
     cursor: pointer;
+    z-index: 30;
   }
+
   .nav-toggle span,
   .nav-toggle span::before,
   .nav-toggle span::after {
@@ -55,14 +74,18 @@ const toggleMenu = () => {
     width: 100%;
     transition: all 0.3s ease;
   }
-  .nav-toggle span            { top: 50%; transform: translateY(-50%); }
-  .nav-toggle span::before    { top: -10px; }
-  .nav-toggle span::after     { top:  10px; }
+
+  .nav-toggle span {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .nav-toggle span::before { top: -10px; }
+  .nav-toggle span::after  { top:  10px; }
+
   .nav-toggle.open span       { background-color: transparent; }
   .nav-toggle.open span::before { top: 0; transform: rotate(45deg); }
   .nav-toggle.open span::after  { top: 0; transform: rotate(-45deg); }
 
-  /*  ───────────────────────────────────────── nav links ─────────────────────────────────────── */
   #nav-menu {
     display: flex;
     gap: 1.5rem;
@@ -70,12 +93,19 @@ const toggleMenu = () => {
     font-weight: 500;
     font-size: 1rem;
   }
-  #nav-menu a           { transition: color 0.2s ease; }
-  #nav-menu a:hover     { color: #F4B942; }
 
-  /*  ───────────────────────────────────── mobile dropdown ───────────────────────────────────── */
+  #nav-menu a {
+    transition: color 0.2s ease;
+  }
+
+  #nav-menu a:hover {
+    color: #F4B942;
+  }
+
   @media (max-width: 768px) {
-    .nav-toggle { display: block; }
+    .nav-toggle {
+      display: block;
+    }
 
     #nav-menu {
       display: none;
@@ -84,16 +114,18 @@ const toggleMenu = () => {
       top: 100%;
       left: 0;
       width: 100%;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(8px);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
       border-top: 1px solid #ddd;
       border-radius: 0 0 12px 12px;
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
       opacity: 0;
       transform: translateY(-10px);
       transition: all 0.3s ease;
-      padding: 1.5rem 2rem; /* spacing inside dropdown */
+      padding: 1.5rem 2rem;
+      z-index: 20;
     }
+
     #nav-menu.open {
       display: flex;
       opacity: 1;
@@ -101,35 +133,33 @@ const toggleMenu = () => {
     }
   }
 
-  /*  ──────────────────────────────────────── logo size ─────────────────────────────────────── */
-  .logo { height: 90px; transition: height 0.3s ease; }
-  @media (max-width: 1024px) { .logo { height: 60px; } }
-  @media (max-width: 640px)  { .logo { height: 70px; } }
+  @media (max-width: 640px) {
+    .logo {
+      height: 80px;
+    }
+  }
 </style>
 
 <header id="site-header">
-  <!-- logo served straight from /public/images -->
-  <a href="/">
-    <img src="/images/sowk_logo-min.png" alt="SOWK logo" class="logo" />
-  </a>
+  <div class="nav-container">
+    <button class="nav-toggle" id="burger-icon" onclick="toggleMenu()">
+      <span></span>
+    </button>
 
-  <!-- hamburger -->
-  <button class="nav-toggle" id="burger-icon" onclick="toggleMenu()">
-    <span></span>
-  </button>
+    <a href="/">
+      <img src="/images/sowk_logo-min.png" alt="SOWK logo" class="logo" />
+    </a>
 
-  <!-- navigation -->
-  <nav id="nav-menu">
-    <a href="/">Home</a>
-    <a href="/gallery">Gallery</a>
-    <a href="/experience">Experience</a>
-    <a href="/contact">Contact</a>
-  </nav>
+    <nav id="nav-menu">
+      <a href="/">Home</a>
+      <a href="/gallery">Gallery</a>
+      <a href="/experience">Experience</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </div>
 </header>
 
-<!-- client-side helpers -->
 <script is:inline>
-  /* share the same behaviour in the browser */
   function toggleMenu () {
     const nav  = document.getElementById('nav-menu');
     const icon = document.getElementById('burger-icon');
@@ -137,7 +167,6 @@ const toggleMenu = () => {
     icon?.classList.toggle('open');
   }
 
-  /* add / remove shadow on scroll */
   window.addEventListener('scroll', () => {
     document.getElementById('site-header')
             .classList.toggle('scrolled', window.scrollY > 10);
