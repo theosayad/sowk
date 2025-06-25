@@ -13,20 +13,20 @@
     "image": "https://guide.moovtoo.com/public/storage/galleries/Venue/smar-jbeil-citadel-13308/Smar%20Jbeil%20Citadel/smar-jbeil-citadel-13308-2022-01-14-61e1b5ea8d181.jpg"
   },
   {
-    "name": "Saint Bassil & Nohra Church (Oldest Virgin Mary Church)",
+    "name": "Saint Nohra Church",
     "category": "Spiritual & Wellness",
     "location": "Smar Jbeil village centre",
     "distance": 0.3,
     "lat": 34.218056,
     "lng": 35.690556,
     "description": "Maronite church built on Roman temple foundations; famed for ancient stone façade.",
-    "copy": "Maronite church built on Roman temple foundations; famed for ancient stone façade. Step inside to admire hand‑cut stone walls and luminous iconography; serenity seekers are welcome to light a candle.",
-    "link": "https://lebanonuntravelled.com/the-oldest-virgin-mary-church-in-lebanon-smar-jbeil/",
-    "slug": "saint-bassil-nohra-church-oldest-virgin-mary-church",
-    "image": "https://i.imgur.com/v8Mb1Jq.jpeg"
+    "copy": "The church of St Nohra is considered to be one of the oldest churches in the Levant dating back to the third century, and bares the patronage of St Logius, also known as Nohra, who was martyred in the nearby castle according to tradition. The first mention of the church comes from a medieval manuscript of a Bible in the florentine Medicci library. The church was built over different stages. The first stones were begotten from local pagan temples. It was an important pilgrimage site due to its patron, St Nohra, who is considered the patron saint of the eyesight.",
+    "link": "https://churches-lb.com/city/smar%20jbayl/churches-leb/smar-jbeil-st-nohras-church/",
+    "slug": "saint-nohra-church",
+    "image": "https://www.lebanoninapicture.com/pages/saint-nohra-s-church-smar-jbeil-batroun-northern-lebano/saint-nohra-s-church-smar-jbeil-batroun-norther-4-30-2018-10-07-57-am-m.jpg"
   },
   {
-    "name": "Our Lady of Gifts Chapel ruins",
+    "name": "Saydet El Maounet Church (Oldest Virgin Mary Church)",
     "category": "Spiritual & Wellness",
     "location": "Smar Jbeil",
     "distance": 0.4,
@@ -34,9 +34,9 @@
     "lng": 35.6895,
     "description": "Tiny one-nave chapel older than Saint Nohra, prized for faded 9th-century wall fresco of the Virgin.",
     "copy": "Tiny one-nave chapel older than Saint Nohra, prized for faded 9th-century wall fresco of the Virgin. Step inside to admire hand‑cut stone walls and luminous iconography; serenity seekers are welcome to light a candle.",
-    "link": "https://lebanonuntravelled.com/7-beautiful-churches-to-visit-on-holy-thursday/",
-    "slug": "our-lady-of-gifts-chapel-ruins",
-    "image": "/images/placeholder.jpg"
+    "link": "https://lebanonuntravelled.com/the-oldest-virgin-mary-church-in-lebanon-smar-jbeil/",
+    "slug": "saydet-el-maounet-church-oldest-virgin-mary-church",
+    "image": "https://i.imgur.com/v8Mb1Jq.jpeg"
   },
   {
     "name": "Atibaia Winery tasting room",
@@ -49,7 +49,7 @@
     "copy": "Boutique vineyard planted on 17th-century terraced slopes; offers guided cellar tours & organic wines. Book a tasting ahead to sample estate blends paired with foraged mezze in a shaded stone courtyard.",
     "link": "https://atibaiawine.com/",
     "slug": "atibaia-winery-tasting-room",
-    "image": "/images/placeholder.jpg"
+    "image": "https://winefromlebanon.com/wp-content/uploads/2022/04/140394553_1130969923983946_83742174061419050_n.jpg"
   },
   {
     "name": "Olive Grove & Village Trail",
@@ -88,7 +88,7 @@
     "copy": "10 km moderate hike linking the fortress to Sainte Rafqa shrine and down Wadi Harba canyon.",
     "link": "https://www.wikiloc.com/hiking-trails/smar-jbeil-sainte-rafqa-wadi-harba-madfoun-61297114",
     "slug": "smar-jbeil-sainte-rafqa-wadi-harba-hike",
-    "image": "/images/placeholder.jpg"
+    "image": "https://pbs.twimg.com/media/DW_x3pmXUAAFY0Y.jpg"
   },
   {
     "name": "Saint Rafqa Monastery, Jrabta",
@@ -101,7 +101,7 @@
     "copy": "Pilgrimage site housing the tomb of Saint Rafqa; tranquil gardens & small museum. Step inside to admire hand‑cut stone walls and luminous iconography; serenity seekers are welcome to light a candle.",
     "link": "https://lebanonuntravelled.com/tag/religious/",
     "slug": "saint-rafqa-monastery-jrabta",
-    "image": "/images/placeholder.jpg"
+    "image": "https://www.rafqa.org/Images/Group%209.jpg?w=486&h=486"
   },
   {
     "name": "Rachana Sculpture Park & Basbous Museum",
@@ -127,7 +127,7 @@
     "copy": "17th-century cliff-top fort plus 2 km riverside boardwalk ideal for bird-watching and cycling. Guided tours spotlight centuries of layered history and offer sweeping coastal panoramas—an Instagram favourite.",
     "link": "https://en.wikipedia.org/wiki/Mseilha_Fort",
     "slug": "mseilha-fort-darb-mseilha-walkway",
-    "image": "/images/placeholder.jpg"
+    "image": "https://bluejayescapes.com/wp-content/uploads/2021/06/mseilha.jpg"
   },
   {
     "name": "Batroun Old Souk",
@@ -140,7 +140,7 @@
     "copy": "Renovated 19th-century marketplace packed with cafés, pubs, artisan shops & lemonade stalls. Guided tours spotlight centuries of layered history and offer sweeping coastal panoramas—an Instagram favourite.",
     "link": "https://owlovertheworld.com/things-to-do-in-batroun-lebanon/",
     "slug": "batroun-old-souk",
-    "image": "/images/placeholder.jpg"
+    "image": "https://api.beiruting.com/content/uploads/articles/bigstock-Byblos-Lebanon-May-312598672-230420112608275.jpg"
   },
   {
     "name": "St. Stephan’s Cathedral",
