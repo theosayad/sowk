@@ -2,6 +2,7 @@
    1.  Google Font Imports
    ========================================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
 /* ==========================================================================
    2.  A Minimal Reset
@@ -20,20 +21,19 @@ html { scroll-behavior: smooth; }
    3.  Base Typography & Colours
    ========================================================================== */
 body {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
+  font-family: 'Poppins', sans-serif;
+  background-color: #fff;
   color: #1B2A41;
-  background: #fff;
+  line-height: 1.6;
+  font-size: 16px;
 }
 
 h1, h2, h3 {
-  font-family: 'Playfair Display', serif;
-  font-weight: 600;              /* a touch bolder for headings */
-  letter-spacing: -0.2px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
   color: #1B2A41;
+  letter-spacing: -0.2px;
 }
-
 /* ==========================================================================
    4.  Layout Utilities
    ========================================================================== */
