@@ -1,16 +1,22 @@
 ---
+/*
+  Front-matter
+  ──────────────────────────────────────────────────────────────
+  • Same toggleMenu helper you asked to keep
+  • `base` makes links work in dev ( / ) *and* on GitHub Pages ( /sowk/ )
+*/
 const toggleMenu = () => {
-  const nav = document.getElementById("nav-menu");
-  nav.classList.toggle("open");
-  const icon = document.getElementById("burger-icon");
-  icon.classList.toggle("open");
+  const nav  = document.getElementById('nav-menu');
+  const icon = document.getElementById('burger-icon');
+  nav?.classList.toggle('open');
+  icon?.classList.toggle('open');
 };
-import logo from '/images/sowk_logo-min.png';
-import { Astro } from 'astro';
+
+const base = import.meta.env.BASE_URL;   // "/" locally, "/sowk/" in prod
 ---
 
-
 <style>
+  /*  ───────────────────────────────────────── header ───────────────────────────────────────── */
   header {
     position: sticky;
     top: 0;
@@ -24,12 +30,12 @@ import { Astro } from 'astro';
     justify-content: space-between;
     transition: box-shadow 0.3s ease, padding 0.3s ease;
   }
-
   header.scrolled {
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
     padding: 0.5rem 1.25rem;
   }
 
+  /*  ─────────────────────────────────────── burger icon ────────────────────────────────────── */
   .nav-toggle {
     display: none;
     width: 30px;
@@ -39,7 +45,6 @@ import { Astro } from 'astro';
     position: relative;
     cursor: pointer;
   }
-
   .nav-toggle span,
   .nav-toggle span::before,
   .nav-toggle span::after {
@@ -52,34 +57,14 @@ import { Astro } from 'astro';
     width: 100%;
     transition: all 0.3s ease;
   }
+  .nav-toggle span            { top: 50%; transform: translateY(-50%); }
+  .nav-toggle span::before    { top: -10px; }
+  .nav-toggle span::after     { top:  10px; }
+  .nav-toggle.open span       { background-color: transparent; }
+  .nav-toggle.open span::before { top: 0; transform: rotate(45deg); }
+  .nav-toggle.open span::after  { top: 0; transform: rotate(-45deg); }
 
-  .nav-toggle span {
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .nav-toggle span::before {
-    top: -10px;
-  }
-
-  .nav-toggle span::after {
-    top: 10px;
-  }
-
-  .nav-toggle.open span {
-    background-color: transparent;
-  }
-
-  .nav-toggle.open span::before {
-    top: 0;
-    transform: rotate(45deg);
-  }
-
-  .nav-toggle.open span::after {
-    top: 0;
-    transform: rotate(-45deg);
-  }
-
+  /*  ───────────────────────────────────────── nav links ─────────────────────────────────────── */
   #nav-menu {
     display: flex;
     gap: 1.5rem;
@@ -87,19 +72,12 @@ import { Astro } from 'astro';
     font-weight: 500;
     font-size: 1rem;
   }
+  #nav-menu a           { transition: color 0.2s ease; }
+  #nav-menu a:hover     { color: #F4B942; }
 
-  #nav-menu a {
-    transition: color 0.2s ease;
-  }
-
-  #nav-menu a:hover {
-    color: #F4B942;
-  }
-
+  /*  ───────────────────────────────────── mobile dropdown ───────────────────────────────────── */
   @media (max-width: 768px) {
-    .nav-toggle {
-      display: block;
-    }
+    .nav-toggle { display: block; }
 
     #nav-menu {
       display: none;
@@ -116,9 +94,8 @@ import { Astro } from 'astro';
       opacity: 0;
       transform: translateY(-10px);
       transition: all 0.3s ease;
-      padding: 1.5rem 2rem; /* Added spacing inside dropdown */
+      padding: 1.5rem 2rem; /* spacing inside dropdown */
     }
-
     #nav-menu.open {
       display: flex;
       opacity: 1;
@@ -126,50 +103,45 @@ import { Astro } from 'astro';
     }
   }
 
-  .logo {
-    height: 90px;
-    transition: height 0.3s ease;
-  }
-
-  @media (max-width: 1024px) {
-    .logo {
-      height: 60px;
-    }
-  }
-
-  @media (max-width: 640px) {
-    .logo {
-      height: 70px;
-    }
-  }
-
+  /*  ──────────────────────────────────────── logo size ─────────────────────────────────────── */
+  .logo { height: 90px; transition: height 0.3s ease; }
+  @media (max-width: 1024px) { .logo { height: 60px; } }
+  @media (max-width: 640px)  { .logo { height: 70px; } }
 </style>
 
 <header id="site-header">
-  <a href="/">
-    <img src={logo.src} alt="SOWK logo" class="logo" />
-      
+  <!-- logo served straight from /public/images -->
+  <a href={base}>
+    <img src="/images/sowk_logo-min.png" alt="SOWK logo" class="logo" />
   </a>
 
-  <button class="nav-toggle" id="burger-icon" onclick="document.getElementById('nav-menu').classList.toggle('open'); this.classList.toggle('open')">
+  <!-- hamburger -->
+  <button class="nav-toggle" id="burger-icon" onclick="toggleMenu()">
     <span></span>
   </button>
 
+  <!-- navigation -->
   <nav id="nav-menu">
-    <a href={Astro.resolve('/')}>Home</a>
-    <a href={Astro.resolve('/gallery')}>Gallery</a>
-    <a href={Astro.resolve('/experience')}>Experience</a>
-    <a href={Astro.resolve('/contact')}>Contact</a>
+    <a href={base}>Home</a>
+    <a href={`${base}gallery`}>Gallery</a>
+    <a href={`${base}experience`}>Experience</a>
+    <a href={`${base}contact`}>Contact</a>
   </nav>
 </header>
 
-<script>
+<!-- client-side helpers -->
+<script is:inline>
+  /* share the same behaviour in the browser */
+  function toggleMenu () {
+    const nav  = document.getElementById('nav-menu');
+    const icon = document.getElementById('burger-icon');
+    nav?.classList.toggle('open');
+    icon?.classList.toggle('open');
+  }
+
+  /* add / remove shadow on scroll */
   window.addEventListener('scroll', () => {
-    const header = document.getElementById('site-header');
-    if (window.scrollY > 10) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
+    document.getElementById('site-header')
+            .classList.toggle('scrolled', window.scrollY > 10);
   });
 </script>
