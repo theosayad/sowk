@@ -72,15 +72,36 @@ const slugify = (s: string) =>
   /* force Poppins */
   body, h1, h3, p, a { font-family:'Poppins',sans-serif; }
 
+  /* ---------- hero ---------- */
   .experience-hero {
-    text-align:center;
-    margin:4rem 0 2rem;
+    text-align: center;
+    margin: 4rem 0 2rem;
+    /* add horizontal padding on all viewports */
+    padding: 0 1.5rem;
   }
   .experience-hero h1 {
-    font-size:2.4rem;
-    font-weight:700;
-    line-height:1.2;
+    font-size: 2.2rem;
+    font-weight: 700;
+    line-height: 1.25;
+    /* keep it centered and constrain width */
+    max-width: 700px;
+    margin: 0 auto;
   }
+  
+  /* tighter on small screens */
+  @media (max-width: 640px) {
+    .experience-hero {
+      /* bump the vertical margins in a bit if you like */
+      margin: 3rem 0 1.5rem;
+      /* a bit more side padding */
+      padding: 0 2rem;
+    }
+    .experience-hero h1 {
+      /* slightly smaller text for mobile */
+      font-size: 1.8rem;
+    }
+  }
+
 
   /* details/summary styles */
   .category-section {
