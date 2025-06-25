@@ -19,6 +19,10 @@ const slugify = (s: string) =>
     <h1>Things to do in &amp; around Smar Jbeil</h1>
   </section>
 
+  <!-- ─────────────── boutique minimal separator ─────────────── -->
+  <div class="experience-separator"></div>
+   
+
   {categories.map((cat) => {
     const id = slugify(cat);
     return (
@@ -198,4 +202,14 @@ const slugify = (s: string) =>
       line-height: 1.2;
     }
   }
+
+   /* ─────── boutique minimal separator ─────── */
+  .experience-separator {
+    width: 60px;
+    height: 2px;
+    background-color: #C8B7A6;
+    margin: 2.5rem auto;
+    opacity: 0.6;
+  }
+
 </style>
