@@ -21,14 +21,9 @@ import Layout from '../layouts/Default.astro';
         A private villa hidden in the pine hills and stone walls of Smar Jbeil.<br />
         Where mornings begin in stillness and nights end beside the fire.
       </p>
-
-      <a
-        href="https://instagram.com/sowklb"
-        class="btn"
-        target="_blank"
-        style="text-decoration: none; color: #000;"
-      >
-        Book Your Stay
+      
+      <a href="https://instagram.com/sowklb" class="btn btn--hero" target="_blank">
+        Book&nbsp;Your&nbsp;Stay
       </a>
 
       <div class="scroll-indicator">
@@ -211,6 +206,20 @@ import Layout from '../layouts/Default.astro';
   .scroll-indicator { margin-top: 2.5rem; animation: bounce 1.8s infinite ease-in-out; opacity: 0.6; }
   @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
 
-  .fade-title { opacity: 0; transform: translateY(20px); transition: all 0.7s ease; }
-  .fade-title.visible { opacity: 1; transform: translateY(0); }
+  .fade-title { opacity: 1; transform: none; transition: none; }
+
+  .btn--hero {
+    background: #F4B942;
+    color: #1B2A41;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    transition: background 0.25s ease, transform 0.25s ease;
+  }
+  .btn--hero:hover {
+    background: #FFF;
+    border-color: #F4B942;
+    transform: translateY(-3px);
+  }
 </style>
