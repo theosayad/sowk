@@ -1,0 +1,21 @@
+---
+import Layout from '../../../layouts/Default.astro';
+import activities from '../../../data/activities.json' assert { type: 'json' };
+const { cat } = Astro.params;
+const decoded = cat.replace(/-/g,' ');
+const list = activities.filter(a => a.category.toLowerCase() === decoded);
+---
+
+<Layout title={`${decoded} · Experience`}>
+  <h1 class="cat-title">{decoded}</h1>
+
+  <div class="cat-grid">
+    {list.map(a => (
+      <a href={`/experience/${a.slug}`} class="cat-card">
+        <img src={a.image} alt={a.name} loading="lazy" />
+        <h3>{a.name}</h3>
+        <p>{a.distance.toFixed(1)} km away</p>
+      </a>
+    ))}
+  </div>
+</Layout>
