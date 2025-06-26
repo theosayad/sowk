@@ -124,35 +124,227 @@
   <div class="typewriter">
     <span class="typewriter-text" id="typewriterText">Hi there! From here onwards, please drop off all your worries.</span>
   </div>
-  
-  <div class="truck-scene">
-    <div class="truck-container" id="truckContainer">
-      <svg class="truck-svg" viewBox="0 0 500 300">
-        <!-- Truck body - kids drawing style -->
-        <g stroke="#000000" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round">
-          <!-- Wheels -->
-          <circle cx="100" cy="250" r="40" fill="#333333"/>
-          <circle cx="400" cy="250" r="40" fill="#333333"/>
-          
-          <!-- Truck body -->
-          <path d="M50 250 L450 250 L450 100 L350 100 L300 50 L150 50 L100 100 L50 100 Z" fill="#FF6B6B"/>
-          
-          <!-- Dump bed -->
-          <g class="dump-bed" id="dumpBed">
-            <path d="M150 100 L450 100 L450 50 L200 50 Z" fill="#FFD93D"/>
-          </g>
-          
-          <!-- Cab -->
-          <rect x="50" y="100" width="100" height="150" fill="#4ECDC4"/>
-          
-          <!-- Window -->
-          <rect x="70" y="120" width="60" height="80" fill="#F8F3D4"/>
-          
-          <!-- Details -->
-          <line x1="70" y1="220" x2="130" y2="220" stroke="#000000" stroke-width="6"/> <!-- Grill -->
-        </g>
-      </svg>
-    </div>
+
+<div class="truck-scene">
+  <div id="sketch-container"></div>
+
+  <!-- p5.js library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+
+  <!-- Full truck animation sketch -->
+  <script type="module">
+    const sketch = (p) => {
+      let truck;
+      let typer;
+
+      p.setup = () => {
+        p.createCanvas(800, 320).parent("sketch-container");
+        truck = new Truck(-500, 240);
+        typer = new Typewriter(
+          "Caterpillar 793 F — 300 t payload, 2,650 hp.\nNeed dirt moved? Call CAT.",
+          60, 70, 20
+        );
+        p.textFont('Courier New', 20);
+        p.frameRate(60);
+      };
+
+      p.draw = () => {
+        p.background(235);
+        drawGround();
+        truck.update();
+        truck.display();
+        typer.update(truck.isParked());
+        typer.display();
+      };
+
+      function drawGround() {
+        p.noStroke();
+        p.fill(200, 180, 130);
+        p.rect(0, p.height * 0.65, p.width, p.height * 0.35);
+      }
+
+      class Truck {
+        constructor(x, y) {
+          this.originX = x;
+          this.y = y;
+          this.reset();
+        }
+
+        reset() {
+          this.x = this.originX;
+          this.state = 'IN';
+          this.speed = 3.2;
+        }
+
+        isParked() {
+          return this.state === 'PARKED';
+        }
+
+        update() {
+          switch (this.state) {
+            case 'IN':
+              this.x += this.speed;
+              if (this.x >= p.width * 0.2) {
+                this.state = 'PARKED';
+                this.parkedAt = p.millis();
+              }
+              break;
+            case 'PARKED':
+              if (typer.finished && p.millis() - this.parkedAt > 4000) {
+                this.state = 'OUT';
+              }
+              break;
+            case 'OUT':
+              this.x += this.speed;
+              break;
+          }
+        }
+
+        display() {
+          p.push();
+          p.translate(this.x, this.y);
+          p.scale(0.7);
+
+          const yellow = p.color(229, 178, 45);
+          const black = 30;
+
+          p.noStroke();
+          p.fill(30);
+          p.ellipse(0, 0, 240, 240);
+          p.ellipse(360, 0, 240, 240);
+
+          p.fill(95, 73, 12);
+          p.ellipse(0, 0, 140, 140);
+          p.ellipse(360, 0, 140, 140);
+
+          p.fill(yellow);
+          p.rect(-120, -160, 600, 90);
+          p.quad(-120, -160, 530, -160, 560, -70, -150, -70);
+
+          p.rect(200, -220, 160, 150);
+          p.fill(black);
+          p.rect(220, -210, 50, 60);
+          p.rect(285, -210, 55, 60);
+
+          p.fill(yellow);
+          p.rect(160, -260, 260, 40);
+
+          p.fill(black);
+          p.rect(-40, -135, 90, 45, 6);
+          p.fill(255);
+          p.textSize(26);
+          p.textAlign(p.CENTER, p.CENTER);
+          p.text('CAT', 5, -112);
+
+          p.fill(black);
+          p.rect(245, -50, 55, 30, 4);
+          p.fill(255);
+          p.textSize(18);
+          p.text('793', 272, -36);
+
+          p.pop();
+        }
+      }
+
+      class Typewriter {
+        constructor(txt, x, baselineY, sizePx = 24) {
+          this.fullText = txt;
+          this.x0 = x;
+          this.y0 = baselineY;
+          this.size = sizePx;
+          this.reset();
+        }
+
+        reset() {
+          this.letters = [];
+          this.cursor = 0;
+          this.nextTypeDue = p.millis() + 800;
+          this.finished = false;
+        }
+
+        update(allowedToType) {
+          if (!allowedToType || this.finished) return;
+
+          const now = p.millis();
+          if (now >= this.nextTypeDue && this.cursor < this.fullText.length) {
+            const ch = this.fullText[this.cursor];
+            let delay = p.randomGaussian(65, 25);
+            if (',.;!?'.includes(ch)) delay += 350;
+            if (ch === '\n') delay += 500;
+            delay = p.max(delay, 30);
+            this.nextTypeDue = now + delay;
+
+            if (ch === '\n') {
+              this.cursor++;
+              return;
+            }
+
+            const row = (this.fullText.substring(0, this.cursor).match(/\n/g) || []).length;
+            const col = this.fullText
+              .substring(this.fullText.lastIndexOf('\n', this.cursor - 1) + 1, this.cursor).length;
+
+            const destX = this.x0 + col * this.size * 0.6;
+            const destY = this.y0 + row * this.size * 1.4;
+
+            this.letters.push(new Letter(ch, destX, destY, this.size));
+            this.cursor++;
+          } else if (this.cursor >= this.fullText.length && !this.finished) {
+            this.finished = true;
+          }
+
+          for (const l of this.letters) l.update();
+        }
+
+        display() {
+          for (const l of this.letters) l.display();
+          if (!this.finished && truck.isParked() && p.frameCount % 40 < 20) {
+            const caretX = this.x0 + this.cursor * this.size * 0.6;
+            p.line(caretX, this.y0, caretX, this.y0 - this.size);
+          }
+        }
+      }
+
+      class Letter {
+        constructor(char, destX, destY, sizePx) {
+          this.char = char;
+          this.dest = p.createVector(destX, destY - 4);
+          this.pos = p.createVector(destX, destY - 140);
+          this.vel = p.createVector(p.random(-1, 1), p.random(5, 10));
+          this.acc = p.createVector(0, 0.4);
+          this.size = sizePx;
+          this.settled = false;
+        }
+
+        update() {
+          if (this.settled) return;
+          this.vel.add(this.acc);
+          this.pos.add(this.vel);
+          if (this.pos.y >= this.dest.y) {
+            this.pos.y = this.dest.y;
+            this.vel.y *= -0.35;
+            if (p.abs(this.vel.y) < 0.6) {
+              this.settled = true;
+              this.pos.y = this.dest.y;
+            }
+          }
+        }
+
+        display() {
+          p.push();
+          p.translate(this.pos.x, this.pos.y);
+          p.noStroke();
+          p.fill(20);
+          p.textSize(this.size);
+          p.textAlign(p.LEFT, p.BOTTOM);
+          p.text(this.char, 0, 0);
+          p.pop();
+        }
+      }
+    };
+
+    new p5(sketch);
+  </script>
+</div>
 
     <!-- Letters container for physics simulation -->
     <div id="letterContainer"></div>
