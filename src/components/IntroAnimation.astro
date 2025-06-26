@@ -1,153 +1,203 @@
----
-/* IntroAnimation – single p5 CAT 793 truck, typewriter, worries dump */
----
-<!-- p5 once -->
+<!-- 1️⃣ Load p5.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
 
 <style>
-  /* ────────── layout */
+  /* ───────── layout ───────── */
   .intro-container {
     position: fixed; inset: 0;
-    background:#f8f9fa;
-    display:flex; flex-direction:column; align-items:center;
-    padding-top:2.5rem;           /* ⬅ push sentence down */
-    gap:2rem;
-    z-index:1000; overflow:hidden;
-    font-family:'Comic Sans MS',cursive;
+    background: #f8f9fa;
+    display: flex; flex-direction: column; align-items: center;
+    padding-top: 2.5rem; gap: 2rem;
+    font-family: 'Comic Sans MS', cursive;
+    overflow: hidden; z-index: 1000;
   }
+  /* p5 canvas behind everything */
+  #p5-canvas { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 
-  #p5-canvas { position:absolute; inset:0; z-index:0; pointer-events:none; }
-
-  /* ────────── typewriter */
+  /* ───────── typewriter ───────── */
   .typewriter {
-    font-size:clamp(1rem,4vw,1.8rem);
-    color:#2d3748;
-    white-space:nowrap; overflow:hidden;
-    border-right:3px solid #4a5568;
-    animation:typing 6s steps(62,end) forwards, blink .8s step-end infinite;
-    max-width:90%; text-align:center;
+    font-size: clamp(1rem, 4vw, 1.8rem);
+    color: #2d3748;
+    white-space: nowrap; overflow: hidden;
+    border-right: 3px solid #4a5568;
+    animation: typing 6s steps(62,end) forwards, blink 0.8s step-end infinite;
+    max-width: 90%; text-align: center; z-index: 5;
   }
-  @keyframes typing {from{width:0} to{width:100%}}
-  @keyframes blink  {50%{border-color:transparent}}
+  @keyframes typing { from { width: 0 } to { width: 100% } }
+  @keyframes blink  { 50% { border-color: transparent } }
 
-  /* ────────── letters that fall */
-  #letterContainer { position:relative; z-index:5; }
-  .letter{
-    position:absolute;font:700 2rem 'Comic Sans MS';color:#e53e3e;
-    opacity:0;transition:transform 1s cubic-bezier(.25,.46,.45,.94),opacity .2s;
-    pointer-events:none;
+  /* ───────── falling letters ───────── */
+  #letterContainer { position: relative; z-index: 5; }
+  .letter {
+    position: absolute;
+    font: bold 2rem 'Comic Sans MS';
+    color: #e53e3e;
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 1s cubic-bezier(.25,.46,.45,.94), opacity .2s;
   }
-  .letter.falling{opacity:1}
+  .letter.falling { opacity: 1 }
 
-  /* ────────── outro */
-  .intro-container.fade-out{animation:fade-out 1s ease-out forwards;}
-  @keyframes fade-out{to{opacity:0;pointer-events:none}}
+  /* ───────── fade out ───────── */
+  .intro-container.fade-out {
+    animation: fadeOut 1s ease-out forwards;
+  }
+  @keyframes fadeOut { to { opacity: 0; pointer-events: none } }
 </style>
 
-
-
 <div class="intro-container" id="intro">
+  <!-- p5 canvas goes here -->
   <div id="p5-canvas"></div>
 
+  <!-- Typewriter text -->
   <div class="typewriter" id="sentence">
     Hi there! From here onwards, please drop off all your worries.
   </div>
 
-  <!-- hidden container that will receive falling letters -->
+  <!-- Letters will be injected here -->
   <div id="letterContainer"></div>
 </div>
 
-
-
-<!-- p5 sketch – one realistic CAT 793 -->
-<script type="module">
-const sketch = (p) => {
-  /* helpers */
-  const yellow = () => p.color(229,178,45);
-  class Truck{
-    constructor(){ this.reset(); }
-    reset(){
-      this.x=-600; this.y=p.height*0.68;
-      this.speed=4; this.state='IN'; this.parkedAt=null;
-    }
-    update(){
-      if(this.state==='IN'){ this.x+=this.speed;
-        if(this.x>=p.width*0.33){this.state='PARKED';this.parkedAt=p.millis();p.dispatchEvent(new Event('truckParked'));}}
-      else if(this.state==='PARKED' && p.millis()-this.parkedAt>4500) this.state='OUT';
-      else if(this.state==='OUT'){ this.x+=this.speed;
-        if(this.x>p.width+600) p.dispatchEvent(new Event('truckGone')); }
-    }
-    display(){
-      p.push(); p.translate(this.x,this.y); p.scale(.55);
-      p.noStroke(); p.fill(35); p.ellipse(0,0,240,240); p.ellipse(360,0,240,240);
-      p.fill(95,73,12); p.ellipse(0,0,140,140); p.ellipse(360,0,140,140);
-      p.fill(yellow()); p.rect(-120,-160,600,90);
-      p.quad(-120,-160,530,-160,560,-70,-150,-70);
-      p.rect(200,-220,160,150);
-      p.fill(30); p.rect(220,-210,50,60); p.rect(285,-210,55,60);
-      p.fill(yellow()); p.rect(160,-260,260,40);
-      p.fill(30);p.rect(-40,-135,90,45,6);p.fill(255);p.textSize(26);p.textAlign(p.CENTER,p.CENTER);p.text('CAT',5,-112);
-      p.fill(30);p.rect(245,-50,55,30,4);p.fill(255);p.textSize(18);p.text('793',272,-36);
-      /* dump-bed hinge guide (for letter drop coord): local tip spot */
-      this.bedGlobal = p.createVector(p._renderer._curMatrix[4]-150, p._renderer._curMatrix[5]-70);
-      p.pop();
-    }
+<!-- 2️⃣ One-time session check -->
+<script>
+  if (sessionStorage.getItem('introPlayed')) {
+    document.getElementById('intro').remove();
+  } else {
+    sessionStorage.setItem('introPlayed','true');
   }
-
-  let truck;
-
-  p.setup=()=>{ const c=p.createCanvas(innerWidth,innerHeight);c.parent('p5-canvas');truck=new Truck(); };
-  p.draw =()=>{ p.clear(); truck.update(); truck.display(); };
-  p.windowResized=()=>{ p.resizeCanvas(innerWidth,innerHeight);truck.reset(); };
-};
-new p5(sketch);
 </script>
 
+<!-- 3️⃣ DOM helpers for dumping letters & fading out -->
+<script>
+  const letterBox = document.getElementById('letterContainer');
 
+  function extractWorries(dropX, dropY) {
+    const line = document.getElementById('sentence');
+    const word = 'worries';
+    line.textContent = line.textContent.replace(word, '______');
 
-<!-- DOM coordination: extract "worries", drop letters, fade out -->
-<script type="module">
-const intro  = document.getElementById('intro');
-const line   = document.getElementById('sentence');
-const lBox   = document.getElementById('letterContainer');
+    [...word].forEach((ch, i) => {
+      const el = document.createElement('div');
+      el.className = 'letter';
+      el.textContent = ch;
+      el.style.left = `${dropX}px`;
+      el.style.top  = `${dropY}px`;
+      letterBox.appendChild(el);
 
-let dumpPoint={x:0,y:0};  // will be filled once p5 emits coords
-
-/* receive bed coordinates from p5 each frame */
-window.addEventListener('truckParked',()=>{
-  // grab current dump-bed nose from p5’s global var
-  const p5c   = document.querySelector('#p5-canvas canvas');
-  const rect  = p5c.getBoundingClientRect();
-  // access hidden p5 instance via _pInst (first one)
-  dumpPoint.x = window._p5js ? _p5js[0].bedGlobal.x + rect.left : rect.left+200;
-  dumpPoint.y = window._p5js ? _p5js[0].bedGlobal.y + rect.top  : rect.top + 100;
-
-  /* swap word */
-  const full  = line.textContent; const word='worries';
-  line.textContent = full.replace(word,'______');
-
-  /* little delay, then letter cascade */
-  setTimeout(()=>{
-    [...word].forEach((ch,i)=>{
-      const el=document.createElement('div'); el.className='letter'; el.textContent=ch;
-      el.style.left=`${dumpPoint.x}px`; el.style.top=`${dumpPoint.y}px`;
-      lBox.appendChild(el);
-      setTimeout(()=>{
-        const spread = (i-(word.length-1)/2)*40;
-        const drop   = Math.random()*30+160;
-        const rot    = (Math.random()-.5)*360;
-        el.style.transform=`translate(${spread}px,${drop}px) rotate(${rot}deg)`; el.classList.add('falling');
-      },20);
+      setTimeout(() => {
+        const spread = (i - (word.length - 1)/2) * 40;
+        const drop   = Math.random() * 30 + 160;
+        const rot    = (Math.random() - 0.5) * 360;
+        el.style.transform = `translate(${spread}px, ${drop}px) rotate(${rot}deg)`;
+        el.classList.add('falling');
+      }, 50);
     });
-  }, 800);
-});
+  }
 
-/* fade + clean-up when truck exits right */
-window.addEventListener('truckGone',()=>{
-  setTimeout(()=>{ intro.classList.add('fade-out'); setTimeout(()=>intro.remove(),1000); },2000);
-});
+  function fadeOutIntro() {
+    document.getElementById('intro').classList.add('fade-out');
+    setTimeout(() => document.getElementById('intro').remove(), 1000);
+  }
+</script>
 
-/* run only once per session */
-if(sessionStorage.getItem('introPlayed')) intro.remove();
-else sessionStorage.setItem('introPlayed','true');
+<!-- 4️⃣ p5 sketch: single realistic CAT 793 + triggers -->
+<script>
+  let sketch = (p) => {
+    class Truck {
+      constructor() {
+        this.scale = 0.55;
+        this.reset();
+      }
+      reset() {
+        this.x = -600;
+        this.y = p.height * 0.68;
+        this.speed = 4;
+        this.state = 'IN';
+        this.parkTime = 0;
+      }
+      update() {
+        if (this.state === 'IN') {
+          this.x += this.speed;
+          if (this.x >= p.width * 0.33) {
+            this.state = 'PARKED';
+            this.parkTime = p.millis();
+            // compute drop point:
+            const cRect = p.select('canvas').elt.getBoundingClientRect();
+            const bx = 180, by = -160;       // bed-local drop coords
+            const dropX = cRect.left + (this.x + bx) * this.scale;
+            const dropY = cRect.top  + (this.y + by) * this.scale;
+            extractWorries(dropX, dropY);
+          }
+        }
+        else if (this.state === 'PARKED' && p.millis() - this.parkTime > 4500) {
+          this.state = 'OUT';
+        }
+        else if (this.state === 'OUT') {
+          this.x += this.speed;
+          if (this.x > p.width + 600) {
+            fadeOutIntro();
+          }
+        }
+      }
+      display() {
+        p.push();
+        p.translate(this.x, this.y);
+        p.scale(this.scale);
+
+        /* wheels */
+        p.noStroke(); p.fill(35);
+        p.ellipse(0, 0, 240, 240);
+        p.ellipse(360, 0, 240, 240);
+        p.fill(95, 73, 12);
+        p.ellipse(0, 0, 140, 140);
+        p.ellipse(360, 0, 140, 140);
+
+        /* dump bed */
+        p.fill(229, 178, 45);
+        p.rect(-120, -160, 600, 90);
+        p.quad(-120, -160, 530, -160, 560, -70, -150, -70);
+
+        /* cab */
+        p.rect(200, -220, 160, 150);
+        p.fill(30);
+        p.rect(220, -210, 50, 60);
+        p.rect(285, -210, 55, 60);
+        p.fill(229, 178, 45);
+        p.rect(160, -260, 260, 40);
+
+        /* logos */
+        p.fill(30); p.rect(-40, -135, 90, 45, 6);
+        p.fill(255); p.textSize(26); p.textAlign(p.CENTER, p.CENTER);
+        p.text('CAT', 5, -112);
+        p.fill(30); p.rect(245, -50, 55, 30, 4);
+        p.fill(255); p.textSize(18);
+        p.text('793', 272, -36);
+
+        p.pop();
+      }
+    }
+
+    let truck;
+    p.setup = () => {
+      const c = p.createCanvas(window.innerWidth, window.innerHeight);
+      c.parent('p5-canvas');
+      p.frameRate(60);
+      truck = new Truck();
+    };
+
+    p.draw = () => {
+      p.clear();
+      if (truck) {
+        truck.update();
+        truck.display();
+      }
+    };
+
+    p.windowResized = () => {
+      p.resizeCanvas(window.innerWidth, window.innerHeight);
+      if (truck) truck.reset();
+    };
+  };
+
+  new p5(sketch);
 </script>
