@@ -1,8 +1,11 @@
+---
+/* IntroAnimation component */
+---
 <!-- 1️⃣ Load p5.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
 
 <style>
-  /* ───────── layout ───────── */
+  /* ────────── layout ────────── */
   .intro-container {
     position: fixed; inset: 0;
     background: #f8f9fa;
@@ -11,22 +14,21 @@
     font-family: 'Comic Sans MS', cursive;
     overflow: hidden; z-index: 1000;
   }
-  /* p5 canvas behind everything */
   #p5-canvas { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 
-  /* ───────── typewriter ───────── */
+  /* ────────── typewriter ────────── */
   .typewriter {
     font-size: clamp(1rem, 4vw, 1.8rem);
     color: #2d3748;
     white-space: nowrap; overflow: hidden;
     border-right: 3px solid #4a5568;
-    animation: typing 6s steps(62,end) forwards, blink 0.8s step-end infinite;
+    animation: typing 6s steps(62,end) forwards, blink .8s step-end infinite;
     max-width: 90%; text-align: center; z-index: 5;
   }
   @keyframes typing { from { width: 0 } to { width: 100% } }
   @keyframes blink  { 50% { border-color: transparent } }
 
-  /* ───────── falling letters ───────── */
+  /* ────────── falling letters ────────── */
   #letterContainer { position: relative; z-index: 5; }
   .letter {
     position: absolute;
@@ -38,7 +40,7 @@
   }
   .letter.falling { opacity: 1 }
 
-  /* ───────── fade out ───────── */
+  /* ────────── fade out ────────── */
   .intro-container.fade-out {
     animation: fadeOut 1s ease-out forwards;
   }
@@ -46,67 +48,60 @@
 </style>
 
 <div class="intro-container" id="intro">
-  <!-- p5 canvas goes here -->
   <div id="p5-canvas"></div>
 
-  <!-- Typewriter text -->
   <div class="typewriter" id="sentence">
     Hi there! From here onwards, please drop off all your worries.
   </div>
 
-  <!-- Letters will be injected here -->
   <div id="letterContainer"></div>
 </div>
 
-<!-- 2️⃣ One-time session check -->
-<script>
+<script type="module">
+  // ────────── session guard ──────────
   if (sessionStorage.getItem('introPlayed')) {
     document.getElementById('intro').remove();
   } else {
     sessionStorage.setItem('introPlayed','true');
   }
-</script>
 
-<!-- 3️⃣ DOM helpers for dumping letters & fading out -->
-<script>
-  const letterBox = document.getElementById('letterContainer');
-
-  function extractWorries(dropX, dropY) {
+  // ────────── helper to drop "worries" ──────────
+  function dropWorries(atX, atY) {
     const line = document.getElementById('sentence');
     const word = 'worries';
-    line.textContent = line.textContent.replace(word, '______');
+    line.textContent = line.textContent.replace(word,'______');
 
     [...word].forEach((ch, i) => {
       const el = document.createElement('div');
       el.className = 'letter';
       el.textContent = ch;
-      el.style.left = `${dropX}px`;
-      el.style.top  = `${dropY}px`;
-      letterBox.appendChild(el);
+      el.style.left = `${atX}px`;
+      el.style.top  = `${atY}px`;
+      document.getElementById('letterContainer').appendChild(el);
 
       setTimeout(() => {
-        const spread = (i - (word.length - 1)/2) * 40;
-        const drop   = Math.random() * 30 + 160;
-        const rot    = (Math.random() - 0.5) * 360;
-        el.style.transform = `translate(${spread}px, ${drop}px) rotate(${rot}deg)`;
+        const spread = (i-(word.length-1)/2)*40;
+        const drop   = Math.random()*30 + 160;
+        const rot    = (Math.random()-0.5)*360;
+        el.style.transform = `translate(${spread}px,${drop}px) rotate(${rot}deg)`;
         el.classList.add('falling');
       }, 50);
     });
   }
 
-  function fadeOutIntro() {
-    document.getElementById('intro').classList.add('fade-out');
-    setTimeout(() => document.getElementById('intro').remove(), 1000);
+  function fadeAway() {
+    const intro = document.getElementById('intro');
+    intro.classList.add('fade-out');
+    setTimeout(()=> intro.remove(), 1000);
   }
-</script>
 
-<!-- 4️⃣ p5 sketch: single realistic CAT 793 + triggers -->
-<script>
-  let sketch = (p) => {
+  // ────────── p5 sketch ──────────
+  new p5(p => {
     class Truck {
       constructor() {
-        this.scale = 0.55;
         this.reset();
+        this.dropped = false;
+        this.left    = false;
       }
       reset() {
         this.x = -600;
@@ -121,57 +116,66 @@
           if (this.x >= p.width * 0.33) {
             this.state = 'PARKED';
             this.parkTime = p.millis();
-            // compute drop point:
-            const cRect = p.select('canvas').elt.getBoundingClientRect();
-            const bx = 180, by = -160;       // bed-local drop coords
-            const dropX = cRect.left + (this.x + bx) * this.scale;
-            const dropY = cRect.top  + (this.y + by) * this.scale;
-            extractWorries(dropX, dropY);
           }
         }
-        else if (this.state === 'PARKED' && p.millis() - this.parkTime > 4500) {
-          this.state = 'OUT';
+        else if (this.state === 'PARKED') {
+          // drop worries once, 0.8s after parked
+          if (!this.dropped && p.millis() - this.parkTime > 800) {
+            this.dropped = true;
+            // compute exact bed-right coords in screen pixels
+            const canvasRect = p.select('canvas').elt.getBoundingClientRect();
+            const bedLocalX = 530;    // right-top corner of bed in p5 coords
+            const bedLocalY = -160;   // top edge of bed
+            const dropX = canvasRect.left + (this.x + bedLocalX) * 0.55;
+            const dropY = canvasRect.top  + (this.y + bedLocalY) * 0.55;
+            dropWorries(dropX, dropY);
+          }
+          // depart after 4.5s parked
+          if (p.millis() - this.parkTime > 4500) {
+            this.state = 'OUT';
+          }
         }
         else if (this.state === 'OUT') {
           this.x += this.speed;
-          if (this.x > p.width + 600) {
-            fadeOutIntro();
+          if (!this.left && this.x > p.width + 600) {
+            this.left = true;
+            fadeAway();
           }
         }
       }
       display() {
         p.push();
         p.translate(this.x, this.y);
-        p.scale(this.scale);
+        p.scale(0.55);
 
         /* wheels */
         p.noStroke(); p.fill(35);
-        p.ellipse(0, 0, 240, 240);
-        p.ellipse(360, 0, 240, 240);
-        p.fill(95, 73, 12);
-        p.ellipse(0, 0, 140, 140);
-        p.ellipse(360, 0, 140, 140);
+        p.ellipse(0,0,240,240);
+        p.ellipse(360,0,240,240);
+        p.fill(95,73,12);
+        p.ellipse(0,0,140,140);
+        p.ellipse(360,0,140,140);
 
-        /* dump bed */
-        p.fill(229, 178, 45);
-        p.rect(-120, -160, 600, 90);
-        p.quad(-120, -160, 530, -160, 560, -70, -150, -70);
+        /* bed */
+        p.fill(229,178,45);
+        p.rect(-120,-160,600,90);
+        p.quad(-120,-160,530,-160,560,-70,-150,-70);
 
         /* cab */
-        p.rect(200, -220, 160, 150);
+        p.rect(200,-220,160,150);
         p.fill(30);
-        p.rect(220, -210, 50, 60);
-        p.rect(285, -210, 55, 60);
-        p.fill(229, 178, 45);
-        p.rect(160, -260, 260, 40);
+        p.rect(220,-210,50,60);
+        p.rect(285,-210,55,60);
+        p.fill(229,178,45);
+        p.rect(160,-260,260,40);
 
         /* logos */
-        p.fill(30); p.rect(-40, -135, 90, 45, 6);
-        p.fill(255); p.textSize(26); p.textAlign(p.CENTER, p.CENTER);
-        p.text('CAT', 5, -112);
-        p.fill(30); p.rect(245, -50, 55, 30, 4);
+        p.fill(30); p.rect(-40,-135,90,45,6);
+        p.fill(255); p.textSize(26); p.textAlign(p.CENTER,p.CENTER);
+        p.text('CAT',5,-112);
+        p.fill(30); p.rect(245,-50,55,30,4);
         p.fill(255); p.textSize(18);
-        p.text('793', 272, -36);
+        p.text('793',272,-36);
 
         p.pop();
       }
@@ -179,25 +183,18 @@
 
     let truck;
     p.setup = () => {
-      const c = p.createCanvas(window.innerWidth, window.innerHeight);
+      const c = p.createCanvas(window.innerWidth,window.innerHeight);
       c.parent('p5-canvas');
-      p.frameRate(60);
       truck = new Truck();
     };
-
     p.draw = () => {
       p.clear();
-      if (truck) {
-        truck.update();
-        truck.display();
-      }
+      truck.update();
+      truck.display();
     };
-
     p.windowResized = () => {
       p.resizeCanvas(window.innerWidth, window.innerHeight);
-      if (truck) truck.reset();
+      truck.reset();
     };
-  };
-
-  new p5(sketch);
+  });
 </script>
