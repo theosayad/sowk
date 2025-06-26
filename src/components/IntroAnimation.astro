@@ -1,21 +1,22 @@
 ---
-/* IntroAnimation component – purely hand-drawn frames */
+/* IntroAnimation component */
 ---
 <style>
-  /* ────────── container & layering ────────── */
+  /* ────────── container & layout ────────── */
   .stopmotion-intro {
     position: fixed; inset: 0;
     background: #f8f9fa;
     display: flex; flex-direction: column;
     align-items: center; gap: 1.5rem;
-    padding-top: 2rem;
+    padding: 2rem 1rem 1rem;
     overflow: hidden; z-index: 1000;
-    font-family: 'Comic Sans MS', cursive;
+    box-sizing: border-box;
   }
 
   /* ────────── header image ────────── */
   .header-img {
-    max-width: 90%;
+    width: 80%;               /* default width */
+    max-width: 600px;         /* never exceed */
     height: auto;
     display: block;
     z-index: 2;
@@ -24,14 +25,15 @@
   /* ────────── stop-motion truck ────────── */
   .sm-container {
     position: relative;
-    width: 500px;
+    width: 90%;
+    max-width: 500px;
     overflow: hidden;
     z-index: 1;
   }
   .sm-img {
     display: block;
     width: 100%;
-    transform: translateX(-100%);
+    transform: translateX(-120%);
   }
   .sm-img.drive-in {
     transition: transform 2s ease-out;
@@ -39,7 +41,7 @@
   }
   .sm-img.drive-out {
     transition: transform 2s ease-in;
-    transform: translateX(100%);
+    transform: translateX(120%);
   }
 
   /* ────────── fade-out ────────── */
@@ -49,10 +51,16 @@
   @keyframes fadeOut {
     to { opacity: 0; pointer-events: none; }
   }
+
+  /* ────────── responsiveness ────────── */
+  @media (max-width: 600px) {
+    .header-img { width: 90%; }
+    .sm-container { width: 95%; max-width: none; }
+  }
 </style>
 
 <div class="stopmotion-intro" id="intro">
-  <!-- 1️⃣ Your hand-drawn header -->
+  <!-- 1️⃣ Hand-drawn header -->
   <img
     id="headerImg"
     class="header-img"
@@ -60,7 +68,7 @@
     alt="Hi! Please drop off all your WORRIES before entering"
   />
 
-  <!-- 2️⃣ Stop-motion truck sequence -->
+  <!-- 2️⃣ Stop-motion truck -->
   <div class="sm-container">
     <img
       id="smImg"
@@ -76,40 +84,40 @@
     const intro = document.getElementById('intro');
     const smImg = document.getElementById('smImg');
 
-    // ► only run once per session
+    // only once per session
     if (sessionStorage.getItem('introPlayed')) {
       intro.remove();
       return;
     }
     sessionStorage.setItem('introPlayed','true');
 
-    // ► drive the blank truck in after 0.5s
+    // drive in after header shows (0.5s)
     setTimeout(() => smImg.classList.add('drive-in'), 500);
 
-    // ► after driving in (2s) + 0.3s pause, swap drop frames
+    // after drive-in (2s) + pause (0.3s), swap drop frames
     const dropFrames = [
       '/images/worries%20falling%20into%20truck.png',
       '/images/worries%20falling%20into%20truck-2.png',
       '/images/truck%20with%20worries.png'
     ];
-    const driveInTime = 500 + 2000 + 300; // initial delay + drive-in + pause
+    const initialDelay = 500 + 2000 + 300;
 
     setTimeout(() => {
-      dropFrames.forEach((src, idx) => {
-        setTimeout(() => smImg.src = src, idx * 800);
+      dropFrames.forEach((src, i) => {
+        setTimeout(() => smImg.src = src, i * 800);
       });
 
-      // ► after all drops (3 * 0.8s = 2400ms) + 1s pause, drive out
-      const totalDropTime = dropFrames.length * 800;
+      // after drops (n*0.8s) + 1s pause, drive out
+      const totalDrops = dropFrames.length * 800;
       setTimeout(() => {
         smImg.classList.add('drive-out');
 
-        // ► fade out 2s after drive-out starts
+        // fade out 2s after drive-out begins
         setTimeout(() => {
           intro.classList.add('fade-out');
           setTimeout(() => intro.remove(), 1000);
         }, 2000);
-      }, totalDropTime + 1000);
-    }, driveInTime);
+      }, totalDrops + 1000);
+    }, initialDelay);
   });
 </script>
