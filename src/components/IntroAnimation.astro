@@ -1,18 +1,15 @@
 ---
-/* IntroAnimation – stop-motion with your hand-drawn art */
+/* IntroAnimation component – purely hand-drawn frames */
 ---
 <style>
   /* ────────── container & layering ────────── */
   .stopmotion-intro {
     position: fixed; inset: 0;
     background: #f8f9fa;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 1.5rem;
     padding-top: 2rem;
-    overflow: hidden;
-    z-index: 1000;
+    overflow: hidden; z-index: 1000;
     font-family: 'Comic Sans MS', cursive;
   }
 
@@ -28,7 +25,6 @@
   .sm-container {
     position: relative;
     width: 500px;
-    height: auto;
     overflow: hidden;
     z-index: 1;
   }
@@ -60,7 +56,7 @@
   <img
     id="headerImg"
     class="header-img"
-    src="/images/intro/header text.png"
+    src="/images/header%20text.png"
     alt="Hi! Please drop off all your WORRIES before entering"
   />
 
@@ -69,7 +65,7 @@
     <img
       id="smImg"
       class="sm-img"
-      src="/images/intro/truck.png"
+      src="/images/truck.png"
       alt="hand-drawn dump truck"
     />
   </div>
@@ -80,48 +76,40 @@
     const intro = document.getElementById('intro');
     const smImg = document.getElementById('smImg');
 
-    // Only show once per session
+    // ► only run once per session
     if (sessionStorage.getItem('introPlayed')) {
       intro.remove();
       return;
     }
     sessionStorage.setItem('introPlayed','true');
 
-    // 1️⃣ Drive the blank truck in after 0.5s
-    setTimeout(() => {
-      smImg.classList.add('drive-in');
-    }, 500);
+    // ► drive the blank truck in after 0.5s
+    setTimeout(() => smImg.classList.add('drive-in'), 500);
 
-    // 2️⃣ After drive-in (2s) + small pause, play drop frames
+    // ► after driving in (2s) + 0.3s pause, swap drop frames
     const dropFrames = [
-      '/images/intro/worries falling into truck.png',
-      '/images/intro/worries falling into truck-2.png',
-      '/images/intro/truck with worries.png'
+      '/images/worries%20falling%20into%20truck.png',
+      '/images/worries%20falling%20into%20truck-2.png',
+      '/images/truck%20with%20worries.png'
     ];
-    const driveInDuration = 2000;
-    const pauseAfterDriveIn = 300; // ms
+    const driveInTime = 500 + 2000 + 300; // initial delay + drive-in + pause
 
     setTimeout(() => {
       dropFrames.forEach((src, idx) => {
-        setTimeout(() => {
-          smImg.src = src;
-        }, idx * 800);
+        setTimeout(() => smImg.src = src, idx * 800);
       });
 
-      // 3️⃣ After all drops + 1s pause, drive out
-      const totalDropTime = dropFrames.length * 800; // e.g. 3*800=2400
+      // ► after all drops (3 * 0.8s = 2400ms) + 1s pause, drive out
+      const totalDropTime = dropFrames.length * 800;
       setTimeout(() => {
         smImg.classList.add('drive-out');
 
-        // 4️⃣ Fade out intro 2s after drive-out starts
+        // ► fade out 2s after drive-out starts
         setTimeout(() => {
           intro.classList.add('fade-out');
           setTimeout(() => intro.remove(), 1000);
         }, 2000);
-
       }, totalDropTime + 1000);
-
-    }, 500 + driveInDuration + pauseAfterDriveIn);
-
+    }, driveInTime);
   });
 </script>
