@@ -11,7 +11,7 @@
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    font-family: 'Comic Sans MS', 'Marker Felt', cursive;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
   }
 
   .typewriter {
@@ -38,79 +38,79 @@
 
   .truck-scene {
     position: relative;
-    width: 400px;
-    height: 250px;
-    overflow: hidden;
+    width: 500px;
+    height: 300px;
+    overflow: visible;
   }
 
-  /* Stop-motion truck frames */
-  .truck-frame {
-    position: absolute;
+  /* Simple truck that's always visible */
+  .truck-container {
+    position: relative;
     width: 100%;
     height: 100%;
-    opacity: 0;
-    animation: stop-motion 3s steps(1) infinite;
   }
 
-  .truck-frame:nth-child(1) { animation-delay: 0s; }
-  .truck-frame:nth-child(2) { animation-delay: 0.3s; }
-  .truck-frame:nth-child(3) { animation-delay: 0.6s; }
-  .truck-frame:nth-child(4) { animation-delay: 0.9s; }
-  .truck-frame:nth-child(5) { animation-delay: 1.2s; }
-
-  @keyframes stop-motion {
-    0%, 10% { opacity: 1; }
-    10.01%, 100% { opacity: 0; }
-  }
-
-  /* Kids drawing style truck */
   .truck-svg {
     width: 100%;
     height: 100%;
+    display: block;
   }
 
-  /* Letter dumping animation */
+  /* Dump bed animation */
+  .dump-bed {
+    transform-origin: 180px 120px;
+    animation: bed-dump 4s ease-in-out forwards;
+    animation-delay: 5s;
+  }
+
+  @keyframes bed-dump {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(-45deg); }
+    75% { transform: rotate(-45deg); }
+    100% { transform: rotate(0deg); }
+  }
+
+  /* Letter physics */
   .letter {
     position: absolute;
     font-family: 'Comic Sans MS', cursive;
     font-weight: bold;
-    font-size: 1.8rem;
+    font-size: 2rem;
     color: #e53e3e;
     z-index: 10;
     pointer-events: none;
     opacity: 0;
+    user-select: none;
   }
 
-  .letter.dumping {
-    animation: dump-letter 2s ease-in forwards;
+  .letter.falling {
+    opacity: 1;
+    animation: realistic-fall 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   }
 
-  @keyframes dump-letter {
+  @keyframes realistic-fall {
     0% {
-      opacity: 1;
       transform: translate(0, 0) rotate(0deg);
     }
-    20% {
-      transform: translate(10px, -20px) rotate(45deg);
+    25% {
+      transform: translate(var(--mid-x), var(--mid-y)) rotate(var(--mid-rotation));
     }
     100% {
-      opacity: 1;
       transform: translate(var(--end-x), var(--end-y)) rotate(var(--end-rotation));
     }
   }
 
-  /* Truck movement */
-  .truck-container {
-    animation: truck-drive 6s ease-in-out forwards;
-    animation-delay: 5s;
+  /* Truck exit animation */
+  .truck-container.driving-away {
+    animation: drive-away 3s ease-in forwards;
+    animation-delay: 9s;
   }
 
-  @keyframes truck-drive {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(100vw); }
+  @keyframes drive-away {
+    to { transform: translateX(120vw); }
   }
 
-  /* Fade out animation */
+  /* Fade out */
   .intro-container.fade-out {
     animation: fade-out 1s ease-out forwards;
   }
@@ -128,93 +128,46 @@
   
   <div class="truck-scene">
     <div class="truck-container" id="truckContainer">
-      <!-- Frame 1: Normal truck -->
-      <div class="truck-frame">
-        <svg class="truck-svg" viewBox="0 0 400 250">
-          <!-- Truck body - kid drawing style with wobbly lines -->
-          <path d="M50 180 L50 120 Q52 115 58 120 L180 120 Q185 115 190 120 L190 100 Q192 95 198 100 L280 100 Q285 95 290 100 L290 180" 
-                stroke="#333" stroke-width="4" fill="#ff6b6b" stroke-linecap="round"/>
-          <!-- Cab -->
-          <path d="M190 120 L190 80 Q192 75 198 80 L250 80 Q255 75 260 80 L260 120" 
-                stroke="#333" stroke-width="4" fill="#4ecdc4" stroke-linecap="round"/>
-          <!-- Wheels -->
-          <circle cx="100" cy="190" r="18" stroke="#333" stroke-width="4" fill="#333"/>
-          <circle cx="240" cy="190" r="18" stroke="#333" stroke-width="4" fill="#333"/>
-          <!-- Dump bed with letters -->
-          <rect x="60" y="100" width="120" height="20" stroke="#333" stroke-width="3" fill="#ffe66d"/>
-          <text x="120" y="115" font-family="Comic Sans MS" font-size="14" fill="#e53e3e" text-anchor="middle">worries stresses</text>
-        </svg>
-      </div>
-
-      <!-- Frame 2: Bed starting to tilt -->
-      <div class="truck-frame">
-        <svg class="truck-svg" viewBox="0 0 400 250">
-          <path d="M50 180 L50 120 Q52 115 58 120 L180 120 Q185 115 190 120 L190 100 Q192 95 198 100 L280 100 Q285 95 290 100 L290 180" 
-                stroke="#333" stroke-width="4" fill="#ff6b6b" stroke-linecap="round"/>
-          <path d="M190 120 L190 80 Q192 75 198 80 L250 80 Q255 75 260 80 L260 120" 
-                stroke="#333" stroke-width="4" fill="#4ecdc4" stroke-linecap="round"/>
-          <circle cx="100" cy="190" r="18" stroke="#333" stroke-width="4" fill="#333"/>
-          <circle cx="240" cy="190" r="18" stroke="#333" stroke-width="4" fill="#333"/>
-          <!-- Tilted bed -->
-          <g transform="rotate(-15 120 110)">
-            <rect x="60" y="100" width="120" height="20" stroke="#333" stroke-width="3" fill="#ffe66d"/>
-            <text x="120" y="115" font-family="Comic Sans MS" font-size="14" fill="#e53e3e" text-anchor="middle">worries stresses</text>
+      <svg class="truck-svg" viewBox="0 0 500 300">
+        <!-- Truck body - kids drawing style -->
+        <g stroke="#2d3748" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <!-- Main truck body -->
+          <path d="M80 200 Q78 195 85 200 L85 140 Q83 135 90 140 L170 140 Q168 135 175 140 L175 120 Q173 115 180 120 L320 120 Q318 115 325 120 L325 200" 
+                fill="#ff6b6b"/>
+          
+          <!-- Truck cab -->
+          <path d="M175 140 Q173 135 180 140 L180 90 Q178 85 185 90 L280 90 Q278 85 285 90 L285 140" 
+                fill="#4ecdc4"/>
+          
+          <!-- Cab window -->
+          <rect x="190" y="100" width="80" height="30" fill="#87ceeb" stroke-width="2"/>
+          
+          <!-- Front bumper -->
+          <path d="M325 120 Q323 115 330 120 L350 120 Q348 115 355 120 L355 180 Q353 175 350 180 L325 180" 
+                fill="#ffd93d"/>
+          
+          <!-- Wheels with wobbly circles -->
+          <circle cx="130" cy="210" r="22" fill="#2d3748" stroke-width="3"/>
+          <circle cx="130" cy="210" r="12" fill="#718096" stroke-width="2"/>
+          <circle cx="280" cy="210" r="22" fill="#2d3748" stroke-width="3"/>
+          <circle cx="280" cy="210" r="12" fill="#718096" stroke-width="2"/>
+          
+          <!-- Dump bed (animated) -->
+          <g class="dump-bed" id="dumpBed">
+            <rect x="90" y="100" width="80" height="40" fill="#ffe66d" stroke-width="3"/>
+            <!-- Letters in truck bed initially -->
+            <text x="130" y="125" font-family="Comic Sans MS" font-size="16" fill="#e53e3e" text-anchor="middle" id="bedText">worries stresses</text>
           </g>
-        </svg>
-      </div>
-
-      <!-- Frame 3: Bed more tilted -->
-      <div class="truck-frame">
-        <svg class="truck-svg" viewBox="0 0 400 250">
-          <path d="M50 180 L50 120 Q52 115 58 120 L180 120 Q185 115 190 120 L190 100 Q192 95 198 100 L280 100 Q285 95 290 100 L290 180" 
-                stroke="#333" stroke-width="4" fill="#ff6b6b" stroke-linecap="round"/>
-          <path d="M190 120 L190 80 Q192 75 198 80 L250 80 Q255 75 260 80 L260 120" 
-                stroke="#333" stroke-width="4" fill="#4ecdc4" stroke-linecap="round"/>
-          <circle cx="100" cy="190" r="18" stroke="#333" stroke-width="4" fill="#333"/>
-          <circle cx="240" cy="190" r="18" stroke="#333" stroke-width="4" fill="#333"/>
-          <!-- More tilted bed -->
-          <g transform="rotate(-35 120 110)">
-            <rect x="60" y="100" width="120" height="20" stroke="#333" stroke-width="3" fill="#ffe66d"/>
-            <text x="120" y="115" font-family="Comic Sans MS" font-size="12" fill="#e53e3e" text-anchor="middle">worri  stress</text>
-          </g>
-        </svg>
-      </div>
-
-      <!-- Frame 4: Bed fully dumping -->
-      <div class="truck-frame">
-        <svg class="truck-svg" viewBox="0 0 400 250">
-          <path d="M50 180 L50 120 Q52 115 58 120 L180 120 Q185 115 190 120 L190 100 Q192 95 198 100 L280 100 Q285 95 290 100 L290 180" 
-                stroke="#333" stroke-width="4" fill="#ff6b6b" stroke-linecap="round"/>
-          <path d="M190 120 L190 80 Q192 75 198 80 L250 80 Q255 75 260 80 L260 120" 
-                stroke="#333" stroke-width="4" fill="#4ecdc4" stroke-linecap="round"/>
-          <circle cx="100" cy="190" r="18" stroke="#333" stroke-width="4" fill="#333"/>
-          <circle cx="240" cy="190" r="18" stroke="#333" stroke-width="4" fill="#333"/>
-          <!-- Fully tilted bed -->
-          <g transform="rotate(-55 120 110)">
-            <rect x="60" y="100" width="120" height="20" stroke="#333" stroke-width="3" fill="#ffe66d"/>
-          </g>
-        </svg>
-      </div>
-
-      <!-- Frame 5: Bed returning to normal -->
-      <div class="truck-frame">
-        <svg class="truck-svg" viewBox="0 0 400 250">
-          <path d="M50 180 L50 120 Q52 115 58 120 L180 120 Q185 115 190 120 L190 100 Q192 95 198 100 L280 100 Q285 95 290 100 L290 180" 
-                stroke="#333" stroke-width="4" fill="#ff6b6b" stroke-linecap="round"/>
-          <path d="M190 120 L190 80 Q192 75 198 80 L250 80 Q255 75 260 80 L260 120" 
-                stroke="#333" stroke-width="4" fill="#4ecdc4" stroke-linecap="round"/>
-          <circle cx="100" cy="190" r="18" stroke="#333" stroke-width="4" fill="#333"/>
-          <circle cx="240" cy="190" r="18" stroke="#333" stroke-width="4" fill="#333"/>
-          <!-- Normal bed again -->
-          <rect x="60" y="100" width="120" height="20" stroke="#333" stroke-width="3" fill="#ffe66d"/>
-        </svg>
-      </div>
+          
+          <!-- Truck details -->
+          <circle cx="200" cy="105" r="3" fill="#2d3748"/> <!-- headlight -->
+          <rect x="290" y="100" width="15" height="8" fill="#ff6b6b" stroke-width="1"/> <!-- door handle -->
+        </g>
+      </svg>
     </div>
 
-    <!-- Individual letters for dumping -->
-    <div id="letterContainer">
-      <!-- Letters will be added dynamically -->
-    </div>
+    <!-- Letters container for physics simulation -->
+    <div id="letterContainer"></div>
   </div>
 </div>
 
@@ -230,49 +183,80 @@
   // Mark as played
   sessionStorage.setItem('introPlayed', 'true');
 
-  const letters = 'worries stresses'.split('');
-  const letterContainer = document.getElementById('letterContainer');
   const introContainer = document.getElementById('introContainer');
+  const truckContainer = document.getElementById('truckContainer');
+  const letterContainer = document.getElementById('letterContainer');
+  const bedText = document.getElementById('bedText');
 
-  // Create and animate letters
+  // Letter dumping physics
   function dumpLetters() {
+    const letters = 'worries stresses'.split('').filter(char => char !== ' ');
+    
+    // Hide the text in the truck bed
+    if (bedText) bedText.style.opacity = '0';
+    
     letters.forEach((char, index) => {
-      if (char === ' ') return; // Skip spaces
-      
       setTimeout(() => {
         const letterEl = document.createElement('div');
-        letterEl.className = 'letter dumping';
+        letterEl.className = 'letter falling';
         letterEl.textContent = char;
         
-        // Starting position (from truck bed)
-        letterEl.style.left = '120px';
-        letterEl.style.top = '100px';
+        // Starting position (truck bed center)
+        const startX = 130; // Center of truck bed
+        const startY = 120; // Truck bed position
         
-        // Random end position
-        const endX = Math.random() * 200 - 100; // -100 to 100px
-        const endY = Math.random() * 80 + 120; // 120 to 200px
-        const endRotation = Math.random() * 360; // 0 to 360 degrees
+        letterEl.style.left = startX + 'px';
+        letterEl.style.top = startY + 'px';
         
+        // Realistic physics - letters spread out as they fall
+        const spreadX = (Math.random() - 0.5) * 200; // -100 to 100px spread
+        const fallDistance = 100 + Math.random() * 80; // 100-180px fall
+        const bounceX = (Math.random() - 0.5) * 50; // Small bounce spread
+        
+        // Mid-point for realistic arc
+        const midX = spreadX * 0.3;
+        const midY = fallDistance * 0.2;
+        const midRotation = (Math.random() - 0.5) * 180;
+        
+        // Final position
+        const endX = spreadX + bounceX;
+        const endY = fallDistance;
+        const endRotation = (Math.random() - 0.5) * 360;
+        
+        letterEl.style.setProperty('--mid-x', midX + 'px');
+        letterEl.style.setProperty('--mid-y', midY + 'px');
+        letterEl.style.setProperty('--mid-rotation', midRotation + 'deg');
         letterEl.style.setProperty('--end-x', endX + 'px');
         letterEl.style.setProperty('--end-y', endY + 'px');
         letterEl.style.setProperty('--end-rotation', endRotation + 'deg');
         
         letterContainer.appendChild(letterEl);
-      }, index * 100); // Stagger the letter drops
+      }, index * 150); // Stagger the drops
     });
   }
 
-  // Start letter dumping when truck bed tilts (after 6 seconds)
-  setTimeout(dumpLetters, 6000);
-
-  // Fade out and remove the entire intro after animation completes
+  // Animation timeline
   setTimeout(() => {
+    // Start dumping letters when bed tilts
+    dumpLetters();
+  }, 6000);
+
+  setTimeout(() => {
+    // Start truck driving away
+    if (truckContainer) {
+      truckContainer.classList.add('driving-away');
+    }
+  }, 9000);
+
+  setTimeout(() => {
+    // Fade out everything
     if (introContainer) {
       introContainer.classList.add('fade-out');
       setTimeout(() => {
         introContainer.remove();
-      }, 1000); // Wait for fade-out animation
+      }, 1000);
     }
-  }, 12000); // Total duration: 12 seconds
+  }, 13000);
+
 })();
 </script>
