@@ -82,7 +82,7 @@
     pointer-events: none;
     opacity: 0;
     user-select: none;
-    transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: all 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .letter.falling {
@@ -181,16 +181,13 @@
   function extractAndDumpLetters() {
     const typewriterEl = document.getElementById('typewriterText');
     
-    // Get the word "worries" from the typewriter text
     const fullText = typewriterEl.textContent;
     const wordToExtract = 'worries';
     const letters = wordToExtract.split('');
     
-    // Replace "worries" in typewriter with blanks
     const newText = fullText.replace(wordToExtract, '______');
     typewriterEl.textContent = newText;
     
-    // Add text to truck bed
     const bedText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     bedText.setAttribute('x', '130');
     bedText.setAttribute('y', '125');
@@ -201,40 +198,36 @@
     bedText.textContent = wordToExtract;
     dumpBed.appendChild(bedText);
     
-    // Trigger dump bed animation
     setTimeout(() => {
       dumpBed.classList.add('dumping');
     }, 1000);
 
-    // After a short delay, dump the letters with sand physics
     setTimeout(() => {
       bedText.remove();
       
       letters.forEach((char, index) => {
+        const letterEl = document.createElement('div');
+        letterEl.className = 'letter';
+        letterEl.textContent = char;
+        
+        const startX = 130;
+        const startY = 120;
+        
+        letterEl.style.left = `${startX}px`;
+        letterEl.style.top = `${startY}px`;
+        
+        letterContainer.appendChild(letterEl);
+
         setTimeout(() => {
-          const letterEl = document.createElement('div');
-          letterEl.className = 'letter falling';
-          letterEl.textContent = char;
-          
-          // Starting position (truck bed center)
-          const startX = 130;
-          const startY = 120;
-          
-          letterEl.style.left = startX + 'px';
-          letterEl.style.top = startY + 'px';
-          
-          // Horizontal spread
-          const horizontalSpread = (index - (letters.length - 1) / 2) * 30;
-          const verticalDrop = Math.random() * 50 + 100; // 100-150px drop
-          
-          letterEl.style.setProperty('--final-x', horizontalSpread + 'px');
-          letterEl.style.setProperty('--final-y', verticalDrop + 'px');
-          letterEl.style.setProperty('--final-rotation', (Math.random() - 0.5) * 360 + 'deg');
-          
-          letterContainer.appendChild(letterEl);
-        }, index * 100); // Slower succession for better visibility
+          const horizontalSpread = (index - (letters.length - 1) / 2) * 40;
+          const verticalDrop = Math.random() * 30 + 150; // 150-180px drop
+          const rotation = (Math.random() - 0.5) * 360;
+
+          letterEl.style.transform = `translate(${horizontalSpread}px, ${verticalDrop}px) rotate(${rotation}deg)`;
+          letterEl.classList.add('falling');
+        }, index * 100); // Delay for each letter to create unique trajectory
       });
-    }, 2000); // Start dumping letters after the bed starts moving
+    }, 2000);
   }
 
   // Animation timeline
