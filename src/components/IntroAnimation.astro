@@ -1,44 +1,41 @@
 ---
-/* IntroAnimation component */
+/* IntroAnimation – stop-motion with your hand-drawn art */
 ---
-<!-- 1️⃣ p5.js removed—pure CSS/JS stop-motion -->
 <style>
-  /* ────────── container ────────── */
+  /* ────────── container & layering ────────── */
   .stopmotion-intro {
     position: fixed; inset: 0;
     background: #f8f9fa;
-    display: flex; flex-direction: column;
-    align-items: center; gap: 1.5rem;
-    overflow: hidden; z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
     padding-top: 2rem;
+    overflow: hidden;
+    z-index: 1000;
     font-family: 'Comic Sans MS', cursive;
   }
 
-  /* ────────── typewriter text ────────── */
-  .typewriter {
-    white-space: nowrap; overflow: hidden;
-    border-right: 3px solid #4a5568;
-    font-size: clamp(1rem,4vw,1.8rem);
-    color: #2d3748;
-    max-width: 90%; text-align: center;
-    animation:
-      typing 5s steps(62,end) 1 forwards,
-      blink 0.8s step-end infinite;
-    z-index: 1;
+  /* ────────── header image ────────── */
+  .header-img {
+    max-width: 90%;
+    height: auto;
+    display: block;
+    z-index: 2;
   }
-  @keyframes typing { from { width: 0 } to { width: 100% } }
-  @keyframes blink  { 50% { border-color: transparent } }
 
-  /* ────────── stop-motion frame ────────── */
+  /* ────────── stop-motion truck ────────── */
   .sm-container {
-    position: relative; width: 500px; height: auto;
-    overflow: hidden; z-index: 1;
+    position: relative;
+    width: 500px;
+    height: auto;
+    overflow: hidden;
+    z-index: 1;
   }
   .sm-img {
     display: block;
     width: 100%;
     transform: translateX(-100%);
-    /* initial off-screen */
   }
   .sm-img.drive-in {
     transition: transform 2s ease-out;
@@ -59,18 +56,21 @@
 </style>
 
 <div class="stopmotion-intro" id="intro">
-  <!-- 2️⃣ Text line -->
-  <div class="typewriter" id="typewriter">
-    Hi there! From here onwards, please drop off all your worries.
-  </div>
+  <!-- 1️⃣ Your hand-drawn header -->
+  <img
+    id="headerImg"
+    class="header-img"
+    src="/images/intro/header text.png"
+    alt="Hi! Please drop off all your WORRIES before entering"
+  />
 
-  <!-- 3️⃣ Stop-motion image -->
+  <!-- 2️⃣ Stop-motion truck sequence -->
   <div class="sm-container">
     <img
-      id="sm-img"
+      id="smImg"
       class="sm-img"
       src="/images/intro/truck.png"
-      alt="stop-motion truck frame"
+      alt="hand-drawn dump truck"
     />
   </div>
 </div>
@@ -78,51 +78,50 @@
 <script type="module">
   document.addEventListener('DOMContentLoaded', () => {
     const intro = document.getElementById('intro');
-    const typer = document.getElementById('typewriter');
-    const img   = document.getElementById('sm-img');
+    const smImg = document.getElementById('smImg');
 
-    /** 0️⃣ Only once per session **/
+    // Only show once per session
     if (sessionStorage.getItem('introPlayed')) {
       intro.remove();
       return;
     }
     sessionStorage.setItem('introPlayed','true');
 
-    /** 1️⃣ When text finishes typing (5s), drive in **/
-    const typingTime = 5000;
+    // 1️⃣ Drive the blank truck in after 0.5s
     setTimeout(() => {
-      img.classList.add('drive-in');
+      smImg.classList.add('drive-in');
+    }, 500);
 
-      /** 2️⃣ After drive-in (2s), wait 0.5s then drop worries **/
+    // 2️⃣ After drive-in (2s) + small pause, play drop frames
+    const dropFrames = [
+      '/images/intro/worries falling into truck.png',
+      '/images/intro/worries falling into truck-2.png',
+      '/images/intro/truck with worries.png'
+    ];
+    const driveInDuration = 2000;
+    const pauseAfterDriveIn = 300; // ms
+
+    setTimeout(() => {
+      dropFrames.forEach((src, idx) => {
+        setTimeout(() => {
+          smImg.src = src;
+        }, idx * 800);
+      });
+
+      // 3️⃣ After all drops + 1s pause, drive out
+      const totalDropTime = dropFrames.length * 800; // e.g. 3*800=2400
       setTimeout(() => {
-        const dropFrames = [
-          '/images/intro/worries falling into truck.png',
-          '/images/intro/worries falling into truck-2.png',
-          '/images/intro/truck with worries.png'
-        ];
-        let idx = 0;
+        smImg.classList.add('drive-out');
 
-        function nextDrop() {
-          if (idx < dropFrames.length) {
-            img.src = dropFrames[idx++];
-            // show each frame 0.8s apart
-            setTimeout(nextDrop, 800);
-          } else {
-            /** 3️⃣ Hold loaded truck 1s, then drive out **/
-            setTimeout(() => {
-              img.classList.add('drive-out');
-              /** 4️⃣ Fade entire intro 2s later **/
-              setTimeout(() => {
-                intro.classList.add('fade-out');
-                setTimeout(() => intro.remove(), 1000);
-              }, 2000);
-            }, 1000);
-          }
-        }
+        // 4️⃣ Fade out intro 2s after drive-out starts
+        setTimeout(() => {
+          intro.classList.add('fade-out');
+          setTimeout(() => intro.remove(), 1000);
+        }, 2000);
 
-        nextDrop();
-      }, 2500);
+      }, totalDropTime + 1000);
 
-    }, typingTime);
+    }, 500 + driveInDuration + pauseAfterDriveIn);
+
   });
 </script>
