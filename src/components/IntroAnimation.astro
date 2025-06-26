@@ -2,6 +2,18 @@
 /* IntroAnimation component */
 ---
 <style>
+
+  .stopmotion-intro {
+    position: fixed; inset: 0;
+    /* was: background: #f8f9fa; */
+    background: #ffffff;    /* ← pure white */
+    display: flex; flex-direction: column;
+    align-items: center; gap: 1.5rem;
+    padding: 2rem 1rem 1rem;
+    overflow: hidden; z-index: 1000;
+    box-sizing: border-box;
+  }
+
   /* ────────── container & layout ────────── */
   .stopmotion-intro {
     position: fixed; inset: 0;
@@ -121,3 +133,5 @@
     }, initialDelay);
   });
 </script>
+
+
