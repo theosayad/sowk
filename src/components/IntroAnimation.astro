@@ -92,7 +92,10 @@
     0% {
       transform: translate(0, 0) rotate(0deg);
     }
-    25% {
+    15% {
+      transform: translate(var(--early-x), var(--early-y)) rotate(var(--early-rotation));
+    }
+    40% {
       transform: translate(var(--mid-x), var(--mid-y)) rotate(var(--mid-rotation));
     }
     100% {
@@ -124,7 +127,7 @@
 </style>
 
 <div class="intro-container" id="introContainer">
-  <div class="typewriter">Hi there! From here onwards, please drop off all your worries and stresses.</div>
+  <div class="typewriter" id="typewriterText">Hi there! From here onwards, please drop off all your worries.</div>
   
   <div class="truck-scene">
     <div class="truck-container" id="truckContainer">
@@ -155,8 +158,8 @@
           <!-- Dump bed (animated) -->
           <g class="dump-bed" id="dumpBed">
             <rect x="90" y="100" width="80" height="40" fill="#ffe66d" stroke-width="3"/>
-            <!-- Letters in truck bed initially -->
-            <text x="130" y="125" font-family="Comic Sans MS" font-size="16" fill="#e53e3e" text-anchor="middle" id="bedText">worries stresses</text>
+            <!-- Empty truck bed initially -->
+            <text x="130" y="125" font-family="Comic Sans MS" font-size="16" fill="#666" text-anchor="middle" id="bedText">empty</text>
           </g>
           
           <!-- Truck details -->
@@ -188,58 +191,85 @@
   const letterContainer = document.getElementById('letterContainer');
   const bedText = document.getElementById('bedText');
 
-  // Letter dumping physics
-  function dumpLetters() {
-    const letters = 'worries stresses'.split('').filter(char => char !== ' ');
+  // Extract letters from typewriter text and animate them
+  function extractAndDumpLetters() {
+    const typewriterEl = document.getElementById('typewriterText');
+    const bedText = document.getElementById('bedText');
     
-    // Hide the text in the truck bed
-    if (bedText) bedText.style.opacity = '0';
+    // Get the word "worries" from the typewriter text
+    const fullText = typewriterEl.textContent;
+    const wordToExtract = 'worries';
+    const letters = wordToExtract.split('');
     
-    letters.forEach((char, index) => {
-      setTimeout(() => {
-        const letterEl = document.createElement('div');
-        letterEl.className = 'letter falling';
-        letterEl.textContent = char;
-        
-        // Starting position (truck bed center)
-        const startX = 130; // Center of truck bed
-        const startY = 120; // Truck bed position
-        
-        letterEl.style.left = startX + 'px';
-        letterEl.style.top = startY + 'px';
-        
-        // Realistic physics - letters spread out as they fall
-        const spreadX = (Math.random() - 0.5) * 200; // -100 to 100px spread
-        const fallDistance = 100 + Math.random() * 80; // 100-180px fall
-        const bounceX = (Math.random() - 0.5) * 50; // Small bounce spread
-        
-        // Mid-point for realistic arc
-        const midX = spreadX * 0.3;
-        const midY = fallDistance * 0.2;
-        const midRotation = (Math.random() - 0.5) * 180;
-        
-        // Final position
-        const endX = spreadX + bounceX;
-        const endY = fallDistance;
-        const endRotation = (Math.random() - 0.5) * 360;
-        
-        letterEl.style.setProperty('--mid-x', midX + 'px');
-        letterEl.style.setProperty('--mid-y', midY + 'px');
-        letterEl.style.setProperty('--mid-rotation', midRotation + 'deg');
-        letterEl.style.setProperty('--end-x', endX + 'px');
-        letterEl.style.setProperty('--end-y', endY + 'px');
-        letterEl.style.setProperty('--end-rotation', endRotation + 'deg');
-        
-        letterContainer.appendChild(letterEl);
-      }, index * 150); // Stagger the drops
-    });
+    // Replace "worries" in typewriter with blanks
+    const newText = fullText.replace(wordToExtract, '______');
+    typewriterEl.textContent = newText;
+    
+    // Show letters in truck bed first
+    if (bedText) {
+      bedText.textContent = wordToExtract;
+      bedText.style.opacity = '1';
+      bedText.style.fill = '#e53e3e';
+    }
+    
+    // After a short delay, dump the letters
+    setTimeout(() => {
+      if (bedText) bedText.style.opacity = '0';
+      
+      letters.forEach((char, index) => {
+        setTimeout(() => {
+          const letterEl = document.createElement('div');
+          letterEl.className = 'letter falling';
+          letterEl.textContent = char;
+          
+          // Starting position (truck bed center)
+          const startX = 130;
+          const startY = 120;
+          
+          letterEl.style.left = startX + 'px';
+          letterEl.style.top = startY + 'px';
+          
+          // Sand-like scattering physics
+          const angle = (Math.random() * 120 - 60) * Math.PI / 180; // -60 to +60 degrees
+          const velocity = 80 + Math.random() * 60; // 80-140px initial velocity
+          const gravity = 0.8;
+          
+          // Early trajectory (initial burst)
+          const earlyX = Math.cos(angle) * velocity * 0.3;
+          const earlyY = Math.sin(angle) * velocity * 0.3 - 10;
+          const earlyRotation = (Math.random() - 0.5) * 90;
+          
+          // Mid trajectory (peak of arc)
+          const midX = Math.cos(angle) * velocity * 0.7;
+          const midY = Math.sin(angle) * velocity * 0.7 - 30;
+          const midRotation = (Math.random() - 0.5) * 180;
+          
+          // Final position (scattered landing)
+          const endX = Math.cos(angle) * velocity + (Math.random() - 0.5) * 40;
+          const endY = Math.sin(angle) * velocity * 0.3 + 80 + Math.random() * 60;
+          const endRotation = (Math.random() - 0.5) * 360;
+          
+          letterEl.style.setProperty('--early-x', earlyX + 'px');
+          letterEl.style.setProperty('--early-y', earlyY + 'px');
+          letterEl.style.setProperty('--early-rotation', earlyRotation + 'deg');
+          letterEl.style.setProperty('--mid-x', midX + 'px');
+          letterEl.style.setProperty('--mid-y', midY + 'px');
+          letterEl.style.setProperty('--mid-rotation', midRotation + 'deg');
+          letterEl.style.setProperty('--end-x', endX + 'px');
+          letterEl.style.setProperty('--end-y', endY + 'px');
+          letterEl.style.setProperty('--end-rotation', endRotation + 'deg');
+          
+          letterContainer.appendChild(letterEl);
+        }, index * 100); // Quick succession like sand
+      });
+    }, 1000); // Short delay to show letters in truck first
   }
 
   // Animation timeline
   setTimeout(() => {
-    // Start dumping letters when bed tilts
-    dumpLetters();
-  }, 6000);
+    // Extract letters from typewriter and put them in truck
+    extractAndDumpLetters();
+  }, 5000);
 
   setTimeout(() => {
     // Start truck driving away
