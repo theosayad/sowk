@@ -1,34 +1,51 @@
 ---
-/* Intro runs once per session. No imports needed. */
+/* Plays once per session */
 ---
 
 <div id="intro-overlay">
-  <!-- Text lines -->
-  <div class="lines">
-    <p class="line1">Hi there!</p>
-    <p class="line2">
-      From here onwards, please drop off all your&nbsp;
-      <span class="drop word1">worries</span>&nbsp;and&nbsp;
-      <span class="drop word2">stresses</span>.
-    </p>
-  </div>
+  <div class="content">
+    <!-- TYPEWRITTEN TEXT -->
+    <div class="lines">
+      <p class="line1">Hi there!</p>
+      <p class="line2">
+        From here onwards, please drop off all your&nbsp;
+        <span class="drop word1">worries</span>&nbsp;and&nbsp;
+        <span class="drop word2">stresses</span>.
+      </p>
+    </div>
 
-  <!-- Kid-style sketch truck -->
-  <svg id="truck" viewBox="0 0 200 100" width="200" height="100">
-    <path class="body" d="M10 60 q10 -30 40 -20 h60 q15 0 20 15 l5 15 h-145 z"/>
-    <path class="cab"  d="M105 45 q5 -15 25 -10 v25 h-25z"/>
-    <circle class="wheel" cx="45" cy="80" r="12"/>
-    <circle class="wheel" cx="130" cy="80" r="12"/>
-  </svg>
+    <!-- SKETCH-STYLE TRUCK -->
+    <div class="truck-container">
+      <svg id="truck" viewBox="0 0 200 100" width="200" height="100">
+        <!-- body: slightly uneven cubic curves -->
+        <path class="body"
+          d="M10 60 
+             C20 20, 60 25, 80 30 
+             C110 35, 130 60, 150 65 
+             L155 80 H10 Z" />
+        <!-- cab: rough cube -->
+        <path class="cab"
+          d="M85 35 
+             L105 35 
+             C110 30, 130 40, 125 60 
+             L100 60 Z" />
+        <!-- wheels -->
+        <circle class="wheel" cx="45"  cy="80" r="12"/>
+        <circle class="wheel" cx="130" cy="80" r="12"/>
+      </svg>
+    </div>
+  </div>
 </div>
 
 <style>
-  /* Overlay fills screen */
+  /* full‐screen white overlay */
   #intro-overlay {
     position: fixed; inset: 0; background: #fff;
-    display: grid; place-items: center; text-align: center;
-    font-family: "Poppins", sans-serif; overflow: hidden;
-    z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9999; overflow: hidden;
+  }
+  .content {
+    display: flex; flex-direction: column; align-items: center;
   }
 
   /* TYPEWRITER */
@@ -40,12 +57,9 @@
     max-width: 0;
     display: inline-block;
   }
-  @keyframes type {
-    to { max-width: 100%; }
-  }
-  @keyframes blink {
-    50% { border-color: transparent; }
-  }
+  @keyframes type { to { max-width: 100%; } }
+  @keyframes blink { 50% { border-color: transparent; } }
+
   .line1 {
     animation: type 1s steps(12) 0.3s forwards,
                blink 0.8s step-end infinite 0.3s;
@@ -54,14 +68,11 @@
     animation: type 3s steps(50) 1.4s forwards,
                blink 0.8s step-end infinite 1.4s;
   }
-  /* once typed, keep visible */
-  .line1[style], .line2[style] { border-right-color: transparent; }
+  /* once typed, remove cursor */
+  .line1, .line2 { border-right: none; }
 
-  /* DROP WORDS */
-  .drop {
-    display: inline-block;
-    transform-origin: top left;
-  }
+  /* DROP ANIMATION */
+  .drop { display: inline-block; }
   @keyframes dropAnim {
     0%   { transform: translateY(0)    rotate(0);   opacity:1; }
     70%  { transform: translateY(180px) rotate(-15deg); }
@@ -71,45 +82,47 @@
   .word2 { animation: dropAnim 1.2s ease 5.8s forwards; }
 
   /* SKETCH TRUCK */
+  .truck-container {
+    position: relative; margin-top: 2rem; z-index: 1;
+  }
   #truck {
-    position: absolute; bottom: 30px; left: -220px;
     stroke: #1b2a41; fill: none; stroke-width: 2;
     animation:
       driveIn 2s 4.8s forwards,
       tip     1s 7.0s forwards,
       driveOut 1.5s 8.5s forwards;
+    position: relative;
   }
-  .body { stroke-linecap: round; stroke-linejoin: round; }
-  .cab  { stroke-linecap: round; stroke-linejoin: round; }
-  .wheel { fill: none; stroke: #1b2a41; stroke-width: 2; }
+  .body, .cab { stroke-linecap: round; stroke-linejoin: round; }
+  .wheel { stroke-linecap: round; }
 
   @keyframes driveIn {
-    to { left: 50%; transform: translateX(-50%); }
+    0%   { transform: translateX(-250px) rotate(0); }
+    100% { transform: translateX(0)      rotate(0); }
   }
   @keyframes tip {
-    to { transform: translateX(-50%) rotate(-20deg); }
+    to { transform: translateX(0) rotate(-20deg); }
   }
   @keyframes driveOut {
-    from { left:50%; transform: translateX(-50%) rotate(0); }
-    to   { left:120%; transform: translateX(0) rotate(0); }
+    from { transform: translateX(0) rotate(0); }
+    to   { transform: translateX(250px) rotate(0); }
   }
 
   /* FADE OVERLAY */
-  @keyframes fadeOut { to { opacity:0; visibility:hidden; } }
+  @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
   #intro-overlay.fade {
     animation: fadeOut 0.8s ease 9.8s forwards;
   }
 </style>
 
 <script is:inline>
-  /* Only play once per session */
   if (typeof window !== "undefined") {
     const key = "sowkIntroPlayed";
     const root = document.getElementById("intro-overlay");
     if (sessionStorage.getItem(key)) {
       root.remove();
     } else {
-      setTimeout(() => root.classList.add("fadeOut"), 9800);
+      setTimeout(() => root.classList.add("fade"), 9800);
       setTimeout(() => root.remove(), 10600);
       sessionStorage.setItem(key, "1");
     }
