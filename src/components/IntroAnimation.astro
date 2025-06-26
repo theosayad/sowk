@@ -2,21 +2,23 @@
 /* IntroAnimation component */
 ---
 <style>
-    /* ensure the page is pure white behind your PNGs */
-    html, body {
-      margin: 0;
-      background: #ffffff;
-    }
+  /* 1. Make the <html> and <body> pure white */
+  html, body {
+    margin: 0;
+    background: #ffffff;
+    height: 100%;
+  }
 
+  /* 2. Ensure your intro container is pure white too */
   .stopmotion-intro {
-    position: fixed; inset: 0;
-    /* was: background: #f8f9fa; */
-    background: #ffffff;    /* ← pure white */
-    display: flex; flex-direction: column;
-    align-items: center; gap: 1.5rem;
-    padding: 2rem 1rem 1rem;
-    overflow: hidden; z-index: 1000;
-    box-sizing: border-box;
+    background: #ffffff;  /* was #f8f9fa */
+    /* rest of your existing styles… */
+  }
+
+  /* 3. Allow the wheels to show by letting the image overflow */
+  .sm-container {
+    overflow: visible;    /* was hidden */
+    /* rest of your existing sm-container styles… */
   }
 
   /* ────────── container & layout ────────── */
