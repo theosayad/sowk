@@ -2,68 +2,50 @@
 /* IntroAnimation component */
 ---
 <style>
-  /* 1️⃣ Force the page background to pure white */
+  /* ─── Global white background ─── */
   html, body {
     margin: 0;
     padding: 0;
-    background: #ffffff !important;
+    background: #ffffff;
     height: 100%;
   }
-  
-  /* 2️⃣ Ensure your intro container is also pure white */
-  .stopmotion-intro {
-    background: #ffffff !important;
-  }
-  
-  /* 3️⃣ Allow the wheels (bottom of the PNG) to overflow */
-  .sm-container {
-    overflow: visible !important;
-  }
 
-  /* 3️⃣ If your .sm-img has object-fit or similar, disable it */
-  .sm-img {
-    width: 100%;
-    height: auto;
-    object-fit: none !important;
-  }
-
-  /* 4️⃣ (Optional) add bottom padding so wheels have room */
-  .stopmotion-intro {
-    padding-bottom: 2rem; /* gives extra space under truck */
-  }
-
-  /* ────────── container & layout ────────── */
+  /* ─── Intro container ─── */
   .stopmotion-intro {
     position: fixed; inset: 0;
-    background: #f8f9fa;
-    display: flex; flex-direction: column;
-    align-items: center; gap: 1.5rem;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
     padding: 2rem 1rem 1rem;
-    overflow: hidden; z-index: 1000;
+    overflow: hidden;
+    z-index: 1000;
     box-sizing: border-box;
   }
 
-  /* ────────── header image ────────── */
+  /* ─── Header image sizing ─── */
   .header-img {
-    width: 80%;               /* default width */
-    max-width: 600px;         /* never exceed */
+    width: 80%;
+    max-width: 600px;
     height: auto;
     display: block;
     z-index: 2;
   }
 
-  /* ────────── stop-motion truck ────────── */
+  /* ─── Stop-motion truck container ─── */
   .sm-container {
     position: relative;
     width: 90%;
     max-width: 500px;
-    overflow: hidden;
+    overflow: visible;    /* show full wheels */
     z-index: 1;
   }
+
   .sm-img {
     display: block;
     width: 100%;
-    transform: translateX(-120%);
+    transform: translateX(-120%); /* start off-screen */
   }
   .sm-img.drive-in {
     transition: transform 2s ease-out;
@@ -74,7 +56,7 @@
     transform: translateX(120%);
   }
 
-  /* ────────── fade-out ────────── */
+  /* ─── Fade-out at end ─── */
   .stopmotion-intro.fade-out {
     animation: fadeOut 1s ease-out forwards;
   }
@@ -82,7 +64,7 @@
     to { opacity: 0; pointer-events: none; }
   }
 
-  /* ────────── responsiveness ────────── */
+  /* ─── Responsive tweaks ─── */
   @media (max-width: 600px) {
     .header-img { width: 90%; }
     .sm-container { width: 95%; max-width: none; }
@@ -111,45 +93,68 @@
 
 <script type="module">
   document.addEventListener('DOMContentLoaded', () => {
-    const intro = document.getElementById('intro');
-    const smImg = document.getElementById('smImg');
+    const intro     = document.getElementById('intro');
+    const headerImg = document.getElementById('headerImg');
+    const smImg     = document.getElementById('smImg');
 
-    // only once per session
+    // Only show once per session
     if (sessionStorage.getItem('introPlayed')) {
       intro.remove();
       return;
     }
     sessionStorage.setItem('introPlayed','true');
 
-    // drive in after header shows (0.5s)
-    setTimeout(() => smImg.classList.add('drive-in'), 500);
-
-    // after drive-in (2s) + pause (0.3s), swap drop frames
-    const dropFrames = [
-      '/images/worries%20falling%20into%20truck.png',
-      '/images/worries%20falling%20into%20truck-2.png',
-      '/images/truck%20with%20worries.png'
+    // ─── 1️⃣ Header‐falling sequence ───
+    const headerFrames    = [
+      '/images/header%20text%20falling1.png',
+      '/images/header%20text%20falling2.png'
     ];
-    const initialDelay = 500 + 2000 + 300;
+    const headerFrameTime = 800;   // ms per frame
+    const headerPause     = 500;   // ms pause after frames
 
-    setTimeout(() => {
-      dropFrames.forEach((src, i) => {
-        setTimeout(() => smImg.src = src, i * 800);
-      });
-
-      // after drops (n*0.8s) + 1s pause, drive out
-      const totalDrops = dropFrames.length * 800;
+    headerFrames.forEach((src, idx) => {
       setTimeout(() => {
-        smImg.classList.add('drive-out');
+        headerImg.src = src;
+      }, idx * headerFrameTime);
+    });
 
-        // fade out 2s after drive-out begins
+    // After the header frames + pause, start the truck
+    const headerTotal = headerFrames.length * headerFrameTime + headerPause;
+    setTimeout(() => {
+      // ─── 2️⃣ Drive-in truck ───
+      smImg.classList.add('drive-in');
+
+      // ─── 3️⃣ Drop-worries sequence ───
+      const dropFrames = [
+        '/images/worries%20falling%20into%20truck.png',
+        '/images/worries%20falling%20into%20truck-2.png',
+        '/images/truck%20with%20worries.png'
+      ];
+      const dropInterval = 800;  // ms between drop frames
+      const dropPause    = 300;  // ms pause after drive-in
+
+      // begin dropping after drive-in duration + small pause
+      setTimeout(() => {
+        dropFrames.forEach((src, idx) => {
+          setTimeout(() => {
+            smImg.src = src;
+          }, idx * dropInterval);
+        });
+
+        // ─── 4️⃣ Drive-out after all drops + 1s pause ───
+        const totalDropTime = dropFrames.length * dropInterval;
         setTimeout(() => {
-          intro.classList.add('fade-out');
-          setTimeout(() => intro.remove(), 1000);
-        }, 2000);
-      }, totalDrops + 1000);
-    }, initialDelay);
+          smImg.classList.add('drive-out');
+
+          // ─── 5️⃣ Fade intro 2s after drive-out ───
+          setTimeout(() => {
+            intro.classList.add('fade-out');
+            setTimeout(() => intro.remove(), 1000);
+          }, 2000);
+        }, totalDropTime + 1000);
+
+      }, 2000 + dropPause);
+
+    }, headerTotal);
   });
 </script>
-
-
