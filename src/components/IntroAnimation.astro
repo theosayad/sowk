@@ -4,8 +4,7 @@
 <style>
   /* ─── Global white background ─── */
   html, body {
-    margin: 0;
-    padding: 0;
+    margin: 0; padding: 0;
     background: #ffffff;
     height: 100%;
   }
@@ -14,38 +13,30 @@
   .stopmotion-intro {
     position: fixed; inset: 0;
     background: #ffffff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 1.5rem;
     padding: 2rem 1rem 1rem;
-    overflow: hidden;
-    z-index: 1000;
+    overflow: hidden; z-index: 1000;
     box-sizing: border-box;
   }
 
   /* ─── Header image sizing ─── */
   .header-img {
-    width: 80%;
-    max-width: 600px;
-    height: auto;
-    display: block;
+    width: 80%; max-width: 600px;
+    height: auto; display: block;
     z-index: 2;
   }
 
   /* ─── Stop-motion truck container ─── */
   .sm-container {
     position: relative;
-    width: 90%;
-    max-width: 500px;
-    overflow: visible;    /* show full wheels */
-    z-index: 1;
+    width: 90%; max-width: 500px;
+    overflow: visible; z-index: 1;
   }
 
   .sm-img {
-    display: block;
-    width: 100%;
-    transform: translateX(-120%); /* start off-screen */
+    display: block; width: 100%;
+    transform: translateX(-120%);
   }
   .sm-img.drive-in {
     transition: transform 2s ease-out;
@@ -97,63 +88,59 @@
     const headerImg = document.getElementById('headerImg');
     const smImg     = document.getElementById('smImg');
 
-    // Only show once per session
+    // Only once per session
     if (sessionStorage.getItem('introPlayed')) {
       intro.remove();
       return;
     }
     sessionStorage.setItem('introPlayed','true');
 
-    // ─── 1️⃣ Header‐falling sequence ───
+    // ─── 1️⃣ Header-fall sequence ───
     const headerFrames    = [
       '/images/header%20text%20falling1.png',
-      '/images/header%20text%20falling2.png'
+      '/images/header%20text%20falling2.png',
+      '/images/header%20text%20worries%20fell.png'
     ];
-    const headerFrameTime = 800;   // ms per frame
-    const headerPause     = 500;   // ms pause after frames
+    const frameTime       = 800;  // ms per header frame
+    const headerPause     = 500;  // ms after last header frame
 
     headerFrames.forEach((src, idx) => {
-      setTimeout(() => {
-        headerImg.src = src;
-      }, idx * headerFrameTime);
+      setTimeout(() => { headerImg.src = src; }, idx * frameTime);
     });
 
-    // After the header frames + pause, start the truck
-    const headerTotal = headerFrames.length * headerFrameTime + headerPause;
+    // After header frames + pause, start truck sequence
+    const headerTotal = headerFrames.length * frameTime + headerPause;
     setTimeout(() => {
-      // ─── 2️⃣ Drive-in truck ───
+      // ─── 2️⃣ Truck drives in ───
       smImg.classList.add('drive-in');
 
       // ─── 3️⃣ Drop-worries sequence ───
-      const dropFrames = [
+      const dropFrames   = [
         '/images/worries%20falling%20into%20truck.png',
         '/images/worries%20falling%20into%20truck-2.png',
         '/images/truck%20with%20worries.png'
       ];
       const dropInterval = 800;  // ms between drop frames
-      const dropPause    = 300;  // ms pause after drive-in
+      const drivePause   = 300;  // ms after drive-in
 
-      // begin dropping after drive-in duration + small pause
       setTimeout(() => {
-        dropFrames.forEach((src, idx) => {
-          setTimeout(() => {
-            smImg.src = src;
-          }, idx * dropInterval);
+        dropFrames.forEach((src, i) => {
+          setTimeout(() => { smImg.src = src; }, i * dropInterval);
         });
 
-        // ─── 4️⃣ Drive-out after all drops + 1s pause ───
+        // ─── 4️⃣ Truck drives out after drops + 1s hold ───
         const totalDropTime = dropFrames.length * dropInterval;
         setTimeout(() => {
           smImg.classList.add('drive-out');
 
-          // ─── 5️⃣ Fade intro 2s after drive-out ───
+          // ─── 5️⃣ Fade intro out 2s later ───
           setTimeout(() => {
             intro.classList.add('fade-out');
             setTimeout(() => intro.remove(), 1000);
           }, 2000);
         }, totalDropTime + 1000);
 
-      }, 2000 + dropPause);
+      }, 2000 + drivePause);
 
     }, headerTotal);
   });
