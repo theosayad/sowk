@@ -64,15 +64,11 @@
   /* Dump bed animation */
   .dump-bed {
     transform-origin: 180px 120px;
-    animation: bed-dump 4s ease-in-out forwards;
-    animation-delay: 5s;
+    transition: transform 1s ease-in-out;
   }
 
-  @keyframes bed-dump {
-    0% { transform: rotate(0deg); }
-    25% { transform: rotate(-45deg); }
-    75% { transform: rotate(-45deg); }
-    100% { transform: rotate(0deg); }
+  .dump-bed.dumping {
+    transform: rotate(-45deg);
   }
 
   /* Letter physics */
@@ -90,15 +86,12 @@
 
   .letter.falling {
     opacity: 1;
-    animation: sand-scatter 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation: letter-fall 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   }
 
-  @keyframes sand-scatter {
+  @keyframes letter-fall {
     0% {
       transform: translate(0, 0) rotate(0deg);
-    }
-    30% {
-      transform: translate(var(--scatter-x), var(--scatter-y)) rotate(var(--scatter-rotation));
     }
     100% {
       transform: translate(var(--final-x), var(--final-y)) rotate(var(--final-rotation));
@@ -191,7 +184,7 @@
   const introContainer = document.getElementById('introContainer');
   const truckContainer = document.getElementById('truckContainer');
   const letterContainer = document.getElementById('letterContainer');
-  const bedText = document.getElementById('bedText');
+  const dumpBed = document.getElementById('dumpBed');
 
   // Extract letters from typewriter text and animate them
   function extractAndDumpLetters() {
@@ -206,8 +199,7 @@
     const newText = fullText.replace(wordToExtract, '______');
     typewriterEl.textContent = newText;
     
-    // Add text to truck bed temporarily
-    const dumpBed = document.getElementById('dumpBed');
+    // Add text to truck bed
     const bedText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     bedText.setAttribute('x', '130');
     bedText.setAttribute('y', '125');
@@ -218,6 +210,11 @@
     bedText.textContent = wordToExtract;
     dumpBed.appendChild(bedText);
     
+    // Trigger dump bed animation
+    setTimeout(() => {
+      dumpBed.classList.add('dumping');
+    }, 1000);
+
     // After a short delay, dump the letters with sand physics
     setTimeout(() => {
       bedText.remove();
@@ -235,39 +232,22 @@
           letterEl.style.left = startX + 'px';
           letterEl.style.top = startY + 'px';
           
-          // True sand-like scattering - wide horizontal spread
-          const horizontalForce = (Math.random() - 0.5) * 300; // -150 to +150px
-          const verticalBurst = -20 - Math.random() * 30; // Initial upward burst
-          const gravity = 120 + Math.random() * 80; // Final downward fall
+          // Horizontal spread
+          const horizontalSpread = (index - (letters.length - 1) / 2) * 30;
+          const verticalDrop = Math.random() * 50 + 100; // 100-150px drop
           
-          // Scatter trajectory (initial burst outward)
-          const scatterX = horizontalForce * 0.6;
-          const scatterY = verticalBurst;
-          const scatterRotation = (Math.random() - 0.5) * 180;
-          
-          // Final position (gravity settles them)
-          const finalX = horizontalForce + (Math.random() - 0.5) * 40;
-          const finalY = gravity;
-          const finalRotation = (Math.random() - 0.5) * 360;
-          
-          letterEl.style.setProperty('--scatter-x', scatterX + 'px');
-          letterEl.style.setProperty('--scatter-y', scatterY + 'px');
-          letterEl.style.setProperty('--scatter-rotation', scatterRotation + 'deg');
-          letterEl.style.setProperty('--final-x', finalX + 'px');
-          letterEl.style.setProperty('--final-y', finalY + 'px');
-          letterEl.style.setProperty('--final-rotation', finalRotation + 'deg');
+          letterEl.style.setProperty('--final-x', horizontalSpread + 'px');
+          letterEl.style.setProperty('--final-y', verticalDrop + 'px');
+          letterEl.style.setProperty('--final-rotation', (Math.random() - 0.5) * 360 + 'deg');
           
           letterContainer.appendChild(letterEl);
-        }, index * 50); // Quick succession like sand pouring
+        }, index * 100); // Slower succession for better visibility
       });
-    }, 1000);
+    }, 2000); // Start dumping letters after the bed starts moving
   }
 
   // Animation timeline
-  setTimeout(() => {
-    // Extract letters from typewriter and put them in truck
-    extractAndDumpLetters();
-  }, 7000); // Wait for typing to finish
+  setTimeout(extractAndDumpLetters, 7000); // Wait for typing to finish
 
   setTimeout(() => {
     // Start truck driving away
