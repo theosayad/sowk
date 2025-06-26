@@ -1,0 +1,44 @@
+---
+/*
+  Full-screen intro that self-destructs once it has played ✔️
+  Dependencies:
+    • GSAP @ 3. (included via CDN below – no NPM install needed)
+*/
+const played = 'introPlayed';
+---
+
+{/*
+  Render nothing at all if the flag already exists (e.g. user came from a sub-page)
+*/}
+{!Astro.client
+  ? null
+  : Astro.embedJS(`
+      if (localStorage.getItem('${played}')) {
+        document.documentElement.classList.add('intro-skip');
+      }
+    `)}
+
+<style>
+  /* hide EVERYTHING beneath while intro is playing */
+  .intro-overlay{
+    position:fixed;inset:0;z-index:9999;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    background:#fff;font-family:'DM Sans',sans-serif;color:#1B2A41;
+    overflow:hidden;
+  }
+
+  .typing{
+    font-size:clamp(1.4rem,6vw,2.4rem);font-weight:500;
+    white-space:nowrap;border-right:2px solid #1B2A41;
+    overflow:hidden;
+  }
+
+  /* dump-truck container */
+  .stage{position:relative;width:320px;height:180px;margin-top:2rem;}
+
+  .truck, .bed, .wheel{
+    position:absolute;transform-origin:center;
+  }
+  .truck   {width:90px;height:80px;right:0;bottom:45px;background:#1B2A41;border-radius:8px 8px 2px 2px;}
+  .bed     {width:160px;height:55px;left:0;bottom:45px;background:#415D43;border-radius:4px;}
+  .wheel   {width:3
