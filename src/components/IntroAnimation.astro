@@ -1,9 +1,11 @@
 ---
-/* IntroAnimation component: typewriter + stop-motion dump-truck animation */
+/* IntroAnimation component: blended typewriter + SVG dump-truck + p5.js background truck */
 ---
+<!-- p5.js once, globally for this component -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
 
 <style>
+  /*  ─────────────────────────  layout  ───────────────────────── */
   .intro-container {
     position: fixed;
     inset: 0;
@@ -11,557 +13,262 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    gap: 2rem;
     z-index: 1000;
     font-family: 'Comic Sans MS', cursive, sans-serif;
+    overflow: hidden;
   }
 
+  /* p5 canvas sits at the very back */
+  #p5-background-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /*  ─────────────────────────  typewriter  ───────────────────────── */
   .typewriter {
     font-size: clamp(1rem, 4vw, 1.8rem);
     color: #2d3748;
     white-space: nowrap;
     overflow: hidden;
     width: 90%;
-    max-width: 600px;
-    margin: 0 auto 2rem;
-    padding: 0.5rem;
-    box-sizing: border-box;
+    max-width: 850px;
     text-align: center;
-  }
-
-  .typewriter-text {
-    display: inline-block;
-    white-space: nowrap;
     border-right: 3px solid #4a5568;
-    padding-right: 5px;
-    animation: typing-realistic 6s steps(60) forwards, blink 0.8s step-end infinite;
+    animation: typing 6s steps(62, end) forwards, blink 0.8s step-end infinite;
   }
 
-  @keyframes typing-realistic {
-    0% { width: 0; }
-    15% { width: 15%; }
-    20% { width: 15%; } /* pause after "Hi there!" */
-    25% { width: 20%; }
-    60% { width: 85%; }
-    65% { width: 85%; } /* pause after period */
-    100% { width: 100%; }
+  @keyframes typing {
+    from { width: 0; }
+    to   { width: 100%; }
   }
+  @keyframes blink { 50% { border-color: transparent; } }
 
-  @keyframes blink {
-    50% { border-color: transparent; }
-  }
-
+  /*  ─────────────────────────  SVG-truck scene  ───────────────────────── */
   .truck-scene {
     position: relative;
     width: 500px;
     height: 300px;
-    overflow: visible;
   }
 
-  /* Simple truck that's always visible */
   .truck-container {
     position: relative;
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
+    z-index: 5;           /* above p5 background */
   }
 
-  .truck-svg {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
+  .truck-svg { width: 100%; height: 100%; display: block; }
 
-  /* Dump bed animation */
-  .dump-bed {
-    transform-origin: 180px 120px;
-    transition: transform 1s ease-in-out;
-  }
+  /* dump-bed pivot */
+  .dump-bed { transform-origin: 180px 120px; transition: transform 1s ease-in-out; }
+  .dump-bed.dumping { transform: rotate(-42deg); }
 
-  .dump-bed.dumping {
-    transform: rotate(-45deg);
-  }
-
-  /* Letter physics */
+  /*  ─────────────────────────  letters  ───────────────────────── */
   .letter {
     position: absolute;
     font-family: 'Comic Sans MS', cursive;
     font-weight: bold;
     font-size: 2rem;
     color: #e53e3e;
-    z-index: 10;
     pointer-events: none;
     opacity: 0;
-    user-select: none;
-    transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform 1s cubic-bezier(.25,.46,.45,.94), opacity .2s;
   }
+  .letter.falling { opacity: 1; }
 
-  .letter.falling {
-    opacity: 1;
-  }
-
-  /* Truck exit animation */
+  /*  ─────────────────────────  exits  ───────────────────────── */
   .truck-container.driving-away {
     animation: drive-away 3s ease-in forwards;
-    animation-delay: 9s;
   }
+  @keyframes drive-away { to { transform: translateX(120vw); } }
 
-  @keyframes drive-away {
-    to { transform: translateX(120vw); }
-  }
-
-  /* Fade out */
   .intro-container.fade-out {
     animation: fade-out 1s ease-out forwards;
   }
-
-  @keyframes fade-out {
-    to {
-      opacity: 0;
-      pointer-events: none;
-    }
-  }
+  @keyframes fade-out { to { opacity: 0; pointer-events: none; } }
 </style>
 
+
 <div class="intro-container" id="introContainer">
-  <div class="typewriter">
-    <div id="p5-background-canvas" style="position: absolute; inset: 0; z-index: 0;"></div>
-    <span class="typewriter-text" id="typewriterText">Hi there! From here onwards, please drop off all your worries.</span>
+  <!-- background p5 canvas -->
+  <div id="p5-background-canvas"></div>
+
+  <!-- typewriter line -->
+  <div class="typewriter" id="typewriterText">
+    Hi there! From here onwards, please drop off all your worries.
   </div>
 
-<div class="truck-scene">
-  <div id="sketch-container"></div>
+  <!-- SVG dump-truck (front layer) -->
+  <div class="truck-scene">
+    <div class="truck-container" id="truckContainer">
+      <svg class="truck-svg" viewBox="0 0 500 300">
+        <g stroke="#000" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none">
+          <!-- wheels -->
+          <circle cx="100" cy="250" r="40" fill="#222"/>
+          <circle cx="400" cy="250" r="40" fill="#222"/>
 
-  <!-- p5.js library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+          <!-- body -->
+          <path d="M50 250 L450 250 L450 100 L350 100 L300 50 L150 50 L100 100 L50 100 Z" fill="#E4AC2F"/>
 
-  <!-- Full truck animation sketch -->
-  <script type="module">
-    const sketch = (p) => {
-      let truck;
-      let typer;
+          <!-- dump-bed (rotates) -->
+          <g id="dumpBed" class="dump-bed">
+            <path d="M150 100 L450 100 L450 50 L200 50 Z" fill="#FCC93E"/>
+          </g>
 
-      p.setup = () => {
-        p.createCanvas(800, 320).parent("sketch-container");
-        truck = new Truck(-500, 240);
-        typer = new Typewriter(
-          "Caterpillar 793 F — 300 t payload, 2,650 hp.\nNeed dirt moved? Call CAT.",
-          60, 70, 20
-        );
-        p.textFont('Courier New', 20);
-        p.frameRate(60);
-      };
-
-      p.draw = () => {
-        p.background(235);
-        drawGround();
-        truck.update();
-        truck.display();
-        typer.update(truck.isParked());
-        typer.display();
-      };
-
-      function drawGround() {
-        p.noStroke();
-        p.fill(200, 180, 130);
-        p.rect(0, p.height * 0.65, p.width, p.height * 0.35);
-      }
-
-      class Truck {
-        constructor(x, y) {
-          this.originX = x;
-          this.y = y;
-          this.reset();
-        }
-
-        reset() {
-          this.x = this.originX;
-          this.state = 'IN';
-          this.speed = 3.2;
-        }
-
-        isParked() {
-          return this.state === 'PARKED';
-        }
-
-        update() {
-          switch (this.state) {
-            case 'IN':
-              this.x += this.speed;
-              if (this.x >= p.width * 0.2) {
-                this.state = 'PARKED';
-                this.parkedAt = p.millis();
-              }
-              break;
-            case 'PARKED':
-              if (typer.finished && p.millis() - this.parkedAt > 4000) {
-                this.state = 'OUT';
-              }
-              break;
-            case 'OUT':
-              this.x += this.speed;
-              break;
-          }
-        }
-
-        display() {
-          p.push();
-          p.translate(this.x, this.y);
-          p.scale(0.7);
-
-          const yellow = p.color(229, 178, 45);
-          const black = 30;
-
-          p.noStroke();
-          p.fill(30);
-          p.ellipse(0, 0, 240, 240);
-          p.ellipse(360, 0, 240, 240);
-
-          p.fill(95, 73, 12);
-          p.ellipse(0, 0, 140, 140);
-          p.ellipse(360, 0, 140, 140);
-
-          p.fill(yellow);
-          p.rect(-120, -160, 600, 90);
-          p.quad(-120, -160, 530, -160, 560, -70, -150, -70);
-
-          p.rect(200, -220, 160, 150);
-          p.fill(black);
-          p.rect(220, -210, 50, 60);
-          p.rect(285, -210, 55, 60);
-
-          p.fill(yellow);
-          p.rect(160, -260, 260, 40);
-
-          p.fill(black);
-          p.rect(-40, -135, 90, 45, 6);
-          p.fill(255);
-          p.textSize(26);
-          p.textAlign(p.CENTER, p.CENTER);
-          p.text('CAT', 5, -112);
-
-          p.fill(black);
-          p.rect(245, -50, 55, 30, 4);
-          p.fill(255);
-          p.textSize(18);
-          p.text('793', 272, -36);
-
-          p.pop();
-        }
-      }
-
-      class Typewriter {
-        constructor(txt, x, baselineY, sizePx = 24) {
-          this.fullText = txt;
-          this.x0 = x;
-          this.y0 = baselineY;
-          this.size = sizePx;
-          this.reset();
-        }
-
-        reset() {
-          this.letters = [];
-          this.cursor = 0;
-          this.nextTypeDue = p.millis() + 800;
-          this.finished = false;
-        }
-
-        update(allowedToType) {
-          if (!allowedToType || this.finished) return;
-
-          const now = p.millis();
-          if (now >= this.nextTypeDue && this.cursor < this.fullText.length) {
-            const ch = this.fullText[this.cursor];
-            let delay = p.randomGaussian(65, 25);
-            if (',.;!?'.includes(ch)) delay += 350;
-            if (ch === '\n') delay += 500;
-            delay = p.max(delay, 30);
-            this.nextTypeDue = now + delay;
-
-            if (ch === '\n') {
-              this.cursor++;
-              return;
-            }
-
-            const row = (this.fullText.substring(0, this.cursor).match(/\n/g) || []).length;
-            const col = this.fullText
-              .substring(this.fullText.lastIndexOf('\n', this.cursor - 1) + 1, this.cursor).length;
-
-            const destX = this.x0 + col * this.size * 0.6;
-            const destY = this.y0 + row * this.size * 1.4;
-
-            this.letters.push(new Letter(ch, destX, destY, this.size));
-            this.cursor++;
-          } else if (this.cursor >= this.fullText.length && !this.finished) {
-            this.finished = true;
-          }
-
-          for (const l of this.letters) l.update();
-        }
-
-        display() {
-          for (const l of this.letters) l.display();
-          if (!this.finished && truck.isParked() && p.frameCount % 40 < 20) {
-            const caretX = this.x0 + this.cursor * this.size * 0.6;
-            p.line(caretX, this.y0, caretX, this.y0 - this.size);
-          }
-        }
-      }
-
-      class Letter {
-        constructor(char, destX, destY, sizePx) {
-          this.char = char;
-          this.dest = p.createVector(destX, destY - 4);
-          this.pos = p.createVector(destX, destY - 140);
-          this.vel = p.createVector(p.random(-1, 1), p.random(5, 10));
-          this.acc = p.createVector(0, 0.4);
-          this.size = sizePx;
-          this.settled = false;
-        }
-
-        update() {
-          if (this.settled) return;
-          this.vel.add(this.acc);
-          this.pos.add(this.vel);
-          if (this.pos.y >= this.dest.y) {
-            this.pos.y = this.dest.y;
-            this.vel.y *= -0.35;
-            if (p.abs(this.vel.y) < 0.6) {
-              this.settled = true;
-              this.pos.y = this.dest.y;
-            }
-          }
-        }
-
-        display() {
-          p.push();
-          p.translate(this.pos.x, this.pos.y);
-          p.noStroke();
-          p.fill(20);
-          p.textSize(this.size);
-          p.textAlign(p.LEFT, p.BOTTOM);
-          p.text(this.char, 0, 0);
-          p.pop();
-        }
-      }
-    };
-
-    new p5(sketch);
-  </script>
-</div>
-
-    <!-- Letters container for physics simulation -->
+          <!-- cab -->
+          <rect x="50" y="100" width="100" height="150" fill="#4ECDC4"/>
+          <!-- window -->
+          <rect x="70" y="120" width="60" height="80" fill="#F8F3D4"/>
+          <!-- grill -->
+          <line x1="70" y1="220" x2="130" y2="220" stroke="#000" stroke-width="6"/>
+        </g>
+      </svg>
+    </div>
+    <!-- letters land here -->
     <div id="letterContainer"></div>
   </div>
 </div>
 
+
+<!-- p5.js background CAT 793 truck -->
 <script type="module">
-  const sketch = (p) => {
-    let truck;
-    let hasExited = false;
-
-    p.setup = () => {
-      const canvas = p.createCanvas(window.innerWidth, window.innerHeight);
-      canvas.parent('p5-background-canvas');
-    };
-
-    p.draw = () => {
-      p.clear();
-      p.background(248, 249, 250, 0); // transparent-ish
-
-      if (!truck) return;
-
-      truck.update();
-      truck.display();
-
-      if (truck.state === 'OUT' && !hasExited) {
-        hasExited = true;
-        // trigger your DOM truck exit
-        document.getElementById('truckContainer')?.classList.add('driving-away');
-      }
-    };
-
-    p.windowResized = () => {
-      p.resizeCanvas(window.innerWidth, window.innerHeight);
-    };
-
-    class Truck {
-      constructor(x, y) {
-        this.x = x;
-        this.y = y;
-        this.state = 'IN';
-        this.speed = 4;
-        this.stopX = window.innerWidth * 0.25;
-        this.parkedAt = null;
-      }
-
-      update() {
-        switch (this.state) {
-          case 'IN':
-            this.x += this.speed;
-            if (this.x >= this.stopX) {
-              this.x = this.stopX;
-              this.state = 'PARKED';
-              this.parkedAt = p.millis();
-            }
-            break;
-          case 'PARKED':
-            if (this.parkedAt && p.millis() - this.parkedAt > 7000) {
-              this.state = 'OUT';
-            }
-            break;
-          case 'OUT':
-            this.x += this.speed;
-            break;
-        }
-      }
-
-      display() {
-        p.push();
-        p.translate(this.x, this.y);
-        p.scale(0.5);
-
-        const yellow = p.color(229, 178, 45);
-        const black = 30;
-
-        p.noStroke();
-        p.fill(30);
-        p.ellipse(0, 0, 240, 240);
-        p.ellipse(360, 0, 240, 240);
-
-        p.fill(95, 73, 12);
-        p.ellipse(0, 0, 140, 140);
-        p.ellipse(360, 0, 140, 140);
-
-        p.fill(yellow);
-        p.rect(-120, -160, 600, 90);
-        p.quad(-120, -160, 530, -160, 560, -70, -150, -70);
-
-        p.rect(200, -220, 160, 150);
-        p.fill(black);
-        p.rect(220, -210, 50, 60);
-        p.rect(285, -210, 55, 60);
-
-        p.fill(yellow);
-        p.rect(160, -260, 260, 40);
-
-        p.fill(black);
-        p.rect(-40, -135, 90, 45, 6);
-        p.fill(255);
-        p.textSize(26);
-        p.textAlign(p.CENTER, p.CENTER);
-        p.text('CAT', 5, -112);
-
-        p.fill(black);
-        p.rect(245, -50, 55, 30, 4);
-        p.fill(255);
-        p.textSize(18);
-        p.text('793', 272, -36);
-
-        p.pop();
+/* ---------- p5 background truck ---------- */
+const sketch = (p) => {
+  class Truck {
+    constructor(x, y) {
+      this.x = x; this.y = y;
+      this.state = 'IN';
+      this.speed = 4;
+      this.stopX = window.innerWidth * 0.32;
+      this.parkedAt = null;
+    }
+    update() {
+      switch (this.state) {
+        case 'IN':
+          this.x += this.speed;
+          if (this.x >= this.stopX) {
+            this.x = this.stopX;
+            this.state = 'PARKED';
+            this.parkedAt = p.millis();
+            window.dispatchEvent(new Event('truckParked'));  // ✨ fire event
+          }
+          break;
+        case 'PARKED':
+          if (p.millis() - this.parkedAt > 4500) this.state = 'OUT';
+          break;
+        case 'OUT':
+          this.x += this.speed;
+          if (this.x > window.innerWidth + 600)
+            window.dispatchEvent(new Event('truckGone'));
+          break;
       }
     }
+    display() {
+      p.push();
+      p.translate(this.x, this.y);
+      p.scale(.55);
 
-    // wait until DOM is loaded and animation begins
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        truck = new Truck(-500, window.innerHeight * 0.65);
-      }, 500); // delay before driving in
-    });
+      const yellow = p.color(229,178,45);
+      p.noStroke();
+      /* wheels */
+      p.fill(35); p.ellipse(0,0,240,240); p.ellipse(360,0,240,240);
+      p.fill(95,73,12); p.ellipse(0,0,140,140); p.ellipse(360,0,140,140);
+      /* bed + chassis */
+      p.fill(yellow); p.rect(-120,-160,600,90);
+      p.quad(-120,-160,530,-160,560,-70,-150,-70);
+      /* cab block */
+      p.rect(200,-220,160,150);
+      p.fill(30); p.rect(220,-210,50,60); p.rect(285,-210,55,60);
+      /* canopy */
+      p.fill(yellow); p.rect(160,-260,260,40);
+      /* logos */
+      p.fill(30); p.rect(-40,-135,90,45,6);
+      p.fill(255); p.textSize(26); p.textAlign(p.CENTER,p.CENTER); p.text('CAT',5,-112);
+      p.fill(30); p.rect(245,-50,55,30,4);
+      p.fill(255); p.textSize(18); p.text('793',272,-36);
+      p.pop();
+    }
+  }
+
+  let truck;
+
+  p.setup = () => {
+    const c = p.createCanvas(window.innerWidth, window.innerHeight);
+    c.parent('p5-background-canvas');
+    truck = new Truck(-600, window.innerHeight * .65);
   };
+  p.draw = () => { p.clear(); truck.update(); truck.display(); };
+  p.windowResized = () => p.resizeCanvas(window.innerWidth, window.innerHeight);
+};
 
-  new p5(sketch);
+new p5(sketch);
 </script>
 
 
-<script>
-(function() {
-  // Check if intro was already played this session
-  if (sessionStorage.getItem('introPlayed')) {
-    const container = document.getElementById('introContainer');
-    if (container) container.remove();
-    return;
-  }
+<!-- DOM-side logic: typewriter extraction & physics letters -->
+<script type="module">
+/* ---------- DOM coordination script ---------- */
+const intro     = document.getElementById('introContainer');
+const dumpBed   = document.getElementById('dumpBed');
+const letterBox = document.getElementById('letterContainer');
+const truckSVG  = document.getElementById('truckContainer');
+const typeNode  = document.getElementById('typewriterText');
 
-  // Mark as played
-  sessionStorage.setItem('introPlayed', 'true');
+/* 1. wait until the p5 truck announces it’s parked */
+window.addEventListener('truckParked', () => {
+  /* pull “worries” out of the sentence */
+  const original = typeNode.textContent;
+  const word     = 'worries';
+  typeNode.textContent = original.replace(word, '______');
 
-  const introContainer = document.getElementById('introContainer');
-  const truckContainer = document.getElementById('truckContainer');
-  const letterContainer = document.getElementById('letterContainer');
-  const dumpBed = document.getElementById('dumpBed');
+  /* put the word inside the dump-bed */
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const txt   = document.createElementNS(svgNS, 'text');
+  txt.setAttribute('x','130'); txt.setAttribute('y','125');
+  txt.setAttribute('font-size','16'); txt.setAttribute('fill','#e53e3e');
+  txt.setAttribute('font-family','Comic Sans MS'); txt.setAttribute('text-anchor','middle');
+  txt.textContent = word; dumpBed.appendChild(txt);
 
-  // Extract letters from typewriter text and animate them
-  function extractAndDumpLetters() {
-    const typewriterEl = document.getElementById('typewriterText');
-    
-    const fullText = typewriterEl.textContent;
-    const wordToExtract = 'worries';
-    const letters = wordToExtract.split('');
-    
-    const newText = fullText.replace(wordToExtract, '______');
-    typewriterEl.textContent = newText;
-    
-    const bedText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    bedText.setAttribute('x', '130');
-    bedText.setAttribute('y', '125');
-    bedText.setAttribute('font-family', 'Comic Sans MS');
-    bedText.setAttribute('font-size', '16');
-    bedText.setAttribute('fill', '#e53e3e');
-    bedText.setAttribute('text-anchor', 'middle');
-    bedText.textContent = wordToExtract;
-    dumpBed.appendChild(bedText);
-    
-    setTimeout(() => {
-      dumpBed.classList.add('dumping');
-    }, 1000);
+  /* tip the bed after 1 s */
+  setTimeout(()=>dumpBed.classList.add('dumping'), 1000);
 
-    setTimeout(() => {
-      bedText.remove();
-      
-      letters.forEach((char, index) => {
-        const letterEl = document.createElement('div');
-        letterEl.className = 'letter';
-        letterEl.textContent = char;
-        
-        const startX = 130;
-        const startY = 120;
-        
-        letterEl.style.left = `${startX}px`;
-        letterEl.style.top = `${startY}px`;
-        
-        letterContainer.appendChild(letterEl);
+  /* 2 s later drop individual letters with simple physics */
+  setTimeout(()=>{
+    txt.remove();
+    [...word].forEach((ch,i)=>{
+      const el = document.createElement('div');
+      el.className = 'letter'; el.textContent = ch;
+      const startX = dumpBed.getBoundingClientRect().left + 130;
+      const startY = dumpBed.getBoundingClientRect().top  + 125;
+      el.style.left = `${startX}px`; el.style.top = `${startY}px`;
+      letterBox.appendChild(el);
 
-        setTimeout(() => {
-          const horizontalSpread = (index - (letters.length - 1) / 2) * 40;
-          const verticalDrop = Math.random() * 30 + 150; // 150-180px drop
-          const rotation = (Math.random() - 0.5) * 360;
+      setTimeout(()=>{
+        const spread = (i-(word.length-1)/2)*40;
+        const drop   = Math.random()*30+160;
+        const rot    = (Math.random()-.5)*360;
+        el.style.transform = `translate(${spread}px, ${drop}px) rotate(${rot}deg)`;
+        el.classList.add('falling');
+      }, 30);
+    });
+  }, 2000);
+});
 
-          letterEl.style.transform = `translate(${horizontalSpread}px, ${verticalDrop}px) rotate(${rotation}deg)`;
-          letterEl.classList.add('falling');
-        }, 50); // Short delay for visual effect
-      });
-    }, 2000);
-  }
+/* when the background truck starts leaving, drive the SVG away */
+window.addEventListener('truckGone', ()=> truckSVG.classList.add('driving-away'));
 
-  // Animation timeline
-  setTimeout(extractAndDumpLetters, 7000); // Wait for typing to finish
+/* fade the whole intro out 3 s after the SVG truck starts leaving */
+window.addEventListener('truckGone', ()=>{
+  setTimeout(()=>{
+    intro.classList.add('fade-out');
+    setTimeout(()=>intro.remove(),1000);
+  },3000);
+});
 
-  setTimeout(() => {
-    // Start truck driving away
-    if (truckContainer) {
-      truckContainer.classList.add('driving-away');
-    }
-  }, 12000);
-
-  setTimeout(() => {
-    // Fade out everything
-    if (introContainer) {
-      introContainer.classList.add('fade-out');
-      setTimeout(() => {
-        introContainer.remove();
-      }, 1000);
-    }
-  }, 16000);
-
-})();
+/* only run once per session */
+if (sessionStorage.getItem('introPlayed')) intro.remove();
+else sessionStorage.setItem('introPlayed','true');
 </script>
