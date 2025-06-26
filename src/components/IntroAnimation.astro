@@ -34,7 +34,7 @@
     transform: translateX(-120%);
   }
   .sm-img.drive-in {
-    transition: transform 1.5s ease-out; /* now 1.5s */
+    transition: transform 2s ease-out;
     transform: translateX(0);
   }
   .sm-img.drive-out {
@@ -50,7 +50,6 @@
     to { opacity: 0; pointer-events: none; }
   }
 
-  /* ─── mobile ─── */
   @media (max-width: 600px) {
     .header-img { width: 90%; }
     .sm-container { width: 95%; max-width: none; }
@@ -58,15 +57,12 @@
 </style>
 
 <div class="stopmotion-intro" id="intro">
-  <!-- 1️⃣ header -->
   <img
     id="headerImg"
     class="header-img"
     src="/images/header%20text.png"
     alt="Hi! Please drop off all your WORRIES before entering"
   />
-
-  <!-- 2️⃣ truck -->
   <div class="sm-container">
     <img
       id="smImg"
@@ -83,48 +79,55 @@
     const headerImg = document.getElementById('headerImg');
     const smImg     = document.getElementById('smImg');
 
+    // only once per session
     if (sessionStorage.getItem('introPlayed')) {
       intro.remove();
       return;
     }
     sessionStorage.setItem('introPlayed','true');
 
-    // start the truck drive-in immediately (1.5s)
-    smImg.classList.add('drive-in');
-
-    // header fall frames
-    const headerFrames   = [
+    // 1️⃣ Header-fall frames at 0.8s,1.6s,2.4s
+    const headerFrames = [
       '/images/header%20text%20falling1.png',
       '/images/header%20text%20falling2.png',
       '/images/header%20text%20worries%20fell.png'
     ];
-    // drop-into-truck frames
-    const dropFrames     = [
+    const frameTime = 800; // ms each
+
+    headerFrames.forEach((src, i) => {
+      setTimeout(() => headerImg.src = src, (i + 1) * frameTime);
+    });
+
+    // 2️⃣ Truck drive-in must finish exactly at 2.4s
+    //    so start drive-in at 2.4s - 2s = 0.4s
+    setTimeout(() => smImg.classList.add('drive-in'), 400);
+
+    // 3️⃣ At headerTotal=3*800=2400ms, immediately swap to first drop frame
+    const headerTotal = headerFrames.length * frameTime; // 2400ms
+    const dropFrames  = [
       '/images/worries%20falling%20into%20truck.png',
       '/images/worries%20falling%20into%20truck-2.png',
       '/images/truck%20with%20worries.png'
     ];
+    const dropInterval = 800; // ms between drops
 
-    const initialHold    = 1500; // ms to hold initial header
-    const frameTime      = 800;  // ms between each frame
-    const dropHold       = 1000; // ms hold after final drop
-
-    // schedule header and drop frames in lock-step
-    headerFrames.forEach((hsrc, i) => {
-      setTimeout(() => headerImg.src = hsrc, initialHold + i * frameTime);
-      setTimeout(() => smImg.src     = dropFrames[i], initialHold + i * frameTime);
-    });
-
-    const totalSequence = initialHold + headerFrames.length * frameTime; 
-    // after all drops + dropHold, drive out
     setTimeout(() => {
-      smImg.classList.add('drive-out');
-      // fade out once drive-out completes (2s)
+      // swap in each drop frame in sequence
+      dropFrames.forEach((src, idx) => {
+        setTimeout(() => { smImg.src = src; }, idx * dropInterval);
+      });
+
+      // 4️⃣ After all drops +1s, drive out
       setTimeout(() => {
-        intro.classList.add('fade-out');
-        setTimeout(() => intro.remove(), 1000);
-      }, 2000);
-    }, totalSequence + dropHold);
+        smImg.classList.add('drive-out');
+        // 5️⃣ Fade away 2s later
+        setTimeout(() => {
+          intro.classList.add('fade-out');
+          setTimeout(() => intro.remove(), 1000);
+        }, 2000);
+      }, dropFrames.length * dropInterval + 1000);
+
+    }, headerTotal);
 
   });
 </script>
