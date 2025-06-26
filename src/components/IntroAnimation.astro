@@ -82,7 +82,7 @@
     pointer-events: none;
     opacity: 0;
     user-select: none;
-    transition: all 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .letter.falling {
@@ -206,26 +206,55 @@
       bedText.remove();
       
       letters.forEach((char, index) => {
-        const letterEl = document.createElement('div');
-        letterEl.className = 'letter';
-        letterEl.textContent = char;
-        
-        const startX = 130;
-        const startY = 120;
-        
-        letterEl.style.left = `${startX}px`;
-        letterEl.style.top = `${startY}px`;
-        
-        letterContainer.appendChild(letterEl);
-
         setTimeout(() => {
-          const horizontalSpread = (index - (letters.length - 1) / 2) * 40;
-          const verticalDrop = Math.random() * 30 + 150; // 150-180px drop
-          const rotation = (Math.random() - 0.5) * 360;
+          const letterEl = document.createElement('div');
+          letterEl.className = 'letter';
+          letterEl.textContent = char;
+          
+          const startX = 130 + (Math.random() - 0.5) * 20; // Slight horizontal variation
+          const startY = 120;
+          
+          letterEl.style.left = `${startX}px`;
+          letterEl.style.top = `${startY}px`;
+          
+          letterContainer.appendChild(letterEl);
 
-          letterEl.style.transform = `translate(${horizontalSpread}px, ${verticalDrop}px) rotate(${rotation}deg)`;
-          letterEl.classList.add('falling');
-        }, index * 100); // Delay for each letter to create unique trajectory
+          // Physics simulation
+          let x = startX;
+          let y = startY;
+          let vx = (Math.random() - 0.5) * 10; // Initial horizontal velocity
+          let vy = -Math.random() * 5; // Initial upward velocity
+          const gravity = 0.5;
+          const bounce = 0.6;
+          const friction = 0.99;
+
+          function animate() {
+            vy += gravity;
+            x += vx;
+            y += vy;
+            vx *= friction;
+
+            // Bottom boundary (floor)
+            if (y > 250) {
+              y = 250;
+              vy *= -bounce;
+              vx *= friction;
+            }
+
+            // Side boundaries
+            if (x < 0 || x > 500) {
+              vx *= -bounce;
+            }
+
+            letterEl.style.transform = `translate(${x - startX}px, ${y - startY}px) rotate(${vx * 10}deg)`;
+
+            if (Math.abs(vy) > 0.1 || Math.abs(vx) > 0.1 || y < 250) {
+              requestAnimationFrame(animate);
+            }
+          }
+
+          setTimeout(animate, 50);
+        }, index * 100); // 100ms delay between each letter
       });
     }, 2000);
   }
