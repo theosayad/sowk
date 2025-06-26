@@ -82,20 +82,11 @@
     pointer-events: none;
     opacity: 0;
     user-select: none;
+    transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .letter.falling {
     opacity: 1;
-    animation: letter-fall 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  }
-
-  @keyframes letter-fall {
-    0% {
-      transform: translate(0, 0) rotate(0deg);
-    }
-    100% {
-      transform: translate(var(--final-x), var(--final-y)) rotate(var(--final-rotation));
-    }
   }
 
   /* Truck exit animation */
