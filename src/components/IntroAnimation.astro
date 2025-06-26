@@ -9,11 +9,13 @@ import { onMount } from 'solid-js';
     inset: 0;
     background: white;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
     z-index: 1000;
   }
+
+  /* Typewriter effect */
   .typewriter {
     font-family: 'DM Sans', sans-serif;
     font-size: 2rem;
@@ -22,10 +24,12 @@ import { onMount } from 'solid-js';
     border-right: 2px solid #000;
     width: 0;
     animation: typing 3s steps(40) forwards, blink 0.75s step-end infinite;
+    text-align: center;
+    max-width: 90%;
   }
   @keyframes typing {
     from { width: 0; }
-    to   { width: 20ch; }
+    to   { width: 40ch; }
   }
   @keyframes blink {
     50% { border-color: transparent; }
@@ -34,64 +38,40 @@ import { onMount } from 'solid-js';
   .truck-scene {
     position: relative;
     width: 300px;
-    height: 200px;
+    height: 180px;
     margin-top: 2rem;
   }
-  /* Sketchy truck body */
-  .truck-body {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100px;
-    border: 2px dashed #000;
-    border-top: 0;
-    border-right: 0;
-    background: transparent;
-  }
-  /* Truck wheels */
-  .wheel {
-    position: absolute;
-    bottom: -4px;
-    width: 40px;
-    height: 40px;
-    border: 2px dashed #000;
-    border-radius: 50%;
-  }
-  .wheel.front { right: 20px; }
-  .wheel.back  { left: 20px; }
 
-  /* Dump bed */
-  .dump-bed {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 180px;
-    height: 60px;
-    border: 2px dashed #000;
-    transform-origin: bottom left;
-    animation: bed-tilt 2s ease-in-out 1 4s forwards;
+  /* Inline SVG sketchy truck */
+  .truck-svg {
+    display: block;
   }
+
+  /* Dump bed rotation */
   @keyframes bed-tilt {
     0%   { transform: rotate(0deg); }
-    60%  { transform: rotate(-45deg); }
+    50%  { transform: rotate(-45deg); }
     100% { transform: rotate(0deg); }
   }
 
-  /* Letters: initial and drop animations */
   .letter {
     position: absolute;
     font-family: 'DM Sans', sans-serif;
     font-weight: 500;
     font-size: 1.5rem;
-    opacity: 1;
-    animation: drop 2s ease-in forwards;
-    animation-delay: 3s;
+    z-index: 2;
+    opacity: 0;
+    animation: drop 1s ease-out forwards;
   }
   @keyframes drop {
-    0%   { transform: translate(0, 0); opacity: 1; }
-    80%  { transform: translate(var(--dx), calc(100px + var(--dy))); opacity: 1; }
-    100% { opacity: 0; }
+    from {
+      transform: translate(0, 0);
+      opacity: 1;
+    }
+    to {
+      transform: translate(var(--dx), var(--dy));
+      opacity: 1;
+    }
   }
 </style>
 
@@ -99,21 +79,29 @@ import { onMount } from 'solid-js';
   <div class="typewriter">Hi there! From here onwards, please drop off all your worries and stresses.</div>
 
   <div class="truck-scene">
-    <div class="dump-bed"></div>
-    <div class="truck-body"></div>
-    <div class="wheel back"></div>
-    <div class="wheel front"></div>
-    {
-      /* Generate each letter span with custom x-offset (--dx) and small random y-offset (--dy) */
-    }
+    <svg class="truck-svg" width="300" height="180">
+      <!-- Truck body sketch -->
+      <polyline points="10,150 10,90 220,90 220,60 280,60" 
+                stroke="#000" stroke-width="3" fill="none" stroke-linecap="round" 
+                stroke-linejoin="round" stroke-dasharray="4 2" />
+      <!-- Wheels -->
+      <circle cx="60" cy="155" r="20" stroke="#000" stroke-width="3" fill="none" stroke-dasharray="4 2" />
+      <circle cx="200" cy="155" r="20" stroke="#000" stroke-width="3" fill="none" stroke-dasharray="4 2" />
+      <!-- Dump bed group -->
+      <g class="dump-bed" style="transform-origin: 220px 90px; animation: bed-tilt 2s ease-in-out 1 6s forwards;">
+        <polyline points="10,100 10,60 180,60 180,100" 
+                  stroke="#000" stroke-width="3" fill="none" stroke-linecap="round" 
+                  stroke-linejoin="round" stroke-dasharray="4 2" />
+      </g>
+    </svg>
+
     {Array.from('worries stresses').map((char, i) => {
-      const baseX = 50 + (i * 12);
-      const dx = `${baseX - 20}px`;
-      const dy = `${Math.random() * 20}px`;
+      const baseX = 60 + i * 12;
+      const dx = `${baseX - 40}px`;
       return (
         <span
           class="letter"
-          style={`left: ${baseX}px; top: -30px; --dx: ${dx}; --dy: ${dy}; animation-delay: ${3 + i*0.05}s;`}
+          style={`left: ${baseX}px; top: 0px; --dx: ${dx}; --dy: 130px; animation-delay: ${3 + i * 0.1}s;`}
         >{char}</span>
       );
     })}
@@ -122,10 +110,10 @@ import { onMount } from 'solid-js';
 
 <script is:inline>
   onMount(() => {
-    // remove intro after animation
+    // Remove the intro after animation completes
     setTimeout(() => {
       const root = document.querySelector('.intro-container');
       root?.remove();
-    }, 7000);
+    }, 9000);
   });
 </script>
