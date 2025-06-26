@@ -17,22 +17,22 @@
   .typewriter {
     font-size: clamp(1rem, 4vw, 1.8rem);
     color: #2d3748;
-    white-space: normal; /* Allow text to wrap */
+    white-space: nowrap;
     overflow: hidden;
-    border-right: 3px solid #4a5568;
-    width: 100%;
-    max-width: 90%;
+    width: 90%;
+    max-width: 600px;
     margin: 0 auto 2rem;
-    padding: 0 1rem;
+    padding: 0.5rem;
     box-sizing: border-box;
     text-align: center;
-    animation: typing-realistic 6s steps(60) forwards, blink 0.8s step-end infinite;
   }
 
-  @media (max-width: 768px) {
-    .typewriter {
-      font-size: clamp(0.8rem, 3vw, 1.2rem);
-    }
+  .typewriter-text {
+    display: inline-block;
+    white-space: nowrap;
+    border-right: 3px solid #4a5568;
+    padding-right: 5px;
+    animation: typing-realistic 6s steps(60) forwards, blink 0.8s step-end infinite;
   }
 
   @keyframes typing-realistic {
@@ -51,10 +51,8 @@
 
   .truck-scene {
     position: relative;
-    width: 100%;
-    max-width: 500px;
-    height: auto;
-    aspect-ratio: 5 / 3;
+    width: 500px;
+    height: 300px;
     overflow: visible;
   }
 
@@ -86,13 +84,13 @@
     position: absolute;
     font-family: 'Comic Sans MS', cursive;
     font-weight: bold;
-    font-size: clamp(1rem, 5vw, 2rem);
+    font-size: 2rem;
     color: #e53e3e;
     z-index: 10;
     pointer-events: none;
     opacity: 0;
     user-select: none;
-    transition: transform 0.05s linear;
+    transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .letter.falling {
@@ -123,44 +121,35 @@
 </style>
 
 <div class="intro-container" id="introContainer">
-  <div class="typewriter" id="typewriterText">Hi there! From here onwards, please drop off all your worries.</div>
+  <div class="typewriter">
+    <span class="typewriter-text" id="typewriterText">Hi there! From here onwards, please drop off all your worries.</span>
+  </div>
   
   <div class="truck-scene">
     <div class="truck-container" id="truckContainer">
       <svg class="truck-svg" viewBox="0 0 500 300">
         <!-- Truck body - kids drawing style -->
-        <g stroke="#2d3748" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
-          <!-- Main truck body -->
-          <path d="M80 200 Q78 195 85 200 L85 140 Q83 135 90 140 L170 140 Q168 135 175 140 L175 120 Q173 115 180 120 L320 120 Q318 115 325 120 L325 200" 
-                fill="#ff6b6b"/>
+        <g stroke="#000000" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <!-- Wheels -->
+          <circle cx="100" cy="250" r="40" fill="#333333"/>
+          <circle cx="400" cy="250" r="40" fill="#333333"/>
           
-          <!-- Truck cab -->
-          <path d="M175 140 Q173 135 180 140 L180 90 Q178 85 185 90 L280 90 Q278 85 285 90 L285 140" 
-                fill="#4ecdc4"/>
+          <!-- Truck body -->
+          <path d="M50 250 L450 250 L450 100 L350 100 L300 50 L150 50 L100 100 L50 100 Z" fill="#FF6B6B"/>
           
-          <!-- Cab window -->
-          <rect x="190" y="100" width="80" height="30" fill="#87ceeb" stroke-width="2"/>
-          
-          <!-- Front bumper -->
-          <path d="M325 120 Q323 115 330 120 L350 120 Q348 115 355 120 L355 180 Q353 175 350 180 L325 180" 
-                fill="#ffd93d"/>
-          
-          <!-- Wheels with wobbly circles -->
-          <circle cx="130" cy="210" r="22" fill="#2d3748" stroke-width="3"/>
-          <circle cx="130" cy="210" r="12" fill="#718096" stroke-width="2"/>
-          <circle cx="280" cy="210" r="22" fill="#2d3748" stroke-width="3"/>
-          <circle cx="280" cy="210" r="12" fill="#718096" stroke-width="2"/>
-          
-          <!-- Dump bed (animated) -->
+          <!-- Dump bed -->
           <g class="dump-bed" id="dumpBed">
-            <!-- Empty truck bed initially -->
-            <rect x="90" y="100" width="80" height="40" fill="#ffe66d" stroke-width="3"/>
-            <!-- No text initially -->
+            <path d="M150 100 L450 100 L450 50 L200 50 Z" fill="#FFD93D"/>
           </g>
           
-          <!-- Truck details -->
-          <circle cx="200" cy="105" r="3" fill="#2d3748"/> <!-- headlight -->
-          <rect x="290" y="100" width="15" height="8" fill="#ff6b6b" stroke-width="1"/> <!-- door handle -->
+          <!-- Cab -->
+          <rect x="50" y="100" width="100" height="150" fill="#4ECDC4"/>
+          
+          <!-- Window -->
+          <rect x="70" y="120" width="60" height="80" fill="#F8F3D4"/>
+          
+          <!-- Details -->
+          <line x1="70" y1="220" x2="130" y2="220" stroke="#000000" stroke-width="6"/> <!-- Grill -->
         </g>
       </svg>
     </div>
@@ -210,74 +199,45 @@
     
     setTimeout(() => {
       dumpBed.classList.add('dumping');
-    }, 500);
+    }, 1000);
 
     setTimeout(() => {
       bedText.remove();
       
       letters.forEach((char, index) => {
+        const letterEl = document.createElement('div');
+        letterEl.className = 'letter';
+        letterEl.textContent = char;
+        
+        const startX = 130;
+        const startY = 120;
+        
+        letterEl.style.left = `${startX}px`;
+        letterEl.style.top = `${startY}px`;
+        
+        letterContainer.appendChild(letterEl);
+
         setTimeout(() => {
-          const letterEl = document.createElement('div');
-          letterEl.className = 'letter';
-          letterEl.textContent = char;
-          
-          const startX = 130 + (Math.random() - 0.5) * 20;
-          const startY = 120;
-          
-          letterEl.style.left = `${startX}px`;
-          letterEl.style.top = `${startY}px`;
-          
-          letterContainer.appendChild(letterEl);
+          const horizontalSpread = (index - (letters.length - 1) / 2) * 40;
+          const verticalDrop = Math.random() * 30 + 150; // 150-180px drop
+          const rotation = (Math.random() - 0.5) * 360;
 
-          // Physics simulation
-          let x = startX;
-          let y = startY;
-          let vx = (Math.random() - 0.5) * 10;
-          let vy = -Math.random() * 5;
-          const gravity = 0.5;
-          const bounce = 0.6;
-          const friction = 0.99;
-
-          function animate() {
-            vy += gravity;
-            x += vx;
-            y += vy;
-            vx *= friction;
-
-            // Bottom boundary (floor)
-            if (y > 250) {
-              y = 250;
-              vy *= -bounce;
-              vx *= friction;
-            }
-
-            // Side boundaries
-            if (x < 0 || x > 500) {
-              vx *= -bounce;
-            }
-
-            letterEl.style.transform = `translate(${x - startX}px, ${y - startY}px) rotate(${vx * 10}deg)`;
-
-            if (Math.abs(vy) > 0.1 || Math.abs(vx) > 0.1 || y < 250) {
-              requestAnimationFrame(animate);
-            }
-          }
-
-          setTimeout(animate, 50);
-        }, index * 100);
+          letterEl.style.transform = `translate(${horizontalSpread}px, ${verticalDrop}px) rotate(${rotation}deg)`;
+          letterEl.classList.add('falling');
+        }, 50); // Short delay for visual effect
       });
-    }, 1500);
+    }, 2000);
   }
 
   // Animation timeline
-  setTimeout(extractAndDumpLetters, 6500); // Wait for typing to finish
+  setTimeout(extractAndDumpLetters, 7000); // Wait for typing to finish
 
   setTimeout(() => {
     // Start truck driving away
     if (truckContainer) {
       truckContainer.classList.add('driving-away');
     }
-  }, 11500);
+  }, 12000);
 
   setTimeout(() => {
     // Fade out everything
@@ -287,7 +247,7 @@
         introContainer.remove();
       }, 1000);
     }
-  }, 15500);
+  }, 16000);
 
 })();
 </script>
