@@ -117,17 +117,31 @@
     "image": "https://blogbaladi.com/wp-content/uploads/2014/06/10411750_798237393550244_4303395272372196050_n.jpg"
   },
   {
-    "name": "Mseilha Fort & Darb Mseilha Walkway",
-    "category": "Heritage & Culture",
-    "location": "Hamat / Batroun highway",
-    "distance": 5.0,
-    "lat": 34.270954,
-    "lng": 35.687144,
-    "description": "17th-century cliff-top fort plus 2 km riverside boardwalk ideal for bird-watching and cycling.",
-    "copy": "17th-century cliff-top fort plus 2 km riverside boardwalk ideal for bird-watching and cycling. Guided tours spotlight centuries of layered history and offer sweeping coastal panoramas—an Instagram favourite.",
-    "link": "https://en.wikipedia.org/wiki/Mseilha_Fort",
-    "slug": "mseilha-fort-darb-mseilha-walkway",
-    "image": "https://bluejayescapes.com/wp-content/uploads/2021/06/mseilha.jpg"
+  "name": "Mseilha Fort",
+  "category": "Heritage & Culture",
+  "location": "Hamat / Batroun highway",
+  "distance": 5.0,
+  "lat": 34.259456,
+  "lng": 35.671872,
+  "description": "Strategic medieval fortification perched atop a narrow limestone rock, overlooking a river valley.",
+  "copy": "An iconic medieval fort built by Emir Fakhreddine in the 17th century, Mseilha Fort towers above a serene valley. Its dramatic clifftop setting and panoramic views make it a must-visit for history buffs and photographers alike.",
+  "link": "https://en.wikipedia.org/wiki/Mseilha_Fort",
+  "slug": "mseilha-fort",
+  "image": "https://owlovertheworld.com/wp-content/uploads/2024/02/mseilha-fort-batroun-1170x878.jpg"
+  },
+
+  {
+  "name": "Darb Mseilha Trail",
+  "category": "Outdoor & Nature",
+  "location": "Hamat / Batroun highway",
+  "distance": 5.0,
+  "lat": 34.256351,
+  "lng": 35.672742,
+  "description": "Scenic pedestrian walkway along a riverbank leading to the historic Mseilha Fort.",
+  "copy": "Follow this scenic stone-paved trail through lush greenery and gentle streams, ending at the dramatic cliffside Mseilha Fort. A peaceful blend of nature, heritage, and breathtaking photo ops—perfect for golden hour walks.",
+  "link": "https://www.wikiloc.com/walking-trails/darb-el-mseilha-93664479",
+  "slug": "darb-mseilha-trail",
+  "image": "https://bluejayescapes.com/wp-content/uploads/2021/06/mseilha.jpg"
   },
   {
     "name": "Batroun Old Souk",
@@ -153,7 +167,7 @@
     "copy": "19th-century sandstone Maronite cathedral overlooking the harbour; free to enter. Step inside to admire hand‑cut stone walls and luminous iconography; serenity seekers are welcome to light a candle.",
     "link": "https://owlovertheworld.com/things-to-do-in-batroun-lebanon/",
     "slug": "st-stephans-cathedral",
-    "image": "/images/placeholder.jpg"
+    "image": "https://owlovertheworld.com/wp-content/uploads/2024/02/top-batroun-attractions-2.jpg"
   },
   {
     "name": "Phoenician Wall & Ancient Port",
@@ -166,7 +180,7 @@
     "copy": "3rd-century BCE sea wall built by the Phoenicians; perfect spot for tidal-pool swims. Guided tours spotlight centuries of layered history and offer sweeping coastal panoramas—an Instagram favourite.",
     "link": "https://lebanonexplorer.com/batroun-ultimate-guide-top-places-restaurants-bars-getaways-and-beaches/",
     "slug": "phoenician-wall-ancient-port",
-    "image": "/images/placeholder.jpg"
+    "image": "https://lebanonuntravelled.com/wp/wp-content/uploads/2021/07/ea9fafff-2d27-4c74-ad70-8d66d7a9118e.jpg"
   },
   {
     "name": "Fisherman Harbor Sunset Point",
@@ -179,7 +193,7 @@
     "copy": "Colourful fishing boats framed by golden-hour light; best spot for sunset photography. Expect crystal‑clear water, casual beach bars for sundowners, and lifeguards during summer weekends.",
     "link": "https://owlovertheworld.com/things-to-do-in-batroun-lebanon/",
     "slug": "fisherman-harbor-sunset-point",
-    "image": "/images/placeholder.jpg"
+    "image": "https://owlovertheworld.com/wp-content/uploads/2024/02/batroun-travel-tips-1170x878.jpg"
   },
   {
     "name": "Batroun Public Beach",
