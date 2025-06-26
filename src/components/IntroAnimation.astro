@@ -1,57 +1,134 @@
-<script type="module">
-  document.addEventListener('DOMContentLoaded', () => {
-    const intro     = document.getElementById('intro');
-    const headerImg = document.getElementById('headerImg');
-    const smImg     = document.getElementById('smImg');
-
-    if (sessionStorage.getItem('introPlayed')) {
-      intro.remove();
-      return;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Intro Animation Debug</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      height: 100%;
     }
-    sessionStorage.setItem('introPlayed', 'true');
+    .stopmotion-intro {
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 2rem 1rem 1rem;
+      overflow: hidden;
+      z-index: 1000;
+      box-sizing: border-box;
+    }
+    .header-img {
+      width: 80%;
+      max-width: 600px;
+      height: auto;
+      display: block;
+      z-index: 2;
+      border: 2px dashed red; /* for debug */
+    }
+    .sm-container {
+      position: relative;
+      width: 90%;
+      max-width: 500px;
+      overflow: visible;
+      z-index: 1;
+    }
+    .sm-img {
+      display: block;
+      width: 100%;
+      transform: translateX(-120%);
+    }
+    .sm-img.drive-in {
+      transition: transform 2s ease-out;
+      transform: translateX(0);
+    }
+    .sm-img.drive-out {
+      transition: transform 2s ease-in;
+      transform: translateX(120%);
+    }
+    .stopmotion-intro.fade-out {
+      animation: fadeOut 1s ease-out forwards;
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; pointer-events: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stopmotion-intro" id="intro">
+    <img
+      id="headerImg"
+      class="header-img"
+      src="/images/header%20text.png"
+      alt="Hi! Please drop off all your WORRIES before entering"
+    />
+    <div class="sm-container">
+      <img
+        id="smImg"
+        class="sm-img"
+        src="/images/truck.png"
+        alt="hand-drawn dump truck"
+      />
+    </div>
+  </div>
 
-    // 1️⃣ Initial settings
-    const staticDuration = 1200;     // 1.2s of static header
-    const driveInTime     = 2000;    // truck takes 2s to drive in
-    const fallFrameTime   = 800;     // time between header frames
-    const dropFrameTime   = 800;
+  <script type="module">
+    document.addEventListener('DOMContentLoaded', () => {
+      const intro     = document.getElementById('intro');
+      const headerImg = document.getElementById('headerImg');
+      const smImg     = document.getElementById('smImg');
 
-    // 2️⃣ Show truck driving in after initial pause
-    setTimeout(() => {
-      smImg.classList.add('drive-in');
-    }, staticDuration); // 1.2s
+      // SAFETY RESET
+      headerImg.src = '/images/header%20text.png';
+      smImg.src     = '/images/truck.png';
 
-    // 3️⃣ After truck has fully parked (1.2 + 2s = 3.2s), start header falling
-    const fallStart = staticDuration + driveInTime;
+      // TIMINGS
+      const showStaticHeader = 1200; // 1.2s
+      const driveInTime = 2000;
+      const fallFrameTime = 800;
 
-    setTimeout(() => headerImg.src = '/images/header%20text%20falling1.png', fallStart); // 3.2s
-    setTimeout(() => headerImg.src = '/images/header%20text%20falling2.png', fallStart + fallFrameTime); // 4.0s
+      // 1. Truck drive-in after 1.2s
+      setTimeout(() => {
+        smImg.classList.add('drive-in');
+      }, showStaticHeader);
 
-    // 4️⃣ At 4.8s, update both header and truck image to start dropping worries
-    setTimeout(() => {
-      headerImg.src = '/images/header%20text%20worries%20fell.png';
-      smImg.src     = '/images/worries%20falling%20into%20truck.png';
-    }, fallStart + 2 * fallFrameTime); // 4.8s
+      // 2. After truck is parked (1.2s + 2s = 3.2s), start header animation
+      const fallStart = showStaticHeader + driveInTime;
 
-    // 5️⃣ Continue truck worry animation
-    setTimeout(() => {
-      smImg.src = '/images/worries%20falling%20into%20truck-2.png';
-    }, fallStart + 3 * fallFrameTime); // 5.6s
+      setTimeout(() => headerImg.src = '/images/header%20text%20falling1.png', fallStart);             // 3.2s
+      setTimeout(() => headerImg.src = '/images/header%20text%20falling2.png', fallStart + 800);       // 4.0s
 
-    setTimeout(() => {
-      smImg.src = '/images/truck%20with%20worries.png';
-    }, fallStart + 4 * fallFrameTime); // 6.4s
+      // 3. Drop worries and update header simultaneously
+      setTimeout(() => {
+        headerImg.src = '/images/header%20text%20worries%20fell.png';
+        smImg.src = '/images/worries%20falling%20into%20truck.png';
+      }, fallStart + 1600); // 4.8s
 
-    // 6️⃣ Drive out truck after all worries drop (add +1s pause)
-    setTimeout(() => {
-      smImg.classList.add('drive-out');
-    }, fallStart + 4 * fallFrameTime + 1000); // 7.4s
+      setTimeout(() => {
+        smImg.src = '/images/worries%20falling%20into%20truck-2.png';
+      }, fallStart + 2400); // 5.6s
 
-    // 7️⃣ Fade out 2s after drive-out
-    setTimeout(() => {
-      intro.classList.add('fade-out');
-      setTimeout(() => intro.remove(), 1000);
-    }, fallStart + 4 * fallFrameTime + 1000 + 2000); // 9.4s + 1s fade
+      setTimeout(() => {
+        smImg.src = '/images/truck%20with%20worries.png';
+      }, fallStart + 3200); // 6.4s
 
-  });
-</script>
+      // 4. Truck drives out after short pause
+      setTimeout(() => {
+        smImg.classList.add('drive-out');
+      }, fallStart + 4200); // 7.4s
+
+      // 5. Fade out
+      setTimeout(() => {
+        intro.classList.add('fade-out');
+        setTimeout(() => intro.remove(), 1000);
+      }, fallStart + 6200); // 9.4s
+    });
+  </script>
+</body>
+</html>
