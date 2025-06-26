@@ -1,117 +1,118 @@
 ---
-// No front-matter JS: keep the component 100 % client-side
+/* No front-matter JS – keep the component 100 % client-side */
 ---
-<div id="intro-overlay">
-  <!-- Typing line -->
-  <p class="line" id="line-1">Hi there!</p>
-  <p class="line" id="line-2">
-    From here onwards,<br />
-    please drop off all your&nbsp;<span class="word" id="word-worries">worries</span>
-    and&nbsp;<span class="word" id="word-stresses">stresses</span>.
-  </p>
 
-  <!-- Very simple “truck” drawn with pure CSS -->
-  <div class="truck" id="truck">
-    <div class="bucket"></div>
-    <div class="cab"></div>
-    <div class="wheel w1"></div>
-    <div class="wheel w2"></div>
+<!-- ─────────── Overlay ─────────── -->
+<div id="intro-overlay">
+
+  <!-- Typing text -->
+  <div class="lines">
+    <p class="line" id="l1">Hi there!</p>
+    <p class="line" id="l2">
+      From here onwards,<br>
+      please drop off all your&nbsp;
+      <span class="word" id="w1">worries</span> and&nbsp;
+      <span class="word" id="w2">stresses</span>.
+    </p>
   </div>
+
+  <!-- Sketch-style dump-truck (single-stroke SVG) -->
+  <svg id="truck" viewBox="0 0 240 120" width="240" height="120">
+    <g fill="none" stroke="#1b2a41" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <!-- bucket -->
+      <rect x="10" y="40" width="130" height="50" rx="6"/>
+      <!-- cab -->
+      <rect x="150" y="30" width="60" height="60" rx="6"/>
+      <!-- window -->
+      <rect x="165" y="40" width="25" height="25" rx="3"/>
+      <!-- wheels -->
+      <circle cx="50"  cy="100" r="15"/>
+      <circle cx="170" cy="100" r="15"/>
+    </g>
+  </svg>
 </div>
 
+<!-- ─────────── Styles ─────────── -->
 <style>
-/* ───────────── overlay ───────────── */
-#intro-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: grid;
-  place-items: center;
-  background: #fff;
-  font-family: "Poppins", sans-serif;
-  text-align: center;
-  overflow: hidden;
+/*** Overlay ***/
+#intro-overlay{
+  position:fixed;inset:0;z-index:9999;
+  display:grid;place-items:center;text-align:center;
+  background:#fff;font-family:"Poppins",sans-serif;
+  overflow:hidden
 }
 
-/* ───────────── typing lines ───────────── */
-.line {
-  font-size: clamp(1.4rem, 2.5vw + 1rem, 2.2rem);
-  opacity: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  border-right: 2px solid #000;
+/*** Typing Effect ***/
+.line{
+  font-size:clamp(1.4rem,2.4vw+1rem,2.2rem);
+  white-space:nowrap;overflow:hidden;opacity:0;
+  border-right:2px solid #000
+}
+/* Caret blink only AFTER line is visible */
+@keyframes caret{50%{border-color:transparent}}
+/* Typewriter */
+@keyframes type{from{max-width:0}to{max-width:100%}}
+#lineVisible{opacity:1;border-right-color:#000}
+
+/* First line */
+#l1{
+  max-width:0;
+  animation:type 1.1s steps(12) .4s forwards,
+           caret .8s step-end infinite .4s
+}
+/* Second line */
+#l2{
+  max-width:0;
+  animation:type 3.4s steps(52) 1.7s forwards,
+           caret .8s step-end infinite 1.7s
 }
 
-/* caret blink */
-@keyframes blink {50% { border-color: transparent; }}
-.line { animation: blink 0.8s step-end infinite; }
-
-/* type-writer effect: width grows from 0 to full */
-@keyframes typing { from { max-width: 0; } to { max-width: 100%; } }
-
-/* apply to each line with staggered delays */
-#line-1 { animation: typing 1.2s steps(14) 0.4s forwards, blink 0.8s step-end infinite; }
-#line-2 { animation: typing 3.6s steps(52) 1.8s forwards, blink 0.8s step-end infinite; }
-
-/* reveal after typed */
-#line-1, #line-2 { max-width: 0; }
-
-/* ───────────── words that will fall ───────────── */
-.word {
-  display: inline-block;
-  position: relative;
+/*** Falling words ***/
+.word{display:inline-block;position:relative}
+@keyframes drop{
+  0%{transform:translateY(0) rotate(0)}
+  70%{transform:translateY(240px) rotate(-18deg)}
+  100%{transform:translate(-120px,240px) rotate(-18deg);opacity:0}
 }
+#w1{animation:drop 1.3s ease 5.6s forwards}
+#w2{animation:drop 1.3s ease 5.9s forwards}
 
-@keyframes dropWord {
-  0%   { transform: translateY(0) rotate(0); }
-  70%  { transform: translateY(260px) rotate(-18deg); }
-  100% { transform: translate(-140px,260px) rotate(-18deg); opacity: 0; }
+/*** Truck animation ***/
+#truck{
+  position:absolute;bottom:50px;left:-260px;
+  animation:driveIn 2s 4.2s forwards,
+           tip     1.3s 7.0s forwards,
+           driveOut 1.5s 8.6s forwards
 }
+/* Drive-in to centre */
+@keyframes driveIn{to{left:50%;transform:translateX(-50%)}}
+/* Tip the bucket */
+@keyframes tip{to{transform:translateX(-50%) rotate(-22deg)}}
+/* Drive away */
+@keyframes driveOut{from{left:50%;transform:translateX(-50%) rotate(0)}
+                    to{left:120%;transform:translateX(0)}}
 
-#word-worries { animation: dropWord 1.4s ease-in-out 6s forwards; }
-#word-stresses{ animation: dropWord 1.4s ease-in-out 6.4s forwards; }
-
-/* ───────────── the truck ───────────── */
-.truck {
-  position: absolute;
-  bottom: 50px; left: -220px;         /* start off-screen */
-  width: 180px; height: 90px;
-  animation: driveIn 2s 5.2s forwards,
-             dump    1.4s 7.2s forwards,
-             driveOut 1.6s 8.9s forwards;
-}
-@keyframes driveIn  { to { left: 50%; transform: translateX(-50%); } }
-@keyframes dump     { 0% { transform: translateX(-50%) rotate(0); }
-                      100%{ transform: translateX(-50%) rotate(-25deg); } }
-@keyframes driveOut { to { left: 120%; } }
-
-/* primitive truck parts */
-.bucket, .cab, .wheel { position: absolute; background:#1b2a41; }
-.bucket { width:120px; height:45px; left: 0; bottom: 25px; border-radius: 6px 6px 0 0; }
-.cab    { width:40px; height:55px; right:0; bottom:25px; border-radius:4px; }
-.wheel  { width:28px; height:28px; border-radius:50%; bottom:0; background:#444; }
-.w1     { left:20px; }
-.w2     { right:20px; }
-
-/* ───────────── fade overlay away ───────────── */
-@keyframes fadeOut { to { opacity:0; visibility:hidden; } }
-#intro-overlay.fade-out { animation: fadeOut 0.8s ease 10.5s forwards; }
+/*** Fade overlay away ***/
+@keyframes vanish{to{opacity:0;visibility:hidden}}
+#intro-overlay.fade{animation:vanish .8s ease forwards}
 </style>
 
+<!-- ─────────── Client script (inline) ─────────── -->
 <script is:inline>
-/* Only run the intro once per session */
-if (typeof window !== 'undefined') {
+(() => {
+  if (typeof window === 'undefined') return;
+
+  const overlay = document.getElementById('intro-overlay');
+  /* Skip if already viewed this session */
   if (sessionStorage.getItem('sowkIntroPlayed')) {
-    document.getElementById('intro-overlay').remove();
-  } else {
-    // after the full sequence, fade + remove
-    setTimeout(() => {
-      const ov = document.getElementById('intro-overlay');
-      ov.classList.add('fade-out');
-      // hard-remove after animation ends
-      setTimeout(() => ov.remove(), 11500);
-      sessionStorage.setItem('sowkIntroPlayed', 'yes');
-    }, 10000); // length of whole animation
+    overlay.remove();
+    return;
   }
-}
+
+  /* After full animation, fade + remove */
+  const END = 11_000; // ms
+  setTimeout(() => overlay.classList.add('fade'), END);
+  setTimeout(() => overlay.remove(), END + 900);
+  sessionStorage.setItem('sowkIntroPlayed','yes');
+})();
 </script>
