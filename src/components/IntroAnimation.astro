@@ -74,6 +74,9 @@
 </div>
 
 <script type="module">
+
+  const initialDelay = 1200; // 1.2 seconds to show static header first
+
   document.addEventListener('DOMContentLoaded', () => {
     const intro     = document.getElementById('intro');
     const headerImg = document.getElementById('headerImg');
@@ -94,16 +97,18 @@
     ];
     const frameTime = 800; // ms each
 
-    headerFrames.forEach((src, i) => {
-      setTimeout(() => headerImg.src = src, (i + 1) * frameTime);
-    });
+  headerFrames.forEach((src, i) => {
+    setTimeout(() => headerImg.src = src, initialDelay + (i + 1) * frameTime);
+  });
+
 
     // 2️⃣ Truck drive-in must finish exactly at 2.4s
     //    so start drive-in at 2.4s - 2s = 0.4s
-    setTimeout(() => smImg.classList.add('drive-in'), 400);
+    setTimeout(() => smImg.classList.add('drive-in'), initialDelay + 400); // 0.4s after initial delay
+
 
     // 3️⃣ At headerTotal=3*800=2400ms, immediately swap to first drop frame
-    const headerTotal = headerFrames.length * frameTime; // 2400ms
+    const headerTotal = initialDelay + headerFrames.length * frameTime; // 1200 + 2400 = 3600ms
     const dropFrames  = [
       '/images/worries%20falling%20into%20truck.png',
       '/images/worries%20falling%20into%20truck-2.png',
