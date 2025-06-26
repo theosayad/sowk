@@ -1,68 +1,56 @@
 ---
 /* IntroAnimation component */
 ---
-<!-- 1️⃣ Load p5.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
-
+<!-- 1️⃣ p5.js removed—pure CSS/JS stop-motion -->
 <style>
-  /* ────────── container & layering ────────── */
-  .intro-container {
+  /* ────────── container ────────── */
+  .stopmotion-intro {
     position: fixed; inset: 0;
     background: #f8f9fa;
-    overflow: hidden;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 1.5rem;
+    overflow: hidden; z-index: 1000;
+    padding-top: 2rem;
     font-family: 'Comic Sans MS', cursive;
   }
-  /* p5 canvas fills entire container, at z-index 0 */
-  #p5-canvas {
-    position: absolute; inset: 0;
-    z-index: 0;
-  }
-  #p5-canvas canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
 
-  /* ────────── typewriter on top ────────── */
+  /* ────────── typewriter text ────────── */
   .typewriter {
-    position: relative;      /* sits above the canvas */
-    z-index: 1;
-    margin: 2rem auto 1rem;
-    max-width: 90%;
-    text-align: center;
-    font-size: clamp(1rem, 4vw, 1.8rem);
-    color: #2d3748;
-    white-space: nowrap;
-    overflow: hidden;
+    white-space: nowrap; overflow: hidden;
     border-right: 3px solid #4a5568;
+    font-size: clamp(1rem,4vw,1.8rem);
+    color: #2d3748;
+    max-width: 90%; text-align: center;
     animation:
-      typing 6s steps(62,end) forwards,
+      typing 5s steps(62,end) 1 forwards,
       blink 0.8s step-end infinite;
-  }
-  @keyframes typing { from{width:0} to{width:100%} }
-  @keyframes blink  { 50%{border-color:transparent} }
-
-  /* ────────── falling letters ────────── */
-  #letterContainer {
-    position: relative;
     z-index: 1;
-    pointer-events: none;
   }
-  .letter {
-    position: absolute;
-    font: bold 2rem 'Comic Sans MS';
-    color: #e53e3e;
-    opacity: 0;
-    transition:
-      transform 1s cubic-bezier(.25,.46,.45,.94),
-      opacity 0.2s;
+  @keyframes typing { from { width: 0 } to { width: 100% } }
+  @keyframes blink  { 50% { border-color: transparent } }
+
+  /* ────────── stop-motion frame ────────── */
+  .sm-container {
+    position: relative; width: 500px; height: auto;
+    overflow: hidden; z-index: 1;
   }
-  .letter.falling {
-    opacity: 1;
+  .sm-img {
+    display: block;
+    width: 100%;
+    transform: translateX(-100%);
+    /* initial off-screen */
+  }
+  .sm-img.drive-in {
+    transition: transform 2s ease-out;
+    transform: translateX(0);
+  }
+  .sm-img.drive-out {
+    transition: transform 2s ease-in;
+    transform: translateX(100%);
   }
 
-  /* ────────── fade‐out ────────── */
-  .intro-container.fade-out {
+  /* ────────── fade-out ────────── */
+  .stopmotion-intro.fade-out {
     animation: fadeOut 1s ease-out forwards;
   }
   @keyframes fadeOut {
@@ -70,189 +58,71 @@
   }
 </style>
 
-<div class="intro-container" id="intro">
-  <!-- p5 background truck -->
-  <div id="p5-canvas"></div>
-
-  <!-- Your typewriter line -->
-  <div class="typewriter" id="sentence">
+<div class="stopmotion-intro" id="intro">
+  <!-- 2️⃣ Text line -->
+  <div class="typewriter" id="typewriter">
     Hi there! From here onwards, please drop off all your worries.
   </div>
 
-  <!-- Letters will be injected here -->
-  <div id="letterContainer"></div>
+  <!-- 3️⃣ Stop-motion image -->
+  <div class="sm-container">
+    <img
+      id="sm-img"
+      class="sm-img"
+      src="/images/intro/truck.png"
+      alt="stop-motion truck frame"
+    />
+  </div>
 </div>
 
 <script type="module">
-  // ────────── Only show once per session ──────────
-  const intro = document.getElementById('intro');
-  if (sessionStorage.getItem('introPlayed')) {
-    intro.remove();
-  } else {
+  document.addEventListener('DOMContentLoaded', () => {
+    const intro = document.getElementById('intro');
+    const typer = document.getElementById('typewriter');
+    const img   = document.getElementById('sm-img');
+
+    /** 0️⃣ Only once per session **/
+    if (sessionStorage.getItem('introPlayed')) {
+      intro.remove();
+      return;
+    }
     sessionStorage.setItem('introPlayed','true');
-  }
 
-  // ────────── Helper to extract & drop “worries” ──────────
-  function dropWorries(x, y) {
-    const line = document.getElementById('sentence');
-    const word = 'worries';
-    line.textContent = line.textContent.replace(word, '______');
+    /** 1️⃣ When text finishes typing (5s), drive in **/
+    const typingTime = 5000;
+    setTimeout(() => {
+      img.classList.add('drive-in');
 
-    const container = document.getElementById('letterContainer');
-    [...word].forEach((ch, i) => {
-      const el = document.createElement('div');
-      el.className = 'letter';
-      el.textContent = ch;
-      el.style.left = `${x}px`;
-      el.style.top  = `${y}px`;
-      container.appendChild(el);
-
+      /** 2️⃣ After drive-in (2s), wait 0.5s then drop worries **/
       setTimeout(() => {
-        const spread = (i - (word.length-1)/2) * 40;
-        const drop   = Math.random()*30 + 160;
-        const rot    = (Math.random() - 0.5) * 360;
-        el.style.transform = `translate(${spread}px, ${drop}px) rotate(${rot}deg)`;
-        el.classList.add('falling');
-      }, 50);
-    });
-  }
+        const dropFrames = [
+          '/images/intro/worries falling into truck.png',
+          '/images/intro/worries falling into truck-2.png',
+          '/images/intro/truck with worries.png'
+        ];
+        let idx = 0;
 
-  // ────────── Fade away entire intro ──────────
-  function fadeAway() {
-    intro.classList.add('fade-out');
-    setTimeout(() => intro.remove(), 1000);
-  }
-
-  // ────────── The p5.js sketch ──────────
-  new p5((p) => {
-    let truck, dropped=false, gone=false;
-
-    p.setup = () => {
-      // Create the standard 1000×480 canvas
-      const c = p.createCanvas(1000, 480);
-      c.parent('p5-canvas');
-      p.frameRate(60);
-      truck = new Truck(-500, 340);
-    };
-
-    p.draw = () => {
-      p.clear();
-      p.background(215, 228, 238);
-      drawGround();
-      truck.update();
-      truck.display();
-    };
-
-    p.windowResized = () => {
-      // keep canvas at 1000×480 but centered & scaled by CSS
-      p.resizeCanvas(1000, 480);
-      truck.reset();
-      dropped = gone = false;
-    };
-
-    function drawGround() {
-      p.noStroke();
-      p.fill(182, 163, 126);
-      p.rect(0, p.height * 0.65, p.width, p.height * 0.35);
-    }
-
-    class Truck {
-      constructor(x, y) {
-        this.originX = x; this.y = y;
-        this.reset();
-      }
-      reset() {
-        this.x = this.originX;
-        this.state = 'IN';    // IN → PARKED → OUT
-        this.speed = 4;
-        this.parkedAt = 0;
-        dropped = false;
-        gone = false;
-      }
-      update() {
-        if (this.state === 'IN') {
-          this.x += this.speed;
-          if (this.x >= width * 0.25) {
-            this.state = 'PARKED';
-            this.parkedAt = p.millis();
+        function nextDrop() {
+          if (idx < dropFrames.length) {
+            img.src = dropFrames[idx++];
+            // show each frame 0.8s apart
+            setTimeout(nextDrop, 800);
+          } else {
+            /** 3️⃣ Hold loaded truck 1s, then drive out **/
+            setTimeout(() => {
+              img.classList.add('drive-out');
+              /** 4️⃣ Fade entire intro 2s later **/
+              setTimeout(() => {
+                intro.classList.add('fade-out');
+                setTimeout(() => intro.remove(), 1000);
+              }, 2000);
+            }, 1000);
           }
         }
-        else if (this.state === 'PARKED') {
-          // drop once after 0.8s
-          if (!dropped && p.millis() - this.parkedAt > 800) {
-            dropped = true;
-            // locate bed tip in p5 coords
-            const bedTip = p.createVector(530, -70);
-            // get displayed canvas rect
-            const r = p.select('canvas').elt.getBoundingClientRect();
-            const scaleX = r.width  / p.width;
-            const scaleY = r.height / p.height;
-            const dropX = r.left + (this.x + bedTip.x) * scaleX;
-            const dropY = r.top  + (this.y + bedTip.y) * scaleY;
-            dropWorries(dropX, dropY);
-          }
-          // depart after total of ~4.8s
-          if (p.millis() - this.parkedAt > 4800) {
-            this.state = 'OUT';
-          }
-        }
-        else if (this.state === 'OUT' && !gone) {
-          this.x += this.speed;
-          if (this.x > width + 600) {
-            gone = true;
-            fadeAway();
-          }
-        }
-      }
-      display() {
-        p.push();
-        p.translate(this.x, this.y);
-        p.scale(0.9);
 
-        const yellow = p.color(229, 178, 45);
+        nextDrop();
+      }, 2500);
 
-        // tyres
-        p.noStroke();
-        p.fill(30);
-        p.ellipse(0, 0, 240, 240);
-        p.ellipse(360, 0, 240, 240);
-        // rims
-        p.fill(95, 73, 12);
-        p.ellipse(0, 0, 140, 140);
-        p.ellipse(360, 0, 140, 140);
-
-        // chassis & bed
-        p.fill(yellow);
-        p.rect(-120, -160, 600, 90);
-        p.quad(-120, -160, 530, -160, 560, -70, -150, -70);
-
-        // cab & engine
-        p.rect(200, -220, 160, 150);
-        p.fill(30);
-        p.rect(220, -210, 50, 60);
-        p.rect(285, -210, 55, 60);
-
-        // roof
-        p.fill(yellow);
-        p.rect(160, -260, 260, 40);
-
-        // CAT logo
-        p.fill(30);
-        p.rect(-40, -135, 90, 45, 6);
-        p.fill(255);
-        p.textSize(26);
-        p.textAlign(p.CENTER, p.CENTER);
-        p.text('CAT', 5, -112);
-
-        // 793 badge
-        p.fill(30);
-        p.rect(245, -50, 55, 30, 4);
-        p.fill(255);
-        p.textSize(18);
-        p.text('793', 272, -36);
-
-        p.pop();
-      }
-    }
+    }, typingTime);
   });
 </script>
