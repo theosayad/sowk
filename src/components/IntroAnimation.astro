@@ -20,6 +20,17 @@
     overflow: visible !important;
   }
 
+  /* 3️⃣ If your .sm-img has object-fit or similar, disable it */
+  .sm-img {
+    width: 100%;
+    height: auto;
+    object-fit: none !important;
+  }
+
+  /* 4️⃣ (Optional) add bottom padding so wheels have room */
+  .stopmotion-intro {
+    padding-bottom: 2rem; /* gives extra space under truck */
+  }
 
   /* ────────── container & layout ────────── */
   .stopmotion-intro {
