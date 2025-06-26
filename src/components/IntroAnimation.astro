@@ -1,89 +1,131 @@
 ---
-/* Plays once per session */
+/* IntroAnimation component: typewriter + sketchy dump-truck animation */
+import { onMount } from 'solid-js';
 ---
 
-<div id="intro-overlay">
-  <div class="content">
-    <!-- TYPEWRITTEN TEXT -->
-    <div class="lines">
-      <p class="line1">Hi there!</p>
-      <p class="line2">
-        From here onwards, please drop off all your&nbsp;
-        <span class="drop word1">worries</span>&nbsp;and&nbsp;
-        <span class="drop word2">stresses</span>.
-      </p>
-    </div>
+<style>
+  .intro-container {
+    position: fixed;
+    inset: 0;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 1000;
+  }
+  .typewriter {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 2px solid #000;
+    width: 0;
+    animation: typing 3s steps(40) forwards, blink 0.75s step-end infinite;
+  }
+  @keyframes typing {
+    from { width: 0; }
+    to   { width: 20ch; }
+  }
+  @keyframes blink {
+    50% { border-color: transparent; }
+  }
 
-    <!-- SKETCH-STYLE DUMP TRUCK -->
-    <div class="truck-container">
-      <svg id="truck" viewBox="0 0 300 150" width="300" height="150">
-        <!-- stationary chassis/body -->
-        <g class="chassis">
-          <path class="body"
-            d="M20 90
-               C30 50, 140 50, 160 70
-               L260 70 L260 90 L20 90 Z" />
-          <path class="cab"
-            d="M140 50 L180 50 L200 70 L140 70 Z" />
-          <circle class="wheel" cx="60" cy="90" r="15" />
-          <circle class="wheel" cx="220" cy="90" r="15" />
-        </g>
-        <!-- dump bed group: rotates around hinge -->
-        <g class="bed" transform="translate(100,70) rotate(0)">
-          <path d="M0 0 L140 0 L120 40 L0 40 Z" />
-        </g>
-      </svg>
-    </div>
+  .truck-scene {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    margin-top: 2rem;
+  }
+  /* Sketchy truck body */
+  .truck-body {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    border: 2px dashed #000;
+    border-top: 0;
+    border-right: 0;
+    background: transparent;
+  }
+  /* Truck wheels */
+  .wheel {
+    position: absolute;
+    bottom: -4px;
+    width: 40px;
+    height: 40px;
+    border: 2px dashed #000;
+    border-radius: 50%;
+  }
+  .wheel.front { right: 20px; }
+  .wheel.back  { left: 20px; }
+
+  /* Dump bed */
+  .dump-bed {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 180px;
+    height: 60px;
+    border: 2px dashed #000;
+    transform-origin: bottom left;
+    animation: bed-tilt 2s ease-in-out 1 4s forwards;
+  }
+  @keyframes bed-tilt {
+    0%   { transform: rotate(0deg); }
+    60%  { transform: rotate(-45deg); }
+    100% { transform: rotate(0deg); }
+  }
+
+  /* Letters: initial and drop animations */
+  .letter {
+    position: absolute;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 1.5rem;
+    opacity: 1;
+    animation: drop 2s ease-in forwards;
+    animation-delay: 3s;
+  }
+  @keyframes drop {
+    0%   { transform: translate(0, 0); opacity: 1; }
+    80%  { transform: translate(var(--dx), calc(100px + var(--dy))); opacity: 1; }
+    100% { opacity: 0; }
+  }
+</style>
+
+<div class="intro-container">
+  <div class="typewriter">Hi there! From here onwards, please drop off all your worries and stresses.</div>
+
+  <div class="truck-scene">
+    <div class="dump-bed"></div>
+    <div class="truck-body"></div>
+    <div class="wheel back"></div>
+    <div class="wheel front"></div>
+    {
+      /* Generate each letter span with custom x-offset (--dx) and small random y-offset (--dy) */
+    }
+    {Array.from('worries stresses').map((char, i) => {
+      const baseX = 50 + (i * 12);
+      const dx = `${baseX - 20}px`;
+      const dy = `${Math.random() * 20}px`;
+      return (
+        <span
+          class="letter"
+          style={`left: ${baseX}px; top: -30px; --dx: ${dx}; --dy: ${dy}; animation-delay: ${3 + i*0.05}s;`}
+        >{char}</span>
+      );
+    })}
   </div>
 </div>
 
-<style>
-  /* overlay setup */
-  #intro-overlay { position: fixed; inset: 0; background: #fff; display: flex; align-items: center; justify-content: center; z-index: 9999; }
-  .content { display: flex; flex-direction: column; align-items: center; }
-
-  /* typewriter */
-  .lines p { overflow: hidden; white-space: nowrap; border-right: 2px solid #000; font-size: clamp(1.6rem, 2.5vw, 2.2rem); max-width: 0; display: inline-block; }
-  @keyframes type { to { max-width: 100%; } }
-  .line1 { animation: type 1s steps(12) 0.3s forwards; }
-  .line2 { animation: type 3s steps(50) 1.4s forwards; }
-
-  /* drop animation */
-  .drop { display: inline-block; }
-  @keyframes dropAnim { 0% { transform: translateY(0) rotate(0); } 70% { transform: translateY(180px) rotate(-15deg); } 100% { transform: translate(-80px,190px) rotate(-15deg); opacity:0; } }
-  .word1 { animation: dropAnim 1.2s ease 5.4s forwards; }
-  .word2 { animation: dropAnim 1.2s ease 5.8s forwards; }
-
-  /* truck styling */
-  .truck-container { margin-top: 2rem; }
-  #truck { stroke: #1b2a41; fill: none; stroke-width: 2; }
-  .body, .cab, .bed, .wheel { stroke-linecap: round; stroke-linejoin: round; }
-
-  /* bed tipping animation */
-  @keyframes tipBed { to { transform: translate(100px,70px) rotate(-25deg); } }
-  @keyframes resetBed { to { transform: translate(100px,70px) rotate(0deg); } }
-  .bed {
-    animation:
-      tipBed 1s ease 6.0s forwards,
-      resetBed 1s ease 7.5s forwards;
-    transform-origin: 0px 0px;
-  }
-
-  /* fade overlay */
-  @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
-  #intro-overlay.fade { animation: fadeOut 0.8s ease 9.8s forwards; }
-</style>
-
 <script is:inline>
-  if (typeof window !== "undefined") {
-    const key = "sowkIntroPlayed";
-    const root = document.getElementById("intro-overlay");
-    if (sessionStorage.getItem(key)) {
-      root.remove();
-    } else {
-      setTimeout(() => root.classList.add("fade"), 9800);
-      setTimeout(() => root.remove(), 10600);
-      sessionStorage.setItem(key, "1");
-    }
-  }
+  onMount(() => {
+    // remove intro after animation
+    setTimeout(() => {
+      const root = document.querySelector('.intro-container');
+      root?.remove();
+    }, 7000);
+  });
 </script>
