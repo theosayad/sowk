@@ -1,44 +1,117 @@
 ---
-/*
-  Full-screen intro that self-destructs once it has played ✔️
-  Dependencies:
-    • GSAP @ 3. (included via CDN below – no NPM install needed)
-*/
-const played = 'introPlayed';
+// No front-matter JS: keep the component 100 % client-side
 ---
+<div id="intro-overlay">
+  <!-- Typing line -->
+  <p class="line" id="line-1">Hi there!</p>
+  <p class="line" id="line-2">
+    From here onwards,<br />
+    please drop off all your&nbsp;<span class="word" id="word-worries">worries</span>
+    and&nbsp;<span class="word" id="word-stresses">stresses</span>.
+  </p>
 
-{/*
-  Render nothing at all if the flag already exists (e.g. user came from a sub-page)
-*/}
-{!Astro.client
-  ? null
-  : Astro.embedJS(`
-      if (localStorage.getItem('${played}')) {
-        document.documentElement.classList.add('intro-skip');
-      }
-    `)}
+  <!-- Very simple “truck” drawn with pure CSS -->
+  <div class="truck" id="truck">
+    <div class="bucket"></div>
+    <div class="cab"></div>
+    <div class="wheel w1"></div>
+    <div class="wheel w2"></div>
+  </div>
+</div>
 
 <style>
-  /* hide EVERYTHING beneath while intro is playing */
-  .intro-overlay{
-    position:fixed;inset:0;z-index:9999;
-    display:flex;flex-direction:column;justify-content:center;align-items:center;
-    background:#fff;font-family:'DM Sans',sans-serif;color:#1B2A41;
-    overflow:hidden;
-  }
+/* ───────────── overlay ───────────── */
+#intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  font-family: "Poppins", sans-serif;
+  text-align: center;
+  overflow: hidden;
+}
 
-  .typing{
-    font-size:clamp(1.4rem,6vw,2.4rem);font-weight:500;
-    white-space:nowrap;border-right:2px solid #1B2A41;
-    overflow:hidden;
-  }
+/* ───────────── typing lines ───────────── */
+.line {
+  font-size: clamp(1.4rem, 2.5vw + 1rem, 2.2rem);
+  opacity: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid #000;
+}
 
-  /* dump-truck container */
-  .stage{position:relative;width:320px;height:180px;margin-top:2rem;}
+/* caret blink */
+@keyframes blink {50% { border-color: transparent; }}
+.line { animation: blink 0.8s step-end infinite; }
 
-  .truck, .bed, .wheel{
-    position:absolute;transform-origin:center;
+/* type-writer effect: width grows from 0 to full */
+@keyframes typing { from { max-width: 0; } to { max-width: 100%; } }
+
+/* apply to each line with staggered delays */
+#line-1 { animation: typing 1.2s steps(14) 0.4s forwards, blink 0.8s step-end infinite; }
+#line-2 { animation: typing 3.6s steps(52) 1.8s forwards, blink 0.8s step-end infinite; }
+
+/* reveal after typed */
+#line-1, #line-2 { max-width: 0; }
+
+/* ───────────── words that will fall ───────────── */
+.word {
+  display: inline-block;
+  position: relative;
+}
+
+@keyframes dropWord {
+  0%   { transform: translateY(0) rotate(0); }
+  70%  { transform: translateY(260px) rotate(-18deg); }
+  100% { transform: translate(-140px,260px) rotate(-18deg); opacity: 0; }
+}
+
+#word-worries { animation: dropWord 1.4s ease-in-out 6s forwards; }
+#word-stresses{ animation: dropWord 1.4s ease-in-out 6.4s forwards; }
+
+/* ───────────── the truck ───────────── */
+.truck {
+  position: absolute;
+  bottom: 50px; left: -220px;         /* start off-screen */
+  width: 180px; height: 90px;
+  animation: driveIn 2s 5.2s forwards,
+             dump    1.4s 7.2s forwards,
+             driveOut 1.6s 8.9s forwards;
+}
+@keyframes driveIn  { to { left: 50%; transform: translateX(-50%); } }
+@keyframes dump     { 0% { transform: translateX(-50%) rotate(0); }
+                      100%{ transform: translateX(-50%) rotate(-25deg); } }
+@keyframes driveOut { to { left: 120%; } }
+
+/* primitive truck parts */
+.bucket, .cab, .wheel { position: absolute; background:#1b2a41; }
+.bucket { width:120px; height:45px; left: 0; bottom: 25px; border-radius: 6px 6px 0 0; }
+.cab    { width:40px; height:55px; right:0; bottom:25px; border-radius:4px; }
+.wheel  { width:28px; height:28px; border-radius:50%; bottom:0; background:#444; }
+.w1     { left:20px; }
+.w2     { right:20px; }
+
+/* ───────────── fade overlay away ───────────── */
+@keyframes fadeOut { to { opacity:0; visibility:hidden; } }
+#intro-overlay.fade-out { animation: fadeOut 0.8s ease 10.5s forwards; }
+</style>
+
+<script is:inline>
+/* Only run the intro once per session */
+if (typeof window !== 'undefined') {
+  if (sessionStorage.getItem('sowkIntroPlayed')) {
+    document.getElementById('intro-overlay').remove();
+  } else {
+    // after the full sequence, fade + remove
+    setTimeout(() => {
+      const ov = document.getElementById('intro-overlay');
+      ov.classList.add('fade-out');
+      // hard-remove after animation ends
+      setTimeout(() => ov.remove(), 11500);
+      sessionStorage.setItem('sowkIntroPlayed', 'yes');
+    }, 10000); // length of whole animation
   }
-  .truck   {width:90px;height:80px;right:0;bottom:45px;background:#1B2A41;border-radius:8px 8px 2px 2px;}
-  .bed     {width:160px;height:55px;left:0;bottom:45px;background:#415D43;border-radius:4px;}
-  .wheel   {width:3
+}
+</script>
