@@ -15,16 +15,24 @@
   }
 
   .typewriter {
-    font-size: 1.8rem;
+    font-size: clamp(1rem, 4vw, 1.8rem);
     color: #2d3748;
-    white-space: nowrap;
+    white-space: normal; /* Allow text to wrap */
     overflow: hidden;
     border-right: 3px solid #4a5568;
-    width: 0;
-    animation: typing-realistic 6s steps(60) forwards, blink 0.8s step-end infinite;
-    text-align: center;
+    width: 100%;
     max-width: 90%;
-    margin-bottom: 2rem;
+    margin: 0 auto 2rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
+    text-align: center;
+    animation: typing-realistic 6s steps(60) forwards, blink 0.8s step-end infinite;
+  }
+
+  @media (max-width: 768px) {
+    .typewriter {
+      font-size: clamp(0.8rem, 3vw, 1.2rem);
+    }
   }
 
   @keyframes typing-realistic {
@@ -43,8 +51,10 @@
 
   .truck-scene {
     position: relative;
-    width: 500px;
-    height: 300px;
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    aspect-ratio: 5 / 3;
     overflow: visible;
   }
 
@@ -76,13 +86,13 @@
     position: absolute;
     font-family: 'Comic Sans MS', cursive;
     font-weight: bold;
-    font-size: 2rem;
+    font-size: clamp(1rem, 5vw, 2rem);
     color: #e53e3e;
     z-index: 10;
     pointer-events: none;
     opacity: 0;
     user-select: none;
-    transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform 0.05s linear;
   }
 
   .letter.falling {
@@ -200,7 +210,7 @@
     
     setTimeout(() => {
       dumpBed.classList.add('dumping');
-    }, 1000);
+    }, 500);
 
     setTimeout(() => {
       bedText.remove();
@@ -211,7 +221,7 @@
           letterEl.className = 'letter';
           letterEl.textContent = char;
           
-          const startX = 130 + (Math.random() - 0.5) * 20; // Slight horizontal variation
+          const startX = 130 + (Math.random() - 0.5) * 20;
           const startY = 120;
           
           letterEl.style.left = `${startX}px`;
@@ -222,8 +232,8 @@
           // Physics simulation
           let x = startX;
           let y = startY;
-          let vx = (Math.random() - 0.5) * 10; // Initial horizontal velocity
-          let vy = -Math.random() * 5; // Initial upward velocity
+          let vx = (Math.random() - 0.5) * 10;
+          let vy = -Math.random() * 5;
           const gravity = 0.5;
           const bounce = 0.6;
           const friction = 0.99;
@@ -254,20 +264,20 @@
           }
 
           setTimeout(animate, 50);
-        }, index * 100); // 100ms delay between each letter
+        }, index * 100);
       });
-    }, 2000);
+    }, 1500);
   }
 
   // Animation timeline
-  setTimeout(extractAndDumpLetters, 7000); // Wait for typing to finish
+  setTimeout(extractAndDumpLetters, 6500); // Wait for typing to finish
 
   setTimeout(() => {
     // Start truck driving away
     if (truckContainer) {
       truckContainer.classList.add('driving-away');
     }
-  }, 12000);
+  }, 11500);
 
   setTimeout(() => {
     // Fade out everything
@@ -277,7 +287,7 @@
         introContainer.remove();
       }, 1000);
     }
-  }, 16000);
+  }, 15500);
 
 })();
 </script>
