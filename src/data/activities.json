@@ -65,19 +65,6 @@
     "image": "/images/placeholder.jpg"
   },
   {
-    "name": "Smar Jbeil Panorama Viewpoint",
-    "category": "Outdoor & Nature",
-    "location": "Hill behind the Citadel",
-    "distance": 0.2,
-    "lat": 34.2178,
-    "lng": 35.6875,
-    "description": "Sunset lookout that frames Mediterranean shoreline from Jbeil to Tripoli and the Cedars range.",
-    "copy": "Sunset lookout that frames Mediterranean shoreline from Jbeil to Tripoli and the Cedars range. Way‑finding signs are clear and benches dot the route, making this a relaxed outing for families and nature lovers.",
-    "link": "https://www.beirut.com/en/65115/smar-jbeil-citadel-an-adventure-through-lebanons-history/",
-    "slug": "smar-jbeil-panorama-viewpoint",
-    "image": "/images/placeholder.jpg"
-  },
-  {
     "name": "Smar Jbeil – Sainte Rafqa – Wadi Harba Hike",
     "category": "Adventure & Sports",
     "location": "Trailhead: Smar Jbeil",
@@ -88,7 +75,7 @@
     "copy": "10 km moderate hike linking the fortress to Sainte Rafqa shrine and down Wadi Harba canyon.",
     "link": "https://www.wikiloc.com/hiking-trails/smar-jbeil-sainte-rafqa-wadi-harba-madfoun-61297114",
     "slug": "smar-jbeil-sainte-rafqa-wadi-harba-hike",
-    "image": "https://pbs.twimg.com/media/DW_x3pmXUAAFY0Y.jpg"
+    "image": "https://s0.wklcdn.com/image_253/7607894/61297122/40806237Master.jpg"
   },
   {
     "name": "Saint Rafqa Monastery, Jrabta",
@@ -127,7 +114,7 @@
   "copy": "An iconic medieval fort built by Emir Fakhreddine in the 17th century, Mseilha Fort towers above a serene valley. Its dramatic clifftop setting and panoramic views make it a must-visit for history buffs and photographers alike.",
   "link": "https://en.wikipedia.org/wiki/Mseilha_Fort",
   "slug": "mseilha-fort",
-  "image": "https://owlovertheworld.com/wp-content/uploads/2024/02/mseilha-fort-batroun-1170x878.jpg"
+  "image": "https://upload.wikimedia.org/wikipedia/commons/d/da/Mseilha_fort%2C_Lebanon.jpg"
   },
 
   {
@@ -204,9 +191,9 @@
     "lng": 35.65722,
     "description": "Free sandy strip with calm shallows, beach volleyball and lifeguards (summer).",
     "copy": "Free sandy strip with calm shallows, beach volleyball and lifeguards (summer). Expect crystal‑clear water, casual beach bars for sundowners, and lifeguards during summer weekends.",
-    "link": "https://traveltriangle.com/blog/beaches-in-batroun/",
+    "link": "https://lebanonuntravelled.com/list-of-freeaffordable-beaches-in-batroun/",
     "slug": "batroun-public-beach",
-    "image": "/images/placeholder.jpg"
+    "image": "https://lebanonuntravelled.com/wp/wp-content/uploads/2016/06/20160701_144615-01.jpeg"
   },
   {
     "name": "White Beach Resort",
@@ -217,9 +204,9 @@
     "lng": 35.66058,
     "description": "Family-friendly private cove with white-pebble shore, cabanas & Mediterranean fusion restaurant.",
     "copy": "Family-friendly private cove with white-pebble shore, cabanas & Mediterranean fusion restaurant. Expect crystal‑clear water, casual beach bars for sundowners, and lifeguards during summer weekends.",
-    "link": "https://lebanonexplorer.com/batroun-ultimate-guide-top-places-restaurants-bars-getaways-and-beaches/",
+    "link": "https://www.sobeirut.com/white-beach-batroun",
     "slug": "white-beach-resort",
-    "image": "/images/placeholder.jpg"
+    "image": "https://www.sobeirut.com/contentFiles/image/venues/174/w934h584/whitebeach.jpg"
   },
   {
     "name": "Orchid Beach Lounge",
