@@ -1,274 +1,153 @@
 ---
-/* IntroAnimation component: blended typewriter + SVG dump-truck + p5.js background truck */
+/* IntroAnimation – single p5 CAT 793 truck, typewriter, worries dump */
 ---
-<!-- p5.js once, globally for this component -->
+<!-- p5 once -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
 
 <style>
-  /*  ─────────────────────────  layout  ───────────────────────── */
+  /* ────────── layout */
   .intro-container {
-    position: fixed;
-    inset: 0;
-    background: #f8f9fa;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 2rem;
-    z-index: 1000;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    overflow: hidden;
+    position: fixed; inset: 0;
+    background:#f8f9fa;
+    display:flex; flex-direction:column; align-items:center;
+    padding-top:2.5rem;           /* ⬅ push sentence down */
+    gap:2rem;
+    z-index:1000; overflow:hidden;
+    font-family:'Comic Sans MS',cursive;
   }
 
-  /* p5 canvas sits at the very back */
-  #p5-background-canvas {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-  }
+  #p5-canvas { position:absolute; inset:0; z-index:0; pointer-events:none; }
 
-  /*  ─────────────────────────  typewriter  ───────────────────────── */
+  /* ────────── typewriter */
   .typewriter {
-    font-size: clamp(1rem, 4vw, 1.8rem);
-    color: #2d3748;
-    white-space: nowrap;
-    overflow: hidden;
-    width: 90%;
-    max-width: 850px;
-    text-align: center;
-    border-right: 3px solid #4a5568;
-    animation: typing 6s steps(62, end) forwards, blink 0.8s step-end infinite;
+    font-size:clamp(1rem,4vw,1.8rem);
+    color:#2d3748;
+    white-space:nowrap; overflow:hidden;
+    border-right:3px solid #4a5568;
+    animation:typing 6s steps(62,end) forwards, blink .8s step-end infinite;
+    max-width:90%; text-align:center;
   }
+  @keyframes typing {from{width:0} to{width:100%}}
+  @keyframes blink  {50%{border-color:transparent}}
 
-  @keyframes typing {
-    from { width: 0; }
-    to   { width: 100%; }
+  /* ────────── letters that fall */
+  #letterContainer { position:relative; z-index:5; }
+  .letter{
+    position:absolute;font:700 2rem 'Comic Sans MS';color:#e53e3e;
+    opacity:0;transition:transform 1s cubic-bezier(.25,.46,.45,.94),opacity .2s;
+    pointer-events:none;
   }
-  @keyframes blink { 50% { border-color: transparent; } }
+  .letter.falling{opacity:1}
 
-  /*  ─────────────────────────  SVG-truck scene  ───────────────────────── */
-  .truck-scene {
-    position: relative;
-    width: 500px;
-    height: 300px;
-  }
-
-  .truck-container {
-    position: relative;
-    width: 100%; height: 100%;
-    z-index: 5;           /* above p5 background */
-  }
-
-  .truck-svg { width: 100%; height: 100%; display: block; }
-
-  /* dump-bed pivot */
-  .dump-bed { transform-origin: 180px 120px; transition: transform 1s ease-in-out; }
-  .dump-bed.dumping { transform: rotate(-42deg); }
-
-  /*  ─────────────────────────  letters  ───────────────────────── */
-  .letter {
-    position: absolute;
-    font-family: 'Comic Sans MS', cursive;
-    font-weight: bold;
-    font-size: 2rem;
-    color: #e53e3e;
-    pointer-events: none;
-    opacity: 0;
-    transition: transform 1s cubic-bezier(.25,.46,.45,.94), opacity .2s;
-  }
-  .letter.falling { opacity: 1; }
-
-  /*  ─────────────────────────  exits  ───────────────────────── */
-  .truck-container.driving-away {
-    animation: drive-away 3s ease-in forwards;
-  }
-  @keyframes drive-away { to { transform: translateX(120vw); } }
-
-  .intro-container.fade-out {
-    animation: fade-out 1s ease-out forwards;
-  }
-  @keyframes fade-out { to { opacity: 0; pointer-events: none; } }
+  /* ────────── outro */
+  .intro-container.fade-out{animation:fade-out 1s ease-out forwards;}
+  @keyframes fade-out{to{opacity:0;pointer-events:none}}
 </style>
 
 
-<div class="intro-container" id="introContainer">
-  <!-- background p5 canvas -->
-  <div id="p5-background-canvas"></div>
 
-  <!-- typewriter line -->
-  <div class="typewriter" id="typewriterText">
+<div class="intro-container" id="intro">
+  <div id="p5-canvas"></div>
+
+  <div class="typewriter" id="sentence">
     Hi there! From here onwards, please drop off all your worries.
   </div>
 
-  <!-- SVG dump-truck (front layer) -->
-  <div class="truck-scene">
-    <div class="truck-container" id="truckContainer">
-      <svg class="truck-svg" viewBox="0 0 500 300">
-        <g stroke="#000" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none">
-          <!-- wheels -->
-          <circle cx="100" cy="250" r="40" fill="#222"/>
-          <circle cx="400" cy="250" r="40" fill="#222"/>
-
-          <!-- body -->
-          <path d="M50 250 L450 250 L450 100 L350 100 L300 50 L150 50 L100 100 L50 100 Z" fill="#E4AC2F"/>
-
-          <!-- dump-bed (rotates) -->
-          <g id="dumpBed" class="dump-bed">
-            <path d="M150 100 L450 100 L450 50 L200 50 Z" fill="#FCC93E"/>
-          </g>
-
-          <!-- cab -->
-          <rect x="50" y="100" width="100" height="150" fill="#4ECDC4"/>
-          <!-- window -->
-          <rect x="70" y="120" width="60" height="80" fill="#F8F3D4"/>
-          <!-- grill -->
-          <line x1="70" y1="220" x2="130" y2="220" stroke="#000" stroke-width="6"/>
-        </g>
-      </svg>
-    </div>
-    <!-- letters land here -->
-    <div id="letterContainer"></div>
-  </div>
+  <!-- hidden container that will receive falling letters -->
+  <div id="letterContainer"></div>
 </div>
 
 
-<!-- p5.js background CAT 793 truck -->
-<script type="module">
-/* ---------- p5 background truck ---------- */
-const sketch = (p) => {
-  class Truck {
-    constructor(x, y) {
-      this.x = x; this.y = y;
-      this.state = 'IN';
-      this.speed = 4;
-      this.stopX = window.innerWidth * 0.32;
-      this.parkedAt = null;
-    }
-    update() {
-      switch (this.state) {
-        case 'IN':
-          this.x += this.speed;
-          if (this.x >= this.stopX) {
-            this.x = this.stopX;
-            this.state = 'PARKED';
-            this.parkedAt = p.millis();
-            window.dispatchEvent(new Event('truckParked'));  // ✨ fire event
-          }
-          break;
-        case 'PARKED':
-          if (p.millis() - this.parkedAt > 4500) this.state = 'OUT';
-          break;
-        case 'OUT':
-          this.x += this.speed;
-          if (this.x > window.innerWidth + 600)
-            window.dispatchEvent(new Event('truckGone'));
-          break;
-      }
-    }
-    display() {
-      p.push();
-      p.translate(this.x, this.y);
-      p.scale(.55);
 
-      const yellow = p.color(229,178,45);
-      p.noStroke();
-      /* wheels */
-      p.fill(35); p.ellipse(0,0,240,240); p.ellipse(360,0,240,240);
+<!-- p5 sketch – one realistic CAT 793 -->
+<script type="module">
+const sketch = (p) => {
+  /* helpers */
+  const yellow = () => p.color(229,178,45);
+  class Truck{
+    constructor(){ this.reset(); }
+    reset(){
+      this.x=-600; this.y=p.height*0.68;
+      this.speed=4; this.state='IN'; this.parkedAt=null;
+    }
+    update(){
+      if(this.state==='IN'){ this.x+=this.speed;
+        if(this.x>=p.width*0.33){this.state='PARKED';this.parkedAt=p.millis();p.dispatchEvent(new Event('truckParked'));}}
+      else if(this.state==='PARKED' && p.millis()-this.parkedAt>4500) this.state='OUT';
+      else if(this.state==='OUT'){ this.x+=this.speed;
+        if(this.x>p.width+600) p.dispatchEvent(new Event('truckGone')); }
+    }
+    display(){
+      p.push(); p.translate(this.x,this.y); p.scale(.55);
+      p.noStroke(); p.fill(35); p.ellipse(0,0,240,240); p.ellipse(360,0,240,240);
       p.fill(95,73,12); p.ellipse(0,0,140,140); p.ellipse(360,0,140,140);
-      /* bed + chassis */
-      p.fill(yellow); p.rect(-120,-160,600,90);
+      p.fill(yellow()); p.rect(-120,-160,600,90);
       p.quad(-120,-160,530,-160,560,-70,-150,-70);
-      /* cab block */
       p.rect(200,-220,160,150);
       p.fill(30); p.rect(220,-210,50,60); p.rect(285,-210,55,60);
-      /* canopy */
-      p.fill(yellow); p.rect(160,-260,260,40);
-      /* logos */
-      p.fill(30); p.rect(-40,-135,90,45,6);
-      p.fill(255); p.textSize(26); p.textAlign(p.CENTER,p.CENTER); p.text('CAT',5,-112);
-      p.fill(30); p.rect(245,-50,55,30,4);
-      p.fill(255); p.textSize(18); p.text('793',272,-36);
+      p.fill(yellow()); p.rect(160,-260,260,40);
+      p.fill(30);p.rect(-40,-135,90,45,6);p.fill(255);p.textSize(26);p.textAlign(p.CENTER,p.CENTER);p.text('CAT',5,-112);
+      p.fill(30);p.rect(245,-50,55,30,4);p.fill(255);p.textSize(18);p.text('793',272,-36);
+      /* dump-bed hinge guide (for letter drop coord): local tip spot */
+      this.bedGlobal = p.createVector(p._renderer._curMatrix[4]-150, p._renderer._curMatrix[5]-70);
       p.pop();
     }
   }
 
   let truck;
 
-  p.setup = () => {
-    const c = p.createCanvas(window.innerWidth, window.innerHeight);
-    c.parent('p5-background-canvas');
-    truck = new Truck(-600, window.innerHeight * .65);
-  };
-  p.draw = () => { p.clear(); truck.update(); truck.display(); };
-  p.windowResized = () => p.resizeCanvas(window.innerWidth, window.innerHeight);
+  p.setup=()=>{ const c=p.createCanvas(innerWidth,innerHeight);c.parent('p5-canvas');truck=new Truck(); };
+  p.draw =()=>{ p.clear(); truck.update(); truck.display(); };
+  p.windowResized=()=>{ p.resizeCanvas(innerWidth,innerHeight);truck.reset(); };
 };
-
 new p5(sketch);
 </script>
 
 
-<!-- DOM-side logic: typewriter extraction & physics letters -->
+
+<!-- DOM coordination: extract "worries", drop letters, fade out -->
 <script type="module">
-/* ---------- DOM coordination script ---------- */
-const intro     = document.getElementById('introContainer');
-const dumpBed   = document.getElementById('dumpBed');
-const letterBox = document.getElementById('letterContainer');
-const truckSVG  = document.getElementById('truckContainer');
-const typeNode  = document.getElementById('typewriterText');
+const intro  = document.getElementById('intro');
+const line   = document.getElementById('sentence');
+const lBox   = document.getElementById('letterContainer');
 
-/* 1. wait until the p5 truck announces it’s parked */
-window.addEventListener('truckParked', () => {
-  /* pull “worries” out of the sentence */
-  const original = typeNode.textContent;
-  const word     = 'worries';
-  typeNode.textContent = original.replace(word, '______');
+let dumpPoint={x:0,y:0};  // will be filled once p5 emits coords
 
-  /* put the word inside the dump-bed */
-  const svgNS = 'http://www.w3.org/2000/svg';
-  const txt   = document.createElementNS(svgNS, 'text');
-  txt.setAttribute('x','130'); txt.setAttribute('y','125');
-  txt.setAttribute('font-size','16'); txt.setAttribute('fill','#e53e3e');
-  txt.setAttribute('font-family','Comic Sans MS'); txt.setAttribute('text-anchor','middle');
-  txt.textContent = word; dumpBed.appendChild(txt);
+/* receive bed coordinates from p5 each frame */
+window.addEventListener('truckParked',()=>{
+  // grab current dump-bed nose from p5’s global var
+  const p5c   = document.querySelector('#p5-canvas canvas');
+  const rect  = p5c.getBoundingClientRect();
+  // access hidden p5 instance via _pInst (first one)
+  dumpPoint.x = window._p5js ? _p5js[0].bedGlobal.x + rect.left : rect.left+200;
+  dumpPoint.y = window._p5js ? _p5js[0].bedGlobal.y + rect.top  : rect.top + 100;
 
-  /* tip the bed after 1 s */
-  setTimeout(()=>dumpBed.classList.add('dumping'), 1000);
+  /* swap word */
+  const full  = line.textContent; const word='worries';
+  line.textContent = full.replace(word,'______');
 
-  /* 2 s later drop individual letters with simple physics */
+  /* little delay, then letter cascade */
   setTimeout(()=>{
-    txt.remove();
     [...word].forEach((ch,i)=>{
-      const el = document.createElement('div');
-      el.className = 'letter'; el.textContent = ch;
-      const startX = dumpBed.getBoundingClientRect().left + 130;
-      const startY = dumpBed.getBoundingClientRect().top  + 125;
-      el.style.left = `${startX}px`; el.style.top = `${startY}px`;
-      letterBox.appendChild(el);
-
+      const el=document.createElement('div'); el.className='letter'; el.textContent=ch;
+      el.style.left=`${dumpPoint.x}px`; el.style.top=`${dumpPoint.y}px`;
+      lBox.appendChild(el);
       setTimeout(()=>{
         const spread = (i-(word.length-1)/2)*40;
         const drop   = Math.random()*30+160;
         const rot    = (Math.random()-.5)*360;
-        el.style.transform = `translate(${spread}px, ${drop}px) rotate(${rot}deg)`;
-        el.classList.add('falling');
-      }, 30);
+        el.style.transform=`translate(${spread}px,${drop}px) rotate(${rot}deg)`; el.classList.add('falling');
+      },20);
     });
-  }, 2000);
+  }, 800);
 });
 
-/* when the background truck starts leaving, drive the SVG away */
-window.addEventListener('truckGone', ()=> truckSVG.classList.add('driving-away'));
-
-/* fade the whole intro out 3 s after the SVG truck starts leaving */
-window.addEventListener('truckGone', ()=>{
-  setTimeout(()=>{
-    intro.classList.add('fade-out');
-    setTimeout(()=>intro.remove(),1000);
-  },3000);
+/* fade + clean-up when truck exits right */
+window.addEventListener('truckGone',()=>{
+  setTimeout(()=>{ intro.classList.add('fade-out'); setTimeout(()=>intro.remove(),1000); },2000);
 });
 
-/* only run once per session */
-if (sessionStorage.getItem('introPlayed')) intro.remove();
+/* run only once per session */
+if(sessionStorage.getItem('introPlayed')) intro.remove();
 else sessionStorage.setItem('introPlayed','true');
 </script>
