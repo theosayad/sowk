@@ -2,17 +2,14 @@
 /* IntroAnimation component */
 ---
 <style>
-  /* ─── Global white background ─── */
+  /* ─── page & container white ─── */
   html, body {
     margin: 0; padding: 0;
-    background: #ffffff;
-    height: 100%;
+    background: #fff; height: 100%;
   }
-
-  /* ─── Intro container ─── */
   .stopmotion-intro {
     position: fixed; inset: 0;
-    background: #ffffff;
+    background: #fff;
     display: flex; flex-direction: column;
     align-items: center; gap: 1.5rem;
     padding: 2rem 1rem 1rem;
@@ -20,20 +17,18 @@
     box-sizing: border-box;
   }
 
-  /* ─── Header image sizing ─── */
+  /* ─── header image responsive ─── */
   .header-img {
     width: 80%; max-width: 600px;
-    height: auto; display: block;
-    z-index: 2;
+    height: auto; display: block; z-index: 2;
   }
 
-  /* ─── Stop-motion truck container ─── */
+  /* ─── stop-motion truck container ─── */
   .sm-container {
     position: relative;
     width: 90%; max-width: 500px;
     overflow: visible; z-index: 1;
   }
-
   .sm-img {
     display: block; width: 100%;
     transform: translateX(-120%);
@@ -47,7 +42,7 @@
     transform: translateX(120%);
   }
 
-  /* ─── Fade-out at end ─── */
+  /* ─── final fade ─── */
   .stopmotion-intro.fade-out {
     animation: fadeOut 1s ease-out forwards;
   }
@@ -55,7 +50,7 @@
     to { opacity: 0; pointer-events: none; }
   }
 
-  /* ─── Responsive tweaks ─── */
+  /* ─── mobile tweaks ─── */
   @media (max-width: 600px) {
     .header-img { width: 90%; }
     .sm-container { width: 95%; max-width: none; }
@@ -63,7 +58,7 @@
 </style>
 
 <div class="stopmotion-intro" id="intro">
-  <!-- 1️⃣ Hand-drawn header -->
+  <!-- 1️⃣ hand-drawn header -->
   <img
     id="headerImg"
     class="header-img"
@@ -71,7 +66,7 @@
     alt="Hi! Please drop off all your WORRIES before entering"
   />
 
-  <!-- 2️⃣ Stop-motion truck -->
+  <!-- 2️⃣ stop-motion truck -->
   <div class="sm-container">
     <img
       id="smImg"
@@ -88,7 +83,7 @@
     const headerImg = document.getElementById('headerImg');
     const smImg     = document.getElementById('smImg');
 
-    // Only once per session
+    // ▶ only once per session
     if (sessionStorage.getItem('introPlayed')) {
       intro.remove();
       return;
@@ -96,20 +91,22 @@
     sessionStorage.setItem('introPlayed','true');
 
     // ─── 1️⃣ Header-fall sequence ───
-    const headerFrames    = [
+    const headerFrames = [
       '/images/header%20text%20falling1.png',
       '/images/header%20text%20falling2.png',
       '/images/header%20text%20worries%20fell.png'
     ];
-    const frameTime       = 800;  // ms per header frame
-    const headerPause     = 500;  // ms after last header frame
+    const headerFrameTime = 800;   // ms
+    const headerPause     = 500;   // ms after last fall frame
 
+    // schedule falling frames AFTER the initial header.png
     headerFrames.forEach((src, idx) => {
-      setTimeout(() => { headerImg.src = src; }, idx * frameTime);
+      setTimeout(() => { headerImg.src = src; }, (idx + 1) * headerFrameTime);
     });
 
-    // After header frames + pause, start truck sequence
-    const headerTotal = headerFrames.length * frameTime + headerPause;
+    // total time before truck starts = all header frames + pause
+    const headerTotal = headerFrames.length * headerFrameTime + headerPause;
+
     setTimeout(() => {
       // ─── 2️⃣ Truck drives in ───
       smImg.classList.add('drive-in');
@@ -120,11 +117,11 @@
         '/images/worries%20falling%20into%20truck-2.png',
         '/images/truck%20with%20worries.png'
       ];
-      const dropInterval = 800;  // ms between drop frames
+      const dropInterval = 800;  // ms between each drop frame
       const drivePause   = 300;  // ms after drive-in
 
       setTimeout(() => {
-        dropFrames.forEach((src, i) => {
+        dropFrames.forEach((src,i) => {
           setTimeout(() => { smImg.src = src; }, i * dropInterval);
         });
 
@@ -133,15 +130,17 @@
         setTimeout(() => {
           smImg.classList.add('drive-out');
 
-          // ─── 5️⃣ Fade intro out 2s later ───
+          // ─── 5️⃣ fade out intro 2s later ───
           setTimeout(() => {
             intro.classList.add('fade-out');
             setTimeout(() => intro.remove(), 1000);
           }, 2000);
+
         }, totalDropTime + 1000);
 
       }, 2000 + drivePause);
 
     }, headerTotal);
+
   });
 </script>
