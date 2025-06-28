@@ -2,6 +2,7 @@
 // dynamic activity page  (src/pages/experience/[slug].astro)
 import Layout      from '../../layouts/Default.astro';   // two dots now
 import activities  from '../../data/activities.json';    // two dots now
+import { formatTravelInfo } from '../../utils/formatTravelInfo.ts';
 
 export function getStaticPaths() {
   return activities.map(a => ({ params: { slug: a.slug } }));
