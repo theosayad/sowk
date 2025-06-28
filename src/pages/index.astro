@@ -23,18 +23,6 @@ import IntroAnimation from '../components/IntroAnimation.astro';
     </div>
   </section>
 
-  <!-- ────────────── Hero Overlay Text ────────────── -->
-  <div class="hero-overlay-text">
-    <h1 class="hero-title">Somewhere Only We Know</h1>
-    <p class="hero-description">
-      A private villa hidden in the pine hills and stone walls of Smar Jbeil.<br />
-      Where mornings begin in stillness and nights end beside the fire.
-    </p>
-    <a href="https://instagram.com/sowklb" class="btn--hero" target="_blank">
-      Book Your Stay
-    </a>
-  </div>
-
   <!-- ────────────── Features Section ────────────── -->
   <section class="features">
     <h2 class="fade-title">What To Expect</h2>
@@ -128,16 +116,6 @@ body, h1, h2, h3, p, a, button { font-family: 'Poppins', sans-serif; }
 .hero-swiper { height: 100vh; overflow:hidden; position:relative; }
 .swiper, .swiper-slide { width:100%; height:100%; }
 .swiper-slide img { width:100%; height:100%; object-fit:cover; }
-
-/* ---------- Overlay box ---------- */
-.hero-overlay-text{
-  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-  background:rgba(255,255,255,.72); backdrop-filter:blur(10px);
-  padding:2rem 2rem 2.5rem; border-radius:1rem; text-align:center;
-  max-width:700px; box-shadow:0 10px 20px rgba(0,0,0,.05);
-}
-.hero-title{ font-size:2.3rem; font-weight:600; margin:0 0 1.25rem; }
-.hero-description{ font-size:1.05rem; line-height:1.9; margin-bottom:2rem; }
 
 /* ---------- CTA button ---------- */
 .btn--hero{
