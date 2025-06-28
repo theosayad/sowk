@@ -396,9 +396,12 @@
     "lng": 35.66,
     "description": "Scenic 15 km bike lane hugging cliffs & hidden coves; rentals available in old souk.",
     "copy": "Scenic 15 km bike lane hugging cliffs & hidden coves; rentals available in old souk.",
-    "link": "https://gobatroun.com/",
+    "link": "https://www.wikiloc.com/cycling-trails/batroun-to-chekka-by-bike-50023839",
     "slug": "cycling-the-batroun-coastal-road",
-    "image": "/images/placeholder.jpg"
+    "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/17/e5/13/38/photo6jpg.jpg?w=1200&h=900&s=1",
+    "image2": "https://s2.wklcdn.com/image_110/3307399/50023839/33259820Master.jpg",
+    "image3": "https://s1.wklcdn.com/image_110/3307399/50023839/33259870Master.jpg",
+    "image4": https://s1.wklcdn.com/image_110/3307399/50023839/33259840Master.jpg
   },
   {
     "name": "Surf Lessons at Colonel Reef",
@@ -409,9 +412,11 @@
     "lng": 35.6579,
     "description": "ISA-certified instructors offering beginner surf & SUP sessions at sheltered reef break.",
     "copy": "ISA-certified instructors offering beginner surf & SUP sessions at sheltered reef break.",
-    "link": "https://colonelbnd.com/",
+    "link": "https://colonelbnd.com/colonel-reef/",
     "slug": "surf-lessons-at-colonel-reef",
-    "image": "/images/placeholder.jpg"
+    "image": "https://colonelbnd.com/wp-content/uploads/2025/05/colonel-reef-1-1170x878.jpg",
+    "image2": "https://www.surf-forecast.com/system/images/5973/large/Batroun.jpg?1347992354",
+    "image3": "https://a0.muscache.com/im/pictures/9449e95d-3d7d-434d-ba20-7277f419bacc.jpg?im_w=720"
   },
   {
     "name": "Byblos Old Port & Citadel",
