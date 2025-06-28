@@ -219,7 +219,7 @@
     "copy": "Adults-only beach club with infinity pools, daybeds & live DJ sets. Expect crystal‑clear water, casual beach bars for sundowners, and lifeguards during summer weekends.",
     "link": "https://lebanonexplorer.com/batroun-ultimate-guide-top-places-restaurants-bars-getaways-and-beaches/",
     "slug": "orchid-beach-lounge",
-    "image": "/images/placeholder.jpg"
+    "image": "https://erga.com/wp-content/uploads/2023/07/orchid-01.jpg"
   },
   {
     "name": "Pierre & Friends Surf Shack",
@@ -230,9 +230,9 @@
     "lng": 35.64917,
     "description": "Iconic beach bar known for weekend parties, surfboard rentals & coastal cliff diving.",
     "copy": "Iconic beach bar known for weekend parties, surfboard rentals & coastal cliff diving. Expect crystal‑clear water, casual beach bars for sundowners, and lifeguards during summer weekends.",
-    "link": "https://owlovertheworld.com/things-to-do-in-batroun-lebanon/",
+    "link": "https://www.instagram.com/pierre.and.friends/",
     "slug": "pierre-friends-surf-shack",
-    "image": "/images/placeholder.jpg"
+    "image": "https://scontent.fdxb3-3.fna.fbcdn.net/v/t51.75761-15/496079970_18503507047007249_758265927981800462_n.webp?stp=dst-jpg_s1080x2048_tt6&_nc_cat=104&ccb=1-7&_nc_sid=127cfc&_nc_ohc=fsGWPA6s54YQ7kNvwGP41Xu&_nc_oc=AdnLJ-TPxC8RYMYZRYxibd21fN8f7FoXlV_DAvVId2_Y-X1WgPMPsAnWZYxvOnXVXa82lCGBvb3IRmtJTS69ZjDY&_nc_zt=23&_nc_ht=scontent.fdxb3-3.fna&_nc_gid=4AwQpHt_--jsCu7-2npNpA&oh=00_AfO0La05vtkZp4ohdoHsJP_TJoaHXEEVLBVtohQ-EDnFeA&oe=68655A32"
   },
   {
     "name": "Colonel Brewery & Distillery",
@@ -245,7 +245,8 @@
     "copy": "Eco-friendly craft brewery offering tours, tastings, live music & on-site camping. Book a tasting ahead to sample estate blends paired with foraged mezze in a shaded stone courtyard.",
     "link": "https://www.tripadvisor.com/Attraction_Review-g1943861-d7307073-Reviews-The_Colonel_Brewery-Batroun_North_Governorate.html",
     "slug": "colonel-brewery-distillery",
-    "image": "/images/placeholder.jpg"
+    "image": "https://media-cdn.tripadvisor.com/media/photo-s/19/5e/61/aa/the-distillery.jpg",
+    "image2": "https://gobatroun.com/wp-content/uploads/2022/05/colonel-beer7.jpg"
   },
   {
     "name": "IXSIR Winery (Basbina)",
@@ -258,20 +259,23 @@
     "copy": "Award-winning sustainable winery built beneath a 17th-century manor; rooftop farm-to-table bistro. Book a tasting ahead to sample estate blends paired with foraged mezze in a shaded stone courtyard.",
     "link": "https://ixsir.com/",
     "slug": "ixsir-winery-basbina",
-    "image": "/images/placeholder.jpg"
+    "image": "https://stalbanstimes.co.uk/wp-content/uploads/2024/06/IMG_7621-1.jpg",
+    "image2": "https://ixsir.com/wp-content/uploads/2019/02/13-1-SDIM5198.jpg",
+    "image3": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/29/2d/fa/d8/caption.jpg?w=1100&h=-1&s=1"
   },
   {
     "name": "Batroun Mountains Winery",
     "category": "Food & Drink",
     "location": "Jawz River valley",
-    "distance": 18.0,
+    "distance": 10.9 (14 mins drive),
     "lat": 34.25625,
     "lng": 35.65875,
     "description": "Family-run high-altitude vineyards spanning 400–1500 m; panoramic tastings & jeep tours.",
     "copy": "Family-run high-altitude vineyards spanning 400–1500 m; panoramic tastings & jeep tours. Book a tasting ahead to sample estate blends paired with foraged mezze in a shaded stone courtyard.",
     "link": "https://batrounmountains.wine/",
     "slug": "batroun-mountains-winery",
-    "image": "/images/placeholder.jpg"
+    "image": "https://www.lebanontraveler.com/wp-content/uploads/2020/11/BatrounWines2.jpg",
+    "image2": "https://static.independent.co.uk/s3fs-public/thumbnails/image/2020/07/12/10/dsc01389closeup.jpg"
   },
   {
     "name": "Sept Winery & Taproom (Amchit)",
@@ -284,7 +288,7 @@
     "copy": "Organic natural-wine pioneer offering cellar walks and sea-view picnics. Book a tasting ahead to sample estate blends paired with foraged mezze in a shaded stone courtyard.",
     "link": "https://septwinery.com/",
     "slug": "sept-winery-taproom-amchit",
-    "image": "/images/placeholder.jpg"
+    "image": "https://cdn.shortpixel.ai/spai/w_924+q_lossy+ret_img+to_webp/wanderlustwine.co.uk/wp-content/uploads/2023/01/Screenshot-2023-01-25-at-13.27.14.png"
   },
   {
     "name": "PureTech Diving Center",
@@ -297,20 +301,7 @@
     "copy": "PADI 5-Star dive school running boat dives to submarine canyons & underwater caves. Equipment rental and certified instructors are available year‑round; visibility peaks June‑September.",
     "link": "https://www.puretechdiving.com/",
     "slug": "puretech-diving-center",
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "name": "BlueBay Water Sports",
-    "category": "Adventure & Sports",
-    "location": "Batroun coast",
-    "distance": 14.0,
-    "lat": 34.2425,
-    "lng": 35.66,
-    "description": "Stand-up paddle, kayaking & snorkel rental at turquoise cove beside Phoenician wall.",
-    "copy": "Stand-up paddle, kayaking & snorkel rental at turquoise cove beside Phoenician wall.",
-    "link": "https://owlovertheworld.com/things-to-do-in-batroun-lebanon/",
-    "slug": "bluebay-water-sports",
-    "image": "/images/placeholder.jpg"
+    "image": "https://www.ncl.com/sites/default/files/shutterstock_558042166.jpg"
   },
   {
     "name": "Nahr El Joz Riverside Trail",
@@ -323,7 +314,8 @@
     "copy": "Shaded 8 km path following crystal river, picnic spots & historic watermills. Way‑finding signs are clear and benches dot the route, making this a relaxed outing for families and nature lovers.",
     "link": "https://www.wikiloc.com/trails/hiking/lebanon/liban-nord/batroun",
     "slug": "nahr-el-joz-riverside-trail",
-    "image": "/images/placeholder.jpg"
+    "image": "https://www.lebanontraveler.com/wp-content/uploads/2021/08/nahr-al-joz-lebanon-traveler.gif",
+    "image2": "https://scontent.fdxb3-3.fna.fbcdn.net/v/t1.6435-9/105517683_862739550881041_6280234675218144831_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=127cfc&_nc_ohc=T-sH-T80NWUQ7kNvwG2pbEz&_nc_oc=AdkmUwlAz4O1hTwVbn7zaT-MAytjdTkjO2M8Ous6elzC_1ijjcLySiuV8MAjQoUFJqrvHfNcFbXRlVTxYiglKjUm&_nc_zt=23&_nc_ht=scontent.fdxb3-3.fna&_nc_gid=r4a1e07RKK-7HrKp8-SJ9A&oh=00_AfP78gMdlzt4Qk0msG7j-QHNGG4gEOQ8l90xfE2CkZX8kw&oe=6886E2A0"
   },
   {
     "name": "Kfarhelda Waterfall",
@@ -336,7 +328,9 @@
     "copy": "25-metre cascade plunging into natural pool; best flow in spring. Way‑finding signs are clear and benches dot the route, making this a relaxed outing for families and nature lovers.",
     "link": "https://www.mylebanonguide.com/place/kfarhelda-waterfall/",
     "slug": "kfarhelda-waterfall",
-    "image": "/images/placeholder.jpg"
+    "image": "https://i.imgur.com/u8NXjaB.jpeg",
+    "image2": "https://cdn.prod.website-files.com/58a6036d2fe9e0dc1314a35c/59836e86ab6960000134efa9_6.jpg",
+    "image3": "https://www.beiruttransfer.com/uploads/1/0/3/7/10373098/kfarhelda-waterfall_orig.jpg"
   },
   {
     "name": "Arnaoon Village Experience Park",
@@ -349,7 +343,8 @@
     "copy": "300-year-old hilltop estate turned into family adventure hub with zip-lines, archery & Lebanese buffet. On‑site staff run a full calendar of workshops and seasonal festivals; kids’ activities run weekends.",
     "link": "https://arnaoonvillage.com/",
     "slug": "arnaoon-village-experience-park",
-    "image": "/images/placeholder.jpg"
+    "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2f/eb/3f/27/dyar-majid-hotel-this.jpg?w=900&h=500&s=1",
+    "image2": "https://arnaoonvillage.com/wp-content/uploads/2023/09/IMG_8987-1.jpg"
   },
   {
     "name": "Tannourine Cedars Forest Nature Reserve",
@@ -362,7 +357,7 @@
     "copy": "625 ha reserve protecting Lebanon’s densest cedar grove; six marked hiking loops. Way‑finding signs are clear and benches dot the route, making this a relaxed outing for families and nature lovers.",
     "link": "https://tannourinecedarreserve.org/",
     "slug": "tannourine-cedars-forest-nature-reserve",
-    "image": "/images/placeholder.jpg"
+    "image": "https://guide.moovtoo.com/public/storage/venues/metaImages/LB/tannourine-cedars-forest-nature-reserve-3742023-08-03-12-31-01.jpg"
   },
   {
     "name": "Bchaaleh ‘Sisters’ Olive Trees",
@@ -375,7 +370,7 @@
     "copy": "12 legendary olive trees believed to be 6,000 years old, still bearing fruit. Way‑finding signs are clear and benches dot the route, making this a relaxed outing for families and nature lovers.",
     "link": "https://lebanonuntravelled.com/olive-trees-of-bchaaleh-are-the-oldest-olive-trees-in-lebanon/",
     "slug": "bchaaleh-sisters-olive-trees",
-    "image": "/images/placeholder.jpg"
+    "image": "https://365daysoflebanon.com/wp-content/uploads/2015/11/syster-olive-10.jpg"
   },
   {
     "name": "Douma Heritage Walk",
@@ -388,7 +383,8 @@
     "copy": "Charming red-roof village with preserved 19th-century Lebanese architecture & artisanal mouneh shops. Guided tours spotlight centuries of layered history and offer sweeping coastal panoramas—an Instagram favourite.",
     "link": "https://lebanonuntravelled.com/discover-douma/",
     "slug": "douma-heritage-walk",
-    "image": "/images/placeholder.jpg"
+    "image": "https://www.lebanontraveler.com/wp-content/uploads/2024/07/douma-lebanon-traveler-1.jpg",
+    "image2": "https://www.pbvliban.org/wp-content/uploads/2017/07/9-1.jpg"
   },
   {
     "name": "Assia Traditional Pottery Workshop",
