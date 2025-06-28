@@ -1,38 +1,138 @@
 ---
 /*
-  Contact page
+  Contact page — boutique style
   ─────────────────────────────────────────────────────
-  • Instagram CTA + fallback form via Formspree
-  • Safe for static output — no base issues
-  • Uses Layout component (already Netlify-cleaned)
+  • Instagram CTA + elegant fallback form
+  • Fully static-compatible
 */
 import Layout from '../layouts/Default.astro';
 ---
 
 <Layout title="Contact · SOWK">
-  <h1 style="margin:2rem 0;">Get in touch</h1>
+  <section class="contact-wrapper">
+    <h1 class="contact-title">Get in touch</h1>
 
-  <p style="margin-bottom:1.5rem; max-width:540px;">
-    For availability and pricing, message us directly on Instagram.<br />
-    We usually reply within a few hours.
-  </p>
+    <p class="contact-description">
+      For availability and pricing, message us directly on Instagram.<br />
+      We usually reply within a few hours.
+    </p>
 
-  <a class="btn" href="https://instagram.com/sowk.smarjbeil" target="_blank">
-    Book via Instagram
-  </a>
+    <a class="contact-btn" href="https://instagram.com/sowk.smarjbeil" target="_blank" rel="noopener">
+      Book via Instagram
+    </a>
 
-  <hr style="margin:3rem 0;" />
+    <div class="separator"></div>
 
-  <h2 style="margin-bottom:1rem;">Or use the form below</h2>
+    <h2 class="form-title">Or use the form below</h2>
 
-  <form
-    action="https://formspree.io/f/xpwrygqr"
-    method="POST"
-    style="display:grid; gap:1rem; max-width:500px;"
-  >
-    <input type="text" name="name" placeholder="Name" required />
-    <input type="email" name="_replyto" placeholder="Email" required />
-    <textarea rows="4" name="message" placeholder="Your message" required></textarea>
-    <button type="submit" class="btn">Send Enquiry</button>
-  </form>
+    <form
+      action="https://formspree.io/f/xpwrygqr"
+      method="POST"
+      class="contact-form"
+    >
+      <input type="text" name="name" placeholder="Name" required />
+      <input type="email" name="_replyto" placeholder="Email" required />
+      <textarea rows="4" name="message" placeholder="Your message" required></textarea>
+      <button type="submit" class="contact-btn">Send Enquiry</button>
+    </form>
+  </section>
+
+  <style>
+    .contact-wrapper {
+      max-width: 600px;
+      margin: 4rem auto;
+      padding: 0 1.5rem;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .contact-title {
+      font-size: 2rem;
+      margin-bottom: 1.25rem;
+      text-align: center;
+      color: #1e1e1e;
+    }
+
+    .contact-description {
+      font-size: 1.05rem;
+      color: #555;
+      line-height: 1.7;
+      text-align: center;
+      max-width: 500px;
+      margin: 0 auto 2rem;
+    }
+
+    .contact-btn {
+      display: inline-block;
+      background-color: #c89a2a;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      border-radius: 999px;
+      font-size: 1rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      transition: background-color 0.25s ease;
+      text-align: center;
+      margin: 0 auto;
+    }
+
+    .contact-btn:hover {
+      background-color: #b3881f;
+    }
+
+    .separator {
+      width: 60px;
+      height: 2px;
+      background-color: #c8b7a6;
+      opacity: 0.5;
+      margin: 3rem auto;
+    }
+
+    .form-title {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      color: #333;
+    }
+
+    .contact-form {
+      display: grid;
+      gap: 1rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      background-color: #fafafa;
+      transition: border 0.2s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      outline: none;
+      border-color: #c89a2a;
+      background-color: #fff;
+    }
+
+    @media (max-width: 600px) {
+      .contact-title {
+        font-size: 1.6rem;
+      }
+      .form-title {
+        font-size: 1.2rem;
+      }
+      .contact-btn {
+        font-size: 0.95rem;
+        padding: 0.65rem 1.25rem;
+      }
+    }
+  </style>
 </Layout>
