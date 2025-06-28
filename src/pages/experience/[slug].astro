@@ -28,38 +28,40 @@ if (activity.image5) images.push(activity.image5);
         <img
           src={images[0]}
           alt={activity.name}
-          class="single-image"
+          class="single-image gallery-clickable"
           width="1200"
           height="600"
+          data-full-src={images[0]}
         />
       )}
       
       {images.length === 2 && (
         <div class="two-images">
-          <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image main" />
-          <img src={images[1]} alt={`${activity.name} - Image 2`} class="gallery-image secondary" />
+          <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image main gallery-clickable" data-full-src={images[0]} />
+          <img src={images[1]} alt={`${activity.name} - Image 2`} class="gallery-image secondary gallery-clickable" data-full-src={images[1]} />
         </div>
       )}
       
       {images.length === 3 && (
         <div class="three-images">
-          <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image main" />
+          <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image main gallery-clickable" data-full-src={images[0]} />
           <div class="side-images">
-            <img src={images[1]} alt={`${activity.name} - Image 2`} class="gallery-image side" />
-            <img src={images[2]} alt={`${activity.name} - Image 3`} class="gallery-image side" />
+            <img src={images[1]} alt={`${activity.name} - Image 2`} class="gallery-image side gallery-clickable" data-full-src={images[1]} />
+            <img src={images[2]} alt={`${activity.name} - Image 3`} class="gallery-image side gallery-clickable" data-full-src={images[2]} />
           </div>
         </div>
       )}
       
       {images.length >= 4 && (
         <div class="four-plus-images">
-          <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image hero" />
+          <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image hero gallery-clickable" data-full-src={images[0]} />
           <div class="image-grid">
             {images.slice(1, 4).map((img, index) => (
               <img 
                 src={img} 
                 alt={`${activity.name} - Image ${index + 2}`} 
-                class="gallery-image grid-item" 
+                class="gallery-image grid-item gallery-clickable" 
+                data-full-src={img}
               />
             ))}
             {images.length > 4 && (
@@ -67,7 +69,8 @@ if (activity.image5) images.push(activity.image5);
                 <img 
                   src={images[4]} 
                   alt={`${activity.name} - Image 5`} 
-                  class="gallery-image grid-item dimmed" 
+                  class="gallery-image grid-item dimmed gallery-clickable" 
+                  data-full-src={images[4]}
                 />
                 <span class="more-count">+{images.length - 4}</span>
               </div>
@@ -79,7 +82,7 @@ if (activity.image5) images.push(activity.image5);
 
     <h1>{activity.name}</h1>
     <p class="activity-meta">
-      {activity.location} · {activity.distance.toFixed(1)} km
+      {formatTravelInfo(activity)}
     </p>
     <p class="activity-copy">{activity.copy}</p>
     <a href={activity.link} target="_blank" rel="noopener" class="more-link">
@@ -87,6 +90,107 @@ if (activity.image5) images.push(activity.image5);
     </a>
   </article>
   <a href="/experience" class="back-link">← Back to all experiences</a>
+
+  <!-- Full-screen image modal -->
+  <div id="imageModal" class="image-modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <img id="modalImage" src="" alt="" />
+      <div class="modal-nav">
+        <button id="prevBtn" class="nav-btn prev-btn">‹</button>
+        <button id="nextBtn" class="nav-btn next-btn">›</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const modal = document.getElementById('imageModal');
+      const modalImg = document.getElementById('modalImage');
+      const closeBtn = document.querySelector('.close-modal');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const clickableImages = document.querySelectorAll('.gallery-clickable');
+      
+      let currentImageIndex = 0;
+      let imageList = [];
+
+      // Collect all image sources
+      clickableImages.forEach((img, index) => {
+        imageList.push({
+          src: img.getAttribute('data-full-src') || img.src,
+          alt: img.alt
+        });
+        
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', function() {
+          currentImageIndex = index;
+          openModal();
+        });
+      });
+
+      function openModal() {
+        modal.style.display = 'flex';
+        updateModalImage();
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal() {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+
+      function updateModalImage() {
+        if (imageList[currentImageIndex]) {
+          modalImg.src = imageList[currentImageIndex].src;
+          modalImg.alt = imageList[currentImageIndex].alt;
+        }
+        
+        // Show/hide navigation buttons
+        prevBtn.style.display = imageList.length > 1 ? 'block' : 'none';
+        nextBtn.style.display = imageList.length > 1 ? 'block' : 'none';
+      }
+
+      function showPrevImage() {
+        currentImageIndex = currentImageIndex > 0 ? currentImageIndex - 1 : imageList.length - 1;
+        updateModalImage();
+      }
+
+      function showNextImage() {
+        currentImageIndex = currentImageIndex < imageList.length - 1 ? currentImageIndex + 1 : 0;
+        updateModalImage();
+      }
+
+      // Event listeners
+      closeBtn.addEventListener('click', closeModal);
+      prevBtn.addEventListener('click', showPrevImage);
+      nextBtn.addEventListener('click', showNextImage);
+
+      // Close modal when clicking outside the image
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+
+      // Keyboard navigation
+      document.addEventListener('keydown', function(e) {
+        if (modal.style.display === 'flex') {
+          switch(e.key) {
+            case 'Escape':
+              closeModal();
+              break;
+            case 'ArrowLeft':
+              showPrevImage();
+              break;
+            case 'ArrowRight':
+              showNextImage();
+              break;
+          }
+        }
+      });
+    });
+  </script>
 </Layout>
 
 <style>
@@ -112,6 +216,14 @@ body, h1, p, a { font-family:'Poppins', sans-serif; }
 .gallery-image:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.gallery-clickable {
+  cursor: pointer;
+}
+
+.gallery-clickable:hover {
+  transform: translateY(-2px) scale(1.02);
 }
 
 /* Single Image */
@@ -292,5 +404,105 @@ h1 {
   margin: 3rem 0 4rem;
   color: #294534; 
   font-weight: 600; 
+}
+
+/* Full-screen image modal */
+.image-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 0.5rem;
+}
+
+.close-modal {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  z-index: 1001;
+}
+
+.close-modal:hover {
+  opacity: 0.7;
+}
+
+.modal-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.nav-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  padding: 1rem;
+  cursor: pointer;
+  border-radius: 50%;
+  pointer-events: auto;
+  transition: background 0.3s ease;
+}
+
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.prev-btn {
+  margin-left: -60px;
+}
+
+.next-btn {
+  margin-right: -60px;
+}
+
+@media (max-width: 768px) {
+  .close-modal {
+    top: -30px;
+    font-size: 1.5rem;
+  }
+  
+  .nav-btn {
+    font-size: 1.5rem;
+    padding: 0.75rem;
+  }
+  
+  .prev-btn {
+    margin-left: -40px;
+  }
+  
+  .next-btn {
+    margin-right: -40px;
+  }
 }
 </style>
