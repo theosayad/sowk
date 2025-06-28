@@ -385,7 +385,9 @@
     "copy": "Hands-on class crafting clay cooking pots using millennia-old techniques preserved by local women. Guided tours spotlight centuries of layered history and offer sweeping coastal panoramas—an Instagram favourite.",
     "link": "https://lebanonuntravelled.com/assias-traditional-pottery/",
     "slug": "assia-traditional-pottery-workshop",
-    "image": "/images/placeholder.jpg"
+    "image": "https://bamleb.s3.eu-central-1.amazonaws.com/2d55936e2edc6852-20160422_093921-2.jpg",
+    "image2": "https://lebanonuntravelled.com/wp/wp-content/uploads/2016/04/20160422_094024-2.jpg",
+    "image3": "https://lebanonuntravelled.com/wp/wp-content/uploads/2016/04/20160422_094116-2.jpg"
   },
   {
     "name": "Cycling the Batroun Coastal Road",
@@ -429,6 +431,9 @@
     "copy": "UNESCO-listed Phoenician port, Crusader castle, mosaic-paved souk & seafood restaurants. Guided tours spotlight centuries of layered history and offer sweeping coastal panoramas—an Instagram favourite.",
     "link": "https://whc.unesco.org/en/list/295/",
     "slug": "byblos-old-port-citadel",
-    "image": "/images/placeholder.jpg"
+    "image": "https://mylebanonguide.com/wp-content/uploads/2022/09/jamesalachkar-___2327106623365369211_354997442___-.jpg"
+    "image2": "https://whc.unesco.org/uploads/thumbs/site_0295_0001-1200-630-20151104123418.jpg",
+    "image3": "blob:https://imgur.com/64830b91-1850-4dc3-a55b-4ed4650c4b1f"
+    
   }
 ]
