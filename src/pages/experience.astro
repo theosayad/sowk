@@ -1,227 +1,508 @@
 ---
-// src/pages/experience.astro
+// dynamic activity page  (src/pages/experience/[slug].astro)
+import Layout      from '../../layouts/Default.astro';   // two dots now
+import activities  from '../../data/activities.json';    // two dots now
 
-import Layout from '../layouts/Default.astro';
-import activities from '../data/activities.json' assert { type: 'json' };
+export function getStaticPaths() {
+  return activities.map(a => ({ params: { slug: a.slug } }));
+}
 
-// all unique, non‐empty categories
-const categories = [
-  ...new Set(activities.map((a) => a.category).filter(Boolean))
-];
+const { slug }  = Astro.params;
+const activity  = activities.find(a => a.slug === slug);
+if (!activity) throw new Error(`No activity for slug "${slug}"`);
 
-// helper to turn "My Category" → "my-category" for IDs
-const slugify = (s: string) =>
-  s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-
-// helper to format distance and travel time
-const formatTravelInfo = (activity) => {
-  const distance = activity.distance.toFixed(1);
-  
-  // If travel_time exists, use it; otherwise fall back to just distance
-  if (activity.travel_time) {
-    return `${distance} km away (${activity.travel_time})`;
-  }
-  
-  return `${distance} km away`;
-};
+// Collect all available images
+const images = [];
+if (activity.image) images.push(activity.image);
+if (activity.image2) images.push(activity.image2);
+if (activity.image3) images.push(activity.image3);
+if (activity.image4) images.push(activity.image4);
+if (activity.image5) images.push(activity.image5);
 ---
 
-<Layout title="Experience · SOWK">
-  <section class="experience-hero">
-    <h1>Things to do in &amp; around Smar Jbeil</h1>
-  </section>
-
-  <!-- ─────────────── boutique minimal separator ─────────────── -->
-  <div class="experience-separator"></div>
-   
-
-  {categories.map((cat) => {
-    const id = slugify(cat);
-    return (
-      <details class="category-section" open>
-        <summary id={id} class="experience-category">{cat}</summary>
-        <div class="experience-row">
-          {activities
-            .filter((a) => a.category === cat)
-            .map((a) => (
-              <a href={`/experience/${a.slug}`} class="experience-card">
-                <img
-                  src={a.image || '/images/placeholder.jpg'}
-                  alt={a.name}
-                  class="experience-thumb"
-                  loading="lazy"
-                  width="300"
-                  height="200"
-                />
-                <h3>{a.name}</h3>
-                <p class="experience-meta">{formatTravelInfo(a)}</p>
-                <span class="experience-link">More info ↗</span>
-              </a>
-          ))}
+<Layout title={`${activity.name} · SOWK`}>
+  <article class="activity-detail">
+    <!-- Image Gallery -->
+    <div class="image-gallery">
+      {images.length === 1 && (
+        <img
+          src={images[0]}
+          alt={activity.name}
+          class="single-image gallery-clickable"
+          width="1200"
+          height="600"
+          data-full-src={images[0]}
+        />
+      )}
+      
+      {images.length === 2 && (
+        <div class="two-images">
+          <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image main gallery-clickable" data-full-src={images[0]} />
+          <img src={images[1]} alt={`${activity.name} - Image 2`} class="gallery-image secondary gallery-clickable" data-full-src={images[1]} />
         </div>
-      </details>
-    );
-  })}
+      )}
+      
+      {images.length === 3 && (
+        <div class="three-images">
+          <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image main gallery-clickable" data-full-src={images[0]} />
+          <div class="side-images">
+            <img src={images[1]} alt={`${activity.name} - Image 2`} class="gallery-image side gallery-clickable" data-full-src={images[1]} />
+            <img src={images[2]} alt={`${activity.name} - Image 3`} class="gallery-image side gallery-clickable" data-full-src={images[2]} />
+          </div>
+        </div>
+      )}
+      
+      {images.length >= 4 && (
+        <div class="four-plus-images">
+          <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image hero gallery-clickable" data-full-src={images[0]} />
+          <div class="image-grid">
+            {images.slice(1, 4).map((img, index) => (
+              <img 
+                src={img} 
+                alt={`${activity.name} - Image ${index + 2}`} 
+                class="gallery-image grid-item gallery-clickable" 
+                data-full-src={img}
+              />
+            ))}
+            {images.length > 4 && (
+              <div class="more-indicator">
+                <img 
+                  src={images[4]} 
+                  alt={`${activity.name} - Image 5`} 
+                  class="gallery-image grid-item dimmed gallery-clickable" 
+                  data-full-src={images[4]}
+                />
+                <span class="more-count">+{images.length - 4}</span>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const rows = document.querySelectorAll('.experience-row');
-    rows.forEach((row, i) => {
-      // how far to nudge (px)
-      const distance = 80;
-      // delay each row so it feels staggered
-      const delay = 600 + i * 200;
-      setTimeout(() => {
-        row.scrollBy({ left: distance, behavior: 'smooth' });
-        // scroll back after a short pause
-        setTimeout(() => {
-          row.scrollBy({ left: -distance, behavior: 'smooth' });
-        }, 800);
-      }, delay);
+    <h1>{activity.name}</h1>
+    <p class="activity-meta">
+      {formatTravelInfo(activity)}
+    </p>
+    <p class="activity-copy">{activity.copy}</p>
+    <a href={activity.link} target="_blank" rel="noopener" class="more-link">
+      Official page / source ↗
+    </a>
+  </article>
+  <a href="/experience" class="back-link">← Back to all experiences</a>
+
+  <!-- Full-screen image modal -->
+  <div id="imageModal" class="image-modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <img id="modalImage" src="" alt="" />
+      <div class="modal-nav">
+        <button id="prevBtn" class="nav-btn prev-btn">‹</button>
+        <button id="nextBtn" class="nav-btn next-btn">›</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const modal = document.getElementById('imageModal');
+      const modalImg = document.getElementById('modalImage');
+      const closeBtn = document.querySelector('.close-modal');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const clickableImages = document.querySelectorAll('.gallery-clickable');
+      
+      let currentImageIndex = 0;
+      let imageList = [];
+
+      // Collect all image sources
+      clickableImages.forEach((img, index) => {
+        imageList.push({
+          src: img.getAttribute('data-full-src') || img.src,
+          alt: img.alt
+        });
+        
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', function() {
+          currentImageIndex = index;
+          openModal();
+        });
+      });
+
+      function openModal() {
+        modal.style.display = 'flex';
+        updateModalImage();
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal() {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+
+      function updateModalImage() {
+        if (imageList[currentImageIndex]) {
+          modalImg.src = imageList[currentImageIndex].src;
+          modalImg.alt = imageList[currentImageIndex].alt;
+        }
+        
+        // Show/hide navigation buttons
+        prevBtn.style.display = imageList.length > 1 ? 'block' : 'none';
+        nextBtn.style.display = imageList.length > 1 ? 'block' : 'none';
+      }
+
+      function showPrevImage() {
+        currentImageIndex = currentImageIndex > 0 ? currentImageIndex - 1 : imageList.length - 1;
+        updateModalImage();
+      }
+
+      function showNextImage() {
+        currentImageIndex = currentImageIndex < imageList.length - 1 ? currentImageIndex + 1 : 0;
+        updateModalImage();
+      }
+
+      // Event listeners
+      closeBtn.addEventListener('click', closeModal);
+      prevBtn.addEventListener('click', showPrevImage);
+      nextBtn.addEventListener('click', showNextImage);
+
+      // Close modal when clicking outside the image
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+
+      // Keyboard navigation
+      document.addEventListener('keydown', function(e) {
+        if (modal.style.display === 'flex') {
+          switch(e.key) {
+            case 'Escape':
+              closeModal();
+              break;
+            case 'ArrowLeft':
+              showPrevImage();
+              break;
+            case 'ArrowRight':
+              showNextImage();
+              break;
+          }
+        }
+      });
     });
-  });
-</script>
-
+  </script>
 </Layout>
 
 <style>
-  /* force Poppins */
-  body, h1, h3, p, a { font-family:'Poppins',sans-serif; }
+body, h1, p, a { font-family:'Poppins', sans-serif; }
 
-  /* ---------- hero ---------- */
-  .experience-hero {
-    text-align: center;
-    margin: 4rem 0 2rem;
-    /* add horizontal padding on all viewports */
-    padding: 0 1.5rem;
-  }
-  .experience-hero h1 {
-    font-size: 2.2rem;
-    font-weight: 700;
-    line-height: 1.25;
-    /* keep it centered and constrain width */
-    max-width: 700px;
-    margin: 0 auto;
+.activity-detail { 
+  max-width: 780px; 
+  margin: 3rem auto; 
+  padding: 0 1rem; 
+}
+
+/* Image Gallery Styles */
+.image-gallery {
+  margin-bottom: 2rem;
+}
+
+.gallery-image {
+  border-radius: 0.75rem;
+  object-fit: cover;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-image:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.gallery-clickable {
+  cursor: pointer;
+}
+
+.gallery-clickable:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* Single Image */
+.single-image {
+  width: 100%;
+  height: 400px;
+  border-radius: 1rem;
+  object-fit: cover;
+}
+
+/* Two Images Layout */
+.two-images {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+  height: 400px;
+}
+
+.two-images .main {
+  height: 100%;
+  width: 100%;
+}
+
+.two-images .secondary {
+  height: 100%;
+  width: 100%;
+}
+
+/* Three Images Layout */
+.three-images {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+  height: 400px;
+}
+
+.three-images .main {
+  height: 100%;
+  width: 100%;
+}
+
+.side-images {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+}
+
+.side-images .side {
+  height: calc(50% - 0.5rem);
+  width: 100%;
+}
+
+/* Four+ Images Layout */
+.four-plus-images {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+  height: 400px;
+}
+
+.four-plus-images .hero {
+  height: 100%;
+  width: 100%;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  height: 100%;
+}
+
+.grid-item {
+  height: calc(50% - 0.25rem);
+  width: 100%;
+}
+
+.more-indicator {
+  position: relative;
+  height: calc(50% - 0.25rem);
+  width: 100%;
+}
+
+.dimmed {
+  filter: brightness(0.4);
+}
+
+.more-count {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: 600;
+  font-size: 1.2rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  pointer-events: none;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .two-images,
+  .three-images,
+  .four-plus-images {
+    grid-template-columns: 1fr;
+    height: auto;
   }
   
-  /* tighter on small screens */
-  @media (max-width: 640px) {
-    .experience-hero {
-      /* bump the vertical margins in a bit if you like */
-      margin: 3rem 0 1.5rem;
-      /* a bit more side padding */
-      padding: 0 2rem;
-    }
-    .experience-hero h1 {
-      /* slightly smaller text for mobile */
-      font-size: 1.8rem;
-    }
-  }
-
-
-  /* details/summary styles */
-  .category-section {
-    margin-bottom:2rem;
-  }
-  .experience-category {
-    cursor:pointer;
-    font-size:1.5rem;
-    font-weight:600;
-    padding:0.5rem 2rem;
-    color:#294534;
-    list-style:none;
-  }
-  /* hide default arrow, use our own if you like */
-  .experience-category::-webkit-details-marker { display:none; }
-
-  /* ─── horizontal swipe row ─── */
-  .experience-row {
-    display: flex;
-    gap: 1rem;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-  
-    /* keep your overall top/right/bottom padding */
-    padding: 1rem 2rem 1.5rem;
-  
-    /* ensure every snap-stop sits 2rem from *either* edge */
-    scroll-padding-inline-start: 2rem;
-    scroll-padding-inline-end:   2rem;
+  .two-images {
+    gap: 0.75rem;
   }
   
-  /* hide the scrollbar in WebKit browsers */
-  .experience-row::-webkit-scrollbar {
-    display: none;
+  .two-images .main,
+  .two-images .secondary {
+    height: 250px;
   }
+  
+  .three-images .main {
+    height: 250px;
+  }
+  
+  .side-images {
+    flex-direction: row;
+    height: 150px;
+  }
+  
+  .side-images .side {
+    height: 100%;
+    width: calc(50% - 0.5rem);
+  }
+  
+  .four-plus-images .hero {
+    height: 250px;
+  }
+  
+  .image-grid {
+    height: 150px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .grid-item {
+    height: 100%;
+    width: 100%;
+  }
+}
 
-  /* card */
-  .experience-card {
-    flex:0 0 180px;
-    scroll-snap-align:start;
-    background:#fff;
-    border-radius:0.75rem;
-    box-shadow:0 12px 32px rgba(0,0,0,0.06);
-    text-decoration:none;
-    color:inherit;
-    display:flex;
-    flex-direction:column;
-    transition:transform .2s ease;
-  }
-  .experience-card:hover { transform:translateY(-4px); }
+/* Rest of the existing styles */
+h1 { 
+  font-size: 2rem; 
+  margin: 1.5rem 0 0.75rem; 
+}
 
-  .experience-thumb {
-    width:100%; height:130px;
-    object-fit:cover;
-    border-bottom:1px solid #eee;
-  }
+.activity-meta { 
+  color: #667; 
+  margin-bottom: 1.5rem; 
+}
 
-  .experience-card h3 {
-    font-size:1rem;
-    font-weight:600;
-    margin:0.6rem 0 0;
-    padding:0 0.8rem;
-  }
-  .experience-meta {
-    font-size:0.8rem;
-    color:#667;
-    padding:0.2rem 0.8rem;
-    margin-bottom:auto;
-    line-height: 1.3;
-  }
-  .experience-link {
-    font-size:0.85rem;
-    font-weight:600;
-    color:#c89a2a;
-    padding:0.6rem 0.8rem;
-  }
-  .experience-link:hover { text-decoration:underline; }
+.activity-copy { 
+  font-size: 1.05rem; 
+  line-height: 1.8; 
+  margin-bottom: 2rem; 
+}
 
-  /* ───── Mobile tweaks ───── */
-  @media (max-width: 600px) {
-    .experience-row {
-      /* reduce left/right padding on phones */
-      padding: 0.75rem 1rem 1rem;
-    }
-    .experience-category {
-      /* reduce the category indent */
-      padding-left: 1rem;
-    }
-  }
+.more-link { 
+  font-weight: 600; 
+  color: #c89a2a; 
+  text-decoration: none; 
+}
 
-  /* ───── Mobile headline tweak ───── */
-  @media (max-width: 600px) {
-    .experience-hero h1 {
-      font-size: 1.5rem;    /* adjust as needed */
-      line-height: 1.2;
-    }
-  }
+.more-link:hover { 
+  text-decoration: underline; 
+}
 
-   /* ─────── boutique minimal separator ─────── */
-  .experience-separator {
-    width: 60px;
-    height: 2px;
-    background-color: #C8B7A6;
-    margin: 2.5rem auto;
-    opacity: 0.6;
+.back-link { 
+  display: block; 
+  text-align: center; 
+  margin: 3rem 0 4rem;
+  color: #294534; 
+  font-weight: 600; 
+}
+
+/* Full-screen image modal */
+.image-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 0.5rem;
+}
+
+.close-modal {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  z-index: 1001;
+}
+
+.close-modal:hover {
+  opacity: 0.7;
+}
+
+.modal-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.nav-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  padding: 1rem;
+  cursor: pointer;
+  border-radius: 50%;
+  pointer-events: auto;
+  transition: background 0.3s ease;
+}
+
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.prev-btn {
+  margin-left: -60px;
+}
+
+.next-btn {
+  margin-right: -60px;
+}
+
+@media (max-width: 768px) {
+  .close-modal {
+    top: -30px;
+    font-size: 1.5rem;
   }
+  
+  .nav-btn {
+    font-size: 1.5rem;
+    padding: 0.75rem;
+  }
+  
+  .prev-btn {
+    margin-left: -40px;
+  }
+  
+  .next-btn {
+    margin-right: -40px;
+  }
+}
 </style>
