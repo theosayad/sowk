@@ -17,9 +17,12 @@ import Layout from '../layouts/Default.astro';
       We usually reply within a few hours.
     </p>
 
-    <a class="contact-btn" href="https://instagram.com/sowk.smarjbeil" target="_blank" rel="noopener">
-      Book via Instagram
-    </a>
+    <div class="button-wrapper">
+      <a class="contact-btn" href="https://instagram.com/sowk.smarjbeil" target="_blank" rel="noopener">
+        Book via Instagram
+      </a>
+    </div>
+
 
     <div class="separator"></div>
 
@@ -134,5 +137,12 @@ import Layout from '../layouts/Default.astro';
         padding: 0.65rem 1.25rem;
       }
     }
+
+    .button-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+
   </style>
 </Layout>
