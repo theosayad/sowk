@@ -68,20 +68,18 @@ import Layout from '../layouts/Default.astro';
     }
 
     .contact-btn {
-      display: inline-block;
-      background-color: #c89a2a;
-      color: white;
-      padding: 0.75rem 1.5rem;
-      font-weight: 600;
-      text-decoration: none;
-      border: none;
-      border-radius: 999px;
-      font-size: 1rem;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-      transition: background-color 0.25s ease;
-      text-align: center;
+      display: block;
       margin: 0 auto;
       width: fit-content;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      background: #c89a2a;
+      color: white;
+      border: none;
+      border-radius: 999px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      transition: background 0.3s ease;
     }
 
     .contact-btn:hover {
@@ -157,11 +155,9 @@ import Layout from '../layouts/Default.astro';
       box-sizing: border-box;
     }
     
-    .contact-form {
-      display: grid;
-      gap: 1rem;
-      max-width: 500px;
-      width: 100%;
+    .contact-form button {
+      align-self: center;
+      justify-self: center;
     }
 
 
