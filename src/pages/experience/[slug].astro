@@ -86,9 +86,41 @@ if (activity.image5) images.push(activity.image5);
       {formatTravelInfo(activity)}
     </p>
     <p class="activity-copy">{activity.copy}</p>
-    <a href={activity.link} target="_blank" rel="noopener" class="more-link">
-      Official page / source ↗
-    </a>
+
+    /* Activity Links */
+    <div class="activity-links">
+      {activity.official_website && (
+        <a href={activity.official_website} target="_blank" rel="noopener" class="more-link">
+          Official Website ↗
+        </a>
+      )}
+      {activity.instagram && (
+        <a href={activity.instagram} target="_blank" rel="noopener" class="more-link">
+          Instagram ↗
+        </a>
+      )}
+      {activity.wikipedia && (
+        <a href={activity.wikipedia} target="_blank" rel="noopener" class="more-link">
+          Wikipedia ↗
+        </a>
+      )}
+      {activity.wikiloc && (
+        <a href={activity.wikiloc} target="_blank" rel="noopener" class="more-link">
+          Wikiloc Trail ↗
+        </a>
+      )}
+      {activity.blog && (
+        <a href={activity.blog} target="_blank" rel="noopener" class="more-link">
+          Blog Post ↗
+        </a>
+      )}
+      {activity.link && (
+        <a href={activity.link} target="_blank" rel="noopener" class="more-link">
+          More Info ↗
+        </a>
+      )}
+    </div>
+
   </article>
   <a href="/experience" class="back-link">← Back to all experiences</a>
 
@@ -552,4 +584,22 @@ h1 {
     margin-right: -40px;
   }
 }
+
+  .activity-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .more-link {
+    font-weight: 600;
+    color: #c89a2a;
+    text-decoration: none;
+  }
+  
+  .more-link:hover {
+    text-decoration: underline;
+  }
+
 </style>
