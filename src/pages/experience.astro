@@ -3,6 +3,8 @@
 
 import Layout from '../layouts/Default.astro';
 import activities from '../data/activities.json' assert { type: 'json' };
+import { formatTravelInfo } from '../utils/formatTravelInfo.ts';
+
 
 // all unique, non‐empty categories
 const categories = [
@@ -12,18 +14,6 @@ const categories = [
 // helper to turn "My Category" → "my-category" for IDs
 const slugify = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-
-// helper to format distance and travel time
-const formatTravelInfo = (activity) => {
-  const distance = activity.distance.toFixed(1);
-  
-  // If travel_time exists, use it; otherwise fall back to just distance
-  if (activity.travel_time) {
-    return `${distance} km away (${activity.travel_time})`;
-  }
-  
-  return `${distance} km away`;
-};
 ---
 
 <Layout title="Experience · SOWK">
