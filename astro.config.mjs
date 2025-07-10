@@ -7,4 +7,7 @@ export default defineConfig({
   base: "/",
   output: "static",
   integrations: [sitemap()],       // ← new line activates the plugin
+  experimental: {
+    assets: true
+  },
 });
