@@ -88,7 +88,7 @@ const schema = {
 <Layout>
   <!-- ⸺ HEAD ONLY ⸺ -->
   <script
-    set:head
+    slot="head"
     type="application/ld+json"
     set:html={JSON.stringify(schema)}
   />
