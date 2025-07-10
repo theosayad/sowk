@@ -59,6 +59,25 @@ import IntroAnimation from '../components/IntroAnimation.astro';
   </script>
   <!-- ─── end JSON-LD ─── -->
 
+  <!-- Google Analytics 4 -->
+  <script async src={`https://www.googletagmanager.com/gtag/js?id=${import.meta.env.PUBLIC_GA4_ID}`}></script>
+  
+  <!--
+    The `is:inline` attribute tells Astro:
+    “Keep this script exactly where I wrote it in the final HTML,
+     don’t bundle it into an external file.”
+    That guarantees gtag() is defined immediately after gtag.js loads.
+  -->
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+  
+    gtag('js', new Date());
+  
+    /* Standard GA4 config: auto–page_view, full IP for geolocation */
+    gtag('config', import.meta.env.PUBLIC_GA4_ID);
+  </script>
+
   <!-- ⸺⸺⸺ Swipable Hero Image Slider ⸺⸺⸺ -->
   <section class="hero-swiper">
     <div class="swiper">
