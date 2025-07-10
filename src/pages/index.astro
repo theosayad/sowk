@@ -1,19 +1,19 @@
 ---
+/* core imports */
 import Layout from '../layouts/Default.astro';
-import IntroAnimation from '../components/IntroAnimation.astro';   /* remove if unused */
+import IntroAnimation from '../components/IntroAnimation.astro';
 
-title: "SOWK | Getaway Guesthouse in Smar Jbeil"
-description: "Stay in a gated stone villa with pool, garden & Crusader-era views — Smar Jbeil, Lebanon."
-image: "/images/hero.jpg"
-type: "website"
-
-/* Hero slider with Astro responsive images */
+/* responsive-image pipeline */
 import { Image } from 'astro:assets';
-
-import heroDusk from '../images/hero.jpg'; 
 import slideKitchen  from '../images/kitchen.jpeg';
 import slidePool     from '../images/pool.jpeg';
 import slideFruits   from '../images/pool_fruits.jpeg';
+
+/* SEO props for <SEO /> component  ——  must be JS exports */
+export const title       = "SOWK | Getaway Guesthouse in Smar Jbeil";
+export const description = "Stay in a gated stone villa with pool, garden & Crusader-era views — Smar Jbeil, Lebanon.";
+export const image       = "/images/hero.jpg";
+export const type        = "website";
 ---
 
 <Layout>
