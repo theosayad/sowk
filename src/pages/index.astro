@@ -12,30 +12,11 @@ export const type        = "website";
 ---
 
 <Layout>
-  ## What To Expect
-
-  ### Private by Design
-
-  Your own gated villa with pool, stone garden, and campfire — completely to yourself.
-
-  ### Steeped in History
-
-  Located in one of Lebanon’s oldest villages, footsteps from a Crusader-era church and stone fortress.
-
-  ### Soulful Comfort
-
-  Cozy interiors, handmade breakfast, and firewood blankets — designed to slow you down.
-
-  "Breathe deep—this is where time slows down." SOWK Guesthouse
-</Layout>
-
-<Layout>
   <!-- ─── JSON-LD: boosted version ─── -->
   <script is:inline set:head type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@graph": [
-      /* ——————————————————— GLOBAL WEBSITE NODE ——————————————————— */
       {
         "@type": "WebSite",
         "@id": "https://www.sowk.org/#website",
@@ -51,7 +32,6 @@ export const type        = "website";
         }
       },
   
-      /* ——————————————————— MAIN BUSINESS ENTITY ——————————————————— */
       {
         "@type": "LodgingBusiness",
         "@id": "https://www.sowk.org/#business",
@@ -67,7 +47,6 @@ export const type        = "website";
         "telephone": "+961-76-492-276",
         "email": "stay@sowk.org",
   
-        /* — Address & Geo — */
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "Main Road",
@@ -81,7 +60,6 @@ export const type        = "website";
           "longitude": 35.6891111
         },
   
-        /* — Amenities — */
         "amenityFeature": [
           { "@type": "LocationFeatureSpecification", "name": "Private pool",        "value": true },
           { "@type": "LocationFeatureSpecification", "name": "Free Wi-Fi",          "value": true },
@@ -90,14 +68,12 @@ export const type        = "website";
         ],
         "petsAllowed": true,
   
-        /* — Basic rating shell (fill later when you have reviews) — */
         "aggregateRating": {
           "@type": "AggregateRating",
           "ratingValue": "5",
           "reviewCount": "12"
         },
   
-        /* — Operational details — */
         "numberOfRooms": {
           "@type": "QuantitativeValue",
           "value": 3
@@ -109,7 +85,6 @@ export const type        = "website";
           "ratingValue": "5"
         },
   
-        /* — Social & brand presence — */
         "sameAs": [
           "https://www.instagram.com/sowklb"
         ],
