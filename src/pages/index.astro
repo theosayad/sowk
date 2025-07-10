@@ -1,11 +1,17 @@
 ---
 import Layout from '../layouts/Default.astro';
-import IntroAnimation from '../components/IntroAnimation.astro';
+import IntroAnimation from '../components/IntroAnimation.astro';   /* remove if unused */
+
+title: "SOWK Eco-Villa | Private Pool Villa in Lebanon"
+description: "Stay in a gated stone villa with pool, garden & Crusader-era views — Smar Jbeil, Lebanon."
+image: "/images/hero.jpg"
+type: "website"
 ---
 
 <Layout>
+
   <!-- ─── JSON-LD structured data (SEO Step 3) ─── -->
-  <script is:inline type="application/ld+json">
+  <script is:inline set:head type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@graph": [
@@ -46,9 +52,9 @@ import IntroAnimation from '../components/IntroAnimation.astro';
           "longitude": 35.6891111
         },
         "amenityFeature": [
-          { "@type": "LocationFeatureSpecification", "name": "Private pool",         "value": true },
-          { "@type": "LocationFeatureSpecification", "name": "Free Wi-Fi",            "value": true },
-          { "@type": "LocationFeatureSpecification", "name": "Optional Breakfast",    "value": true }
+          { "@type": "LocationFeatureSpecification", "name": "Private pool",      "value": true },
+          { "@type": "LocationFeatureSpecification", "name": "Free Wi-Fi",        "value": true },
+          { "@type": "LocationFeatureSpecification", "name": "Optional Breakfast","value": true }
         ],
         "sameAs": [
           "https://www.instagram.com/sowklb"
@@ -58,25 +64,6 @@ import IntroAnimation from '../components/IntroAnimation.astro';
   }
   </script>
   <!-- ─── end JSON-LD ─── -->
-
-  <!-- Google Analytics 4 -->
-  <script async src={`https://www.googletagmanager.com/gtag/js?id=${import.meta.env.PUBLIC_GA4_ID}`}></script>
-  
-  <!--
-    The `is:inline` attribute tells Astro:
-    “Keep this script exactly where I wrote it in the final HTML,
-     don’t bundle it into an external file.”
-    That guarantees gtag() is defined immediately after gtag.js loads.
-  -->
-  <script is:inline>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-  
-    gtag('js', new Date());
-  
-    /* Standard GA4 config: auto–page_view, full IP for geolocation */
-    gtag('config', import.meta.env.PUBLIC_GA4_ID);
-  </script>
 
   <!-- ⸺⸺⸺ Swipable Hero Image Slider ⸺⸺⸺ -->
   <section class="hero-swiper">
