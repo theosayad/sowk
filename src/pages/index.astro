@@ -9,86 +9,91 @@ export const title       = "SOWK | Getaway Guesthouse in Smar Jbeil";
 export const description = "Stay in a gated stone villa with pool, garden & Crusader-era views — Smar Jbeil, Lebanon.";
 export const image       = "/images/hero.jpg";
 export const type        = "website";
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+  {
+          "@type": "WebSite",
+          "@id": "https://www.sowk.org/#website",
+          "url": "https://www.sowk.org/",
+          "name": "SOWK Guesthouse",
+          "description": "Private eco-villa in Smar Jbeil, Lebanon — stone architecture, pool & Crusader-era views.",
+          "inLanguage": "en",
+          "publisher": { "@id": "https://www.sowk.org/#business" },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://www.sowk.org/?s={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "LodgingBusiness",
+          "@id": "https://www.sowk.org/#business",
+          "name": "SOWK Guesthouse",
+          "alternateName": "Somewhere Only We Know",
+          "url": "https://www.sowk.org/",
+          "image": [
+            "https://www.sowk.org/images/hero.jpg",
+            "https://www.sowk.org/images/smarjbeilcitadel.jpg"
+          ],
+          "description": "Gated stone villa with private pool, garden fireplace and optional breakfast. Footsteps from Smar Jbeil’s Crusader citadel. Sleeps up to 6 guests.",
+          "priceRange": "$$ – $$$",
+          "telephone": "+961-76-492-276",
+          "email": "stay@sowk.org",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Main Road",
+            "addressLocality": "Smar Jbeil",
+            "addressRegion": "North Governorate",
+            "addressCountry": "LB"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 34.2211667,
+            "longitude": 35.6891111
+          },
+          "amenityFeature": [
+            { "@type": "LocationFeatureSpecification", "name": "Private pool",       "value": true },
+            { "@type": "LocationFeatureSpecification", "name": "Free Wi-Fi",         "value": true },
+            { "@type": "LocationFeatureSpecification", "name": "Firepit & wood",     "value": true },
+            { "@type": "LocationFeatureSpecification", "name": "Optional breakfast", "value": true }
+          ],
+          "petsAllowed": "yes",
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "5",
+            "reviewCount": "12"
+          },
+          "numberOfRooms": {
+            "@type": "QuantitativeValue",
+            "value": 3
+          },
+          "currenciesAccepted": "USD, LBP",
+          "paymentAccepted": "Cash, Credit Card",
+          "sameAs": [
+            "https://www.instagram.com/sowklb"
+          ],
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.sowk.org/images/sowk_logo-min.png",
+            "width": 180,
+            "height": 180
+          }
+        }
+      ]
+    }
+  ]
+};
 ---
 
 <Layout>
-  <!-- ─── JSON-LD: boosted version ─── -->
-  <script set:head type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebSite",
-        "@id": "https://www.sowk.org/#website",
-        "url": "https://www.sowk.org/",
-        "name": "SOWK Guesthouse",
-        "description": "Private eco-villa in Smar Jbeil, Lebanon — stone architecture, pool & Crusader-era views.",
-        "inLanguage": "en",
-        "publisher": { "@id": "https://www.sowk.org/#business" },
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://www.sowk.org/?s={search_term_string}",
-          "query-input": "required name=search_term_string"
-        }
-      },
-      {
-        "@type": "LodgingBusiness",
-        "@id": "https://www.sowk.org/#business",
-        "name": "SOWK Guesthouse",
-        "alternateName": "Somewhere Only We Know",
-        "url": "https://www.sowk.org/",
-        "image": [
-          "https://www.sowk.org/images/hero.jpg",
-          "https://www.sowk.org/images/smarjbeilcitadel.jpg"
-        ],
-        "description": "Gated stone villa with private pool, garden fireplace and optional breakfast. Footsteps from Smar Jbeil’s Crusader citadel. Sleeps up to 6 guests.",
-        "priceRange": "$$ – $$$",
-        "telephone": "+961-76-492-276",
-        "email": "stay@sowk.org",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "Main Road",
-          "addressLocality": "Smar Jbeil",
-          "addressRegion": "North Governorate",
-          "addressCountry": "LB"
-        },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": 34.2211667,
-          "longitude": 35.6891111
-        },
-        "amenityFeature": [
-          { "@type": "LocationFeatureSpecification", "name": "Private pool",       "value": true },
-          { "@type": "LocationFeatureSpecification", "name": "Free Wi-Fi",         "value": true },
-          { "@type": "LocationFeatureSpecification", "name": "Firepit & wood",     "value": true },
-          { "@type": "LocationFeatureSpecification", "name": "Optional breakfast", "value": true }
-        ],
-        "petsAllowed": "yes",
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "5",
-          "reviewCount": "12"
-        },
-        "numberOfRooms": {
-          "@type": "QuantitativeValue",
-          "value": 3
-        },
-        "currenciesAccepted": "USD, LBP",
-        "paymentAccepted": "Cash, Credit Card",
-        "sameAs": [
-          "https://www.instagram.com/sowklb"
-        ],
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://www.sowk.org/images/sowk_logo-min.png",
-          "width": 180,
-          "height": 180
-        }
-      }
-    ]
-  }
-  </script>
-  <!-- ─── end JSON-LD ─── -->
+  <!-- ⸺ HEAD ONLY ⸺ -->
+  <script
+    set:head
+    type="application/ld+json"
+    set:html={JSON.stringify(schema)}
+  />
   
   <!-- Swipable Hero Image Slider (fills entire viewport below header) -->
   <section class="hero-swiper" aria-label="Highlights of SOWK Guesthouse">
@@ -179,18 +184,17 @@ export const type        = "website";
   
   <!-- ────────────── QUOTE STRIP (high-end version) ────────────── -->
   <section class="quote-strip" aria-label="Evening ambience at SOWK Guesthouse">
+    <!-- QUOTE STRIP / HERO BANNER -->
     <figure class="quote-media">
       <Image
         src={slidePool}
         alt="Twilight view of SOWK Guesthouse framed by olive branches and lantern glow"
         widths={[640, 1024, 1600]}
         formats={['avif', 'webp', 'jpeg']}
-        aspectRatio={21/9}       /* extra-wide cinematic banner */
         loading="lazy"
       />
-  
       <figcaption class="quote-overlay">
-        <q>Breathe deep—this is&nbsp;where time slows down.</q>
+        <q>Breathe deep—this is where time slows down.</q>
         <span class="quote-author">SOWK Guesthouse</span>
       </figcaption>
     </figure>
@@ -288,7 +292,18 @@ body, h1, h2, h3, p, a, button { font-family: 'Poppins', sans-serif; }
 /* —— Luxe banner —— */
 .quote-strip          { position:relative; height:60vh; overflow:hidden; }
 .quote-media picture  { width:100%; height:100%; display:block; }
-.quote-media img      { width:100%; height:100%; object-fit:cover; object-position:center; }
+
+/* page-specific or global */
+.quote-media {
+  width: 100%;
+  aspect-ratio: 21 / 9;   /* CSS handles it—no prop needed */
+  overflow: hidden;
+}
+.quote-media img {        /* keep the image covered */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 /* —— Overlay —— */
 .quote-overlay{
