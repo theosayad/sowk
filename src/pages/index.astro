@@ -4,6 +4,60 @@ import IntroAnimation from '../components/IntroAnimation.astro';
 ---
 
 <Layout>
+  <!-- ─── JSON-LD structured data (SEO Step 3) ─── -->
+  <script is:inline type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://www.sowk.org/#website",
+        "url": "https://www.sowk.org/",
+        "name": "SOWK Eco-Villa",
+        "description": "Private eco-villa in Smar Jbeil, Lebanon — stone architecture, pool & castle views.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://www.sowk.org/?s={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "LodgingBusiness",
+        "@id": "https://www.sowk.org/#business",
+        "name": "SOWK Eco-Villa",
+        "url": "https://www.sowk.org/",
+        "image": [
+          "https://www.sowk.org/images/hero.jpg",
+          "https://www.sowk.org/images/smarjbeilcitadel.jpg"
+        ],
+        "description": "A private, gated stone villa with pool and garden, footsteps from Smar Jbeil’s Crusader citadel. Sleeps up to 6 guests.",
+        "priceRange": "$$$",
+        "telephone": "+961-76-492-276",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Main Road",
+          "addressLocality": "Smar Jbeil",
+          "addressRegion": "North Governorate",
+          "addressCountry": "LB"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 34.2429,
+          "longitude": 35.6821
+        },
+        "amenityFeature": [
+          { "@type": "LocationFeatureSpecification", "name": "Private pool",         "value": true },
+          { "@type": "LocationFeatureSpecification", "name": "Free Wi-Fi",            "value": true },
+          { "@type": "LocationFeatureSpecification", "name": "Breakfast included",    "value": true }
+        ],
+        "sameAs": [
+          "https://www.instagram.com/sowklb"
+        ]
+      }
+    ]
+  }
+  </script>
+  <!-- ─── end JSON-LD ─── -->
 
   <!-- ⸺⸺⸺ Swipable Hero Image Slider ⸺⸺⸺ -->
   <section class="hero-swiper">
