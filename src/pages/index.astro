@@ -6,6 +6,13 @@ title: "SOWK | Getaway Guesthouse in Smar Jbeil"
 description: "Stay in a gated stone villa with pool, garden & Crusader-era views — Smar Jbeil, Lebanon."
 image: "/images/hero.jpg"
 type: "website"
+
+/* Hero slider with Astro responsive images */
+import { Image } from 'astro:assets';
+
+import slideKitchen  from '../images/kitchen.jpeg';
+import slidePool     from '../images/pool.jpeg';
+import slideFruits   from '../images/pool_fruits.jpeg';
 ---
 
 <Layout>
@@ -103,20 +110,47 @@ type: "website"
   }
   </script>
   <!-- ─── end JSON-LD ─── -->
-
   <!-- ⸺⸺⸺ Swipable Hero Image Slider ⸺⸺⸺ -->
-  <section class="hero-swiper">
+  <section class="hero-swiper" aria-label="Highlights of SOWK Guesthouse">
     <div class="swiper">
       <div class="swiper-wrapper">
+  
+        <!-- Slide 1 – kitchen -->
         <div class="swiper-slide">
-          <img src="/images/smarcitadel-skyview.jpg" alt="Citadel view" />
+          <Image
+            src={slideKitchen}
+            alt="Open-plan kitchen with vaulted stone arches, warm pendant lighting and wooden island at SOWK Guesthouse"
+            widths={[640, 960, 1440]}
+            formats={['avif', 'webp', 'jpeg']}
+            aspectRatio={16/9}
+            loading="eager"      /* improves LCP for first viewport image */
+          />
         </div>
+  
+        <!-- Slide 2 – twilight pool -->
         <div class="swiper-slide">
-          <img src="/images/smarjbeilcitadel.jpg" alt="Smar Jbeil walls" />
+          <Image
+            src={slidePool}
+            alt="Twilight view of SOWK Guesthouse’s private pool bordered by olive trees and stone walls"
+            widths={[640, 960, 1440]}
+            formats={['avif', 'webp', 'jpeg']}
+            aspectRatio={16/9}
+            loading="lazy"
+          />
         </div>
+  
+        <!-- Slide 3 – floating-fruit tray -->
         <div class="swiper-slide">
-          <img src="/images/batroun-port.jpg" alt="Batroun Port" />
+          <Image
+            src={slideFruits}
+            alt="Breakfast tray with fresh fruits floating on the pool’s turquoise water at SOWK Guesthouse"
+            widths={[640, 960, 1440]}
+            formats={['avif', 'webp', 'jpeg']}
+            aspectRatio={16/9}
+            loading="lazy"
+          />
         </div>
+  
       </div>
       <div class="swiper-pagination"></div>
     </div>
