@@ -1,0 +1,36 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  url?: string;
+  type?: "website" | "article";
+}
+const {
+  title = "SOWK",
+  description = "Slow down in a 12th-century Lebanese village.",
+  image = "/images/og-default.jpg",
+  url   = new URL(Astro.url.pathname, import.meta.env.SITE).href,
+  type  = "website",
+} = Astro.props;
+---
+<head>
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={url} />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content={type} />
+  <meta property="og:title"       content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image"       content={image} />
+  <meta property="og:url"         content={url} />
+
+  <!-- Twitter -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image"       content={image} />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
