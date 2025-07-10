@@ -1,54 +1,57 @@
 ---
 /*
   Default site-wide layout
-  ───────────────────────────────────────────────────────────────
-  • Works in dev and on any host thanks to BASE ("/" vs "/sowk/")
-  • Renders <Header /> and <Footer /> on every page
+  ────────────────────────────────────────────────────────────────
+  • Adds SEO meta, GA4, favicon, fonts, header & footer on every page
+  • BASE handles GitHub Pages sub-folder builds
 */
-import SEO from '../components/SEO.astro';
+import SEO    from '../components/SEO.astro';
 import Header from '../components/Header.astro';
-import Footer  from '../components/Footer.astro';
+import Footer from '../components/Footer.astro';
 
-const BASE = import.meta.env.BASE_URL;     // "/" locally & Netlify, "/sowk/" on GitHub Pages
+const BASE = import.meta.env.BASE_URL;      // "/" on Netlify, "/sowk/" on GitHub Pages
 ---
 
 <!DOCTYPE html>
 <html lang="en">
-  <SEO {...Astro.props} />
   <head>
+    <!-- ────────── Core meta & charset ────────── -->
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
 
-    <!-- ─────────── Favicon & web-manifest ─────────── -->
+    <!-- ────────── Dynamic SEO (title, description, OG, etc.) ────────── -->
+    <SEO {...Astro.props} />
+
+    <!-- ────────── Favicon & manifest ────────── -->
     <link rel="icon" href={`${BASE}images/favicon.svg`} />
 
-    <!-- ─────────── Google Fonts ─────────── -->
+    <!-- ────────── Google Fonts ────────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=DM+Sans:wght@400;500;600&family=Poppins:wght@400;500;600&family=Quicksand:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
+      rel="stylesheet" />
 
-    <!--  Self-host / add more fonts (e.g. “canopee”) here if needed  -->
-
-    <!-- ─────────── Page Title (fallback → “SOWK”) ─────────── -->
-    <title><slot name="title">SOWK</slot></title>
-
-    <!-- ─────────── Site-wide stylesheet ─────────── -->
+    <!-- ────────── Global stylesheet ────────── -->
     <link rel="stylesheet" href={`${BASE}styles/global.css`} />
+
+    <!-- ────────── Google Analytics 4 (site-wide) ────────── -->
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${import.meta.env.PUBLIC_GA4_ID}`}></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', import.meta.env.PUBLIC_GA4_ID);   // full IP, auto page_view
+    </script>
   </head>
 
   <body>
-    <!-- ─────────── Header ─────────── -->
     <Header />
 
-    <!-- ─────────── Page content ─────────── -->
     <main>
       <slot />
     </main>
 
-    <!-- ─────────── Footer ─────────── -->
     <Footer />
   </body>
 </html>
