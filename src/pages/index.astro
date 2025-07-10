@@ -111,7 +111,8 @@ import slideFruits   from '../images/pool_fruits.jpeg';
   }
   </script>
   <!-- ─── end JSON-LD ─── -->
-  <!-- ⸺⸺⸺ Swipable Hero Image Slider ⸺⸺⸺ -->
+  
+  <!-- Swipable Hero Image Slider (fills entire viewport below header) -->
   <section class="hero-swiper" aria-label="Highlights of SOWK Guesthouse">
     <div class="swiper">
       <div class="swiper-wrapper">
@@ -123,8 +124,7 @@ import slideFruits   from '../images/pool_fruits.jpeg';
             alt="Open-plan kitchen with vaulted stone arches, warm pendant lighting and wooden island at SOWK Guesthouse"
             widths={[640, 960, 1440]}
             formats={['avif', 'webp', 'jpeg']}
-            aspectRatio={16/9}
-            loading="eager"      /* improves LCP for first viewport image */
+            loading="eager"
           />
         </div>
   
@@ -135,7 +135,6 @@ import slideFruits   from '../images/pool_fruits.jpeg';
             alt="Twilight view of SOWK Guesthouse’s private pool bordered by olive trees and stone walls"
             widths={[640, 960, 1440]}
             formats={['avif', 'webp', 'jpeg']}
-            aspectRatio={16/9}
             loading="lazy"
           />
         </div>
@@ -147,7 +146,6 @@ import slideFruits   from '../images/pool_fruits.jpeg';
             alt="Breakfast tray with fresh fruits floating on the pool’s turquoise water at SOWK Guesthouse"
             widths={[640, 960, 1440]}
             formats={['avif', 'webp', 'jpeg']}
-            aspectRatio={16/9}
             loading="lazy"
           />
         </div>
@@ -259,9 +257,10 @@ import slideFruits   from '../images/pool_fruits.jpeg';
 body, h1, h2, h3, p, a, button { font-family: 'Poppins', sans-serif; }
 
 /* ---------- Hero Swiper ---------- */
-.hero-swiper { height: 100vh; overflow:hidden; position:relative; }
+.hero-swiper { height: calc(100dvh - var(--header-h)); overflow:hidden; position:relative; }
 .swiper, .swiper-slide { width:100%; height:100%; }
 .swiper-slide img { width:100%; height:100%; object-fit:cover; }
+.swiper-slide picture{ width:100%; height:100%; object-fit:cover; }
 
 /* ---------- CTA button ---------- */
 .btn--hero{
@@ -341,6 +340,10 @@ body, h1, h2, h3, p, a, button { font-family: 'Poppins', sans-serif; }
   text-transform:uppercase;
   font-family:'DM Sans', sans-serif;
 }
+
+/* Header height variable (adjust to your actual header) */
+:root { --header-h: 80px; }   /* e.g. 80 px desktop & mobile */
+
 </style>
 
 /* ---------- Small tweaks ---------- */
