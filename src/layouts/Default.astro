@@ -38,7 +38,7 @@ const BASE = import.meta.env.BASE_URL;      // "/" on Netlify, "/sowk/" on GitHu
     <!-- ────────── Google Analytics 4 (site-wide) ────────── -->
     {import.meta.env.PROD && (
       <>
-        <script async crossOrigin="anonymous"
+        <script async crossorigin="anonymous"
           src={`https://www.googletagmanager.com/gtag/js?id=${import.meta.env.PUBLIC_GA4_ID}`}>
         </script>
         <script is:inline>
