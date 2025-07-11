@@ -1,16 +1,17 @@
----
+-----
 /*
-  Header ─ Moroseta-inspired navbar
-  • Mobile: hamburger left, centred logo
-  • Desktop: centred logo, nav flush right
+Header ─ Luxury boutique hotel navbar with full-screen overlay
+• Mobile: hamburger left, centred logo, full-screen menu
+• Desktop: centred logo, nav flush right
 */
 const toggleMenu = () => {
-  const nav  = document.getElementById('nav-menu');
-  const icon = document.getElementById('burger-icon');
-  nav?.classList.toggle('open');
-  icon?.classList.toggle('open');
+const nav  = document.getElementById(‘nav-menu’);
+const icon = document.getElementById(‘burger-icon’);
+const body = document.body;
+nav?.classList.toggle(‘open’);
+icon?.classList.toggle(‘open’);
+body.classList.toggle(‘menu-open’);
 };
----
 
 <style>
   /* ───────────── header shell ───────────── */
@@ -36,7 +37,7 @@ const toggleMenu = () => {
   /* ───────────── burger ───────────── */
   .nav-toggle{
     position:absolute;left:0;top:50%;transform:translateY(-50%);
-    display:none;width:30px;height:30px;border:none;background:none;cursor:pointer;z-index:30;
+    display:none;width:30px;height:30px;border:none;background:none;cursor:pointer;z-index:1001;
   }
   .nav-toggle span,
   .nav-toggle span::before,
@@ -51,6 +52,12 @@ const toggleMenu = () => {
   .nav-toggle.open span::before{top:0;transform:rotate(45deg);}
   .nav-toggle.open span::after {top:0;transform:rotate(-45deg);}
 
+  /* Change burger to white when menu is open */
+  .nav-toggle.open span::before,
+  .nav-toggle.open span::after {
+    background: white;
+  }
+
   /* ───────────── nav links ───────────── */
   #nav-menu{
     display:flex;gap:1.5rem;font:500 1rem "Poppins",sans-serif;
@@ -60,45 +67,92 @@ const toggleMenu = () => {
   #nav-menu a{color:#1B2A41;text-decoration:none;transition:color .2s;}
   #nav-menu a:hover{color:#F4B942;}
 
-  /* ───────────── mobile dropdown ───────────── */
-@media (max-width: 768px) {
-  .nav-toggle {
-    display: block;
+  /* ───────────── FULL SCREEN OVERLAY ───────────── */
+  @media (max-width: 768px) {
+    .nav-toggle {
+      display: block;
+    }
+
+    #nav-menu {
+      /* Full screen overlay */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      
+      /* Your brand colors - luxury dark background */
+      background: linear-gradient(135deg, #1B2A41 0%, #2C3E50 100%);
+      
+      /* Center content */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 3rem;
+      
+      /* Typography for luxury feel */
+      font-size: 2rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      
+      /* Animation */
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-20px);
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      z-index: 1000;
+    }
+
+    #nav-menu.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    /* Luxury link styling */
+    #nav-menu a {
+      color: white;
+      text-decoration: none;
+      position: relative;
+      padding: 1rem 2rem;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+      border-radius: 2px;
+    }
+
+    #nav-menu a:hover {
+      color: #F4B942;
+      border-color: #F4B942;
+      background: rgba(244, 185, 66, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(244, 185, 66, 0.2);
+    }
+
+    /* Staggered entrance animation */
+    #nav-menu.open a:nth-child(1) { animation: slideInUp 0.6s ease 0.1s both; }
+    #nav-menu.open a:nth-child(2) { animation: slideInUp 0.6s ease 0.2s both; }
+    #nav-menu.open a:nth-child(3) { animation: slideInUp 0.6s ease 0.3s both; }
+    #nav-menu.open a:nth-child(4) { animation: slideInUp 0.6s ease 0.4s both; }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Prevent body scroll when menu is open */
+    body.menu-open {
+      overflow: hidden;
+    }
   }
-
-  #nav-menu {
-    /* hidden by default */
-    display: none;
-    flex-direction: column;
-
-    /* ----- perfect visual connection to header ----- */
-    position: absolute;
-    top: 100%;              /* aligns directly to bottom edge of header */
-    left: 50%;
-    transform: translateX(-50%);  /* center the panel */
-    
-    width: calc(100% - 3rem);   /* 1.5rem side padding */
-    margin-top: 0;              /* remove vertical gap */
-
-    background: rgba(255, 255, 255, 0.96);
-    backdrop-filter: blur(10px);
-    border-radius: 0 0 12px 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-    
-    padding: 1.5rem 2rem;
-    opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-
-  #nav-menu.open {
-    display: flex;
-    opacity: 1;
-    transform: translateX(-50%);
-  }
-}
-
-
-
 </style>
 
 <header id="site-header">
@@ -106,28 +160,48 @@ const toggleMenu = () => {
     <!-- hamburger -->
     <button class="nav-toggle" id="burger-icon" onclick="toggleMenu()"><span></span></button>
 
-    <!-- centred logo -->
-    <a href="/"><img src="/images/sowk_logo-min.png" alt="SOWK logo" class="logo"/></a>
+```
+<!-- centred logo -->
+<a href="/"><img src="/images/sowk_logo-min.png" alt="SOWK logo" class="logo"/></a>
 
-    <!-- desktop nav / mobile dropdown -->
-    <nav id="nav-menu">
-      <a href="/">Home</a>
-      <a href="/gallery">Gallery</a>
-      <a href="/experience">Experience</a>
-      <a href="/contact">Contact</a>
-    </nav>
+<!-- desktop nav / mobile dropdown -->
+<nav id="nav-menu">
+  <a href="/">Home</a>
+  <a href="/gallery">Gallery</a>
+  <a href="/experience">Experience</a>
+  <a href="/contact">Contact</a>
+</nav>
+```
+
   </div>
 </header>
 
 <script is:inline>
   function toggleMenu(){
-    const nav=document.getElementById('nav-menu');
-    const icon=document.getElementById('burger-icon');
+    const nav = document.getElementById('nav-menu');
+    const icon = document.getElementById('burger-icon');
+    const body = document.body;
+    
     nav?.classList.toggle('open');
     icon?.classList.toggle('open');
+    body.classList.toggle('menu-open');
   }
+
   window.addEventListener('scroll',()=>{
     document.getElementById('site-header')
             .classList.toggle('scrolled',window.scrollY>10);
+  });
+
+  // Close menu when clicking on a link
+  document.querySelectorAll('#nav-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+      const nav = document.getElementById('nav-menu');
+      const icon = document.getElementById('burger-icon');
+      const body = document.body;
+      
+      nav?.classList.remove('open');
+      icon?.classList.remove('open');
+      body.classList.remove('menu-open');
+    });
   });
 </script>
