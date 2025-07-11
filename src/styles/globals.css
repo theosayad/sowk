@@ -35,6 +35,11 @@ h1, h2, h3 {
   letter-spacing: -0.2px;
 }
 
+header,
+footer {
+  font-family: 'Poppins', sans-serif;
+}
+
 body, .hero-description, .btn, p, li, label, input, textarea {
   font-family: 'Poppins', sans-serif;
 }
