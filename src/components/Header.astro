@@ -161,7 +161,7 @@
     <button class="nav-toggle" id="burger-icon" onclick="toggleMenu()"><span></span></button>
 
     <!-- centred logo -->
-    <a href="/"><img src="/images/sowk_logo-min.png" alt="SOWK logo" class="logo"/></a>
+    <a href="/"><img src="https://via.placeholder.com/150x72/1B2A41/FFFFFF?text=SOWK" alt="SOWK logo" class="logo"/></a>
 
     <!-- desktop nav / mobile dropdown -->
     <nav id="nav-menu">
@@ -173,7 +173,18 @@
   </div>
 </header>
 
+<!-- Demo content to show scroll effect -->
+<div style="height: 200vh; padding: 2rem; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+  <h1 style="text-align: center; color: #1B2A41; font-family: 'Poppins', sans-serif; margin-top: 4rem;">
+    Luxury Hotel Experience
+  </h1>
+  <p style="text-align: center; color: #666; max-width: 600px; margin: 2rem auto; line-height: 1.6;">
+    Scroll down to see the header shadow effect. On mobile, click the hamburger menu to see the full-screen overlay navigation.
+  </p>
+</div>
+
 <script>
+  // Global function for menu toggle
   function toggleMenu(){
     const nav = document.getElementById('nav-menu');
     const icon = document.getElementById('burger-icon');
@@ -184,6 +195,7 @@
     body.classList.toggle('menu-open');
   }
 
+  // Scroll effect for header
   window.addEventListener('scroll',()=>{
     document.getElementById('site-header')
             .classList.toggle('scrolled',window.scrollY>10);
