@@ -203,10 +203,15 @@ body, h1, h2, h3, p, a, button { font-family: 'Poppins', sans-serif; }
   height: 60vh;
   min-height: 400px; /* Ensure minimum height on small screens */
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .quote-media {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   display: block;
@@ -216,7 +221,7 @@ body, h1, h2, h3, p, a, button { font-family: 'Poppins', sans-serif; }
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
+  object-position: center center;
 }
 
 .quote-overlay {
@@ -227,27 +232,30 @@ body, h1, h2, h3, p, a, button { font-family: 'Poppins', sans-serif; }
   bottom: 0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   padding: 2rem 1.5rem;
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.1) 0%,
-    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.4) 50%,
     rgba(0, 0, 0, 0.6) 100%
   );
   text-align: center;
   color: #fff;
+  z-index: 2;
 }
 
 .quote-overlay q {
   font-size: clamp(1.1rem, 4vw, 1.8rem);
   font-weight: 400;
   line-height: 1.4;
-  max-width: 600px;
-  margin: 0;
+  max-width: 90%;
+  margin: 0 0 0.5rem 0;
   font-family: 'Playfair Display', serif;
   font-style: italic;
+  display: block;
+  text-align: center;
 }
 
 .quote-author {
@@ -269,14 +277,18 @@ body, h1, h2, h3, p, a, button { font-family: 'Poppins', sans-serif; }
   
   .quote-overlay {
     padding: 1.5rem 1rem;
+    justify-content: center;
   }
   
   .quote-overlay q {
     font-size: 1.2rem;
+    max-width: 95%;
+    line-height: 1.3;
   }
   
   .quote-author {
     font-size: 0.8rem;
+    margin-top: 0.5rem;
   }
 }
 
