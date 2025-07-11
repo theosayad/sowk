@@ -43,6 +43,12 @@
     transition: height 0.3s;
   }
 
+  @media (max-width: 640px) {
+    .logo {
+      height: 80px;
+    }
+  }
+
   /* Desktop Navigation */
   .nav-menu {
     display: flex;
@@ -68,6 +74,9 @@
     cursor: pointer;
     padding: 5px;
     z-index: 1001;
+    position: relative;
+    background: none;
+    border: none;
   }
 
   .hamburger span {
@@ -82,6 +91,7 @@
   /* Hamburger Animation */
   .hamburger.active span:nth-child(1) {
     transform: rotate(45deg) translate(5px, 5px);
+    background: #1B2A41;
   }
 
   .hamburger.active span:nth-child(2) {
@@ -90,6 +100,7 @@
 
   .hamburger.active span:nth-child(3) {
     transform: rotate(-45deg) translate(7px, -6px);
+    background: #1B2A41;
   }
 
   /* Mobile Menu Overlay */
@@ -165,19 +176,12 @@
 
     .hamburger {
       display: flex;
-    }
-
-    .logo {
-      height: 60px;
+      position: absolute;
+      left: 0;
     }
 
     .nav-container {
       justify-content: center;
-    }
-
-    .hamburger {
-      position: absolute;
-      left: 0;
     }
   }
 </style>
