@@ -23,7 +23,11 @@ const BASE = import.meta.env.BASE_URL;      // "/" on Netlify, "/sowk/" on GitHu
     <SEO {...Astro.props} />
 
     <!-- ────────── Favicon & manifest ────────── -->
-    <link rel="icon" href={`${BASE}images/favicon.svg`} />
+    <link rel="icon" type="image/png" sizes="32x32" href={`${BASE}images/favicon-32x32.png`} />
+    <link rel="icon" type="image/png" sizes="16x16" href={`${BASE}images/favicon-16x16.png`} />
+    <link rel="apple-touch-icon" href={`${BASE}images/apple-touch-icon.png`} />
+    <link rel="manifest" href={`${BASE}images/site.webmanifest`} />
+    <link rel="icon" href={`${BASE}images/favicon.ico`} />
 
     <!-- ────────── Google Fonts ────────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
