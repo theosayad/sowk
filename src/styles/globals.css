@@ -1,12 +1,12 @@
-/* ==========================================================================
-   1.  Google Font Imports
-   ========================================================================== */
+/* ========================================================================
+   1. Google Font Imports
+   ======================================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
-/* ==========================================================================
-   2.  A Minimal Reset
-   ========================================================================== */
+/* ========================================================================
+   2. A Minimal Reset
+   ======================================================================== */
 *,
 *::before,
 *::after {
@@ -17,11 +17,11 @@
 
 html { scroll-behavior: smooth; }
 
-/* ==========================================================================
-   3.  Base Typography & Colours
-   ========================================================================== */
+/* ========================================================================
+   3. Base Typography & Colours
+   ======================================================================== */
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'DM Sans', sans-serif;   /* ← global default */
   background-color: #fff;
   color: #1B2A41;
   line-height: 1.6;
@@ -29,56 +29,37 @@ body {
 }
 
 h1, h2, h3 {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', sans-serif;   /* keep headings in Poppins */
   font-weight: 600;
   color: #1B2A41;
   letter-spacing: -0.2px;
 }
 
-header,
-footer {
-  font-family: 'Poppins', sans-serif;
-}
+/* (delete the old header/footer override) */
 
+/* Body copy, buttons, etc. can still opt-in to Poppins
+   if you like the contrast – leave this or adjust as you wish. */
 body, .hero-description, .btn, p, li, label, input, textarea {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'DM Sans', sans-serif;
 }
 
-/* ==========================================================================
-   4.  Layout Utilities
-   ========================================================================== */
-.container {
-  width: min(90%, 1080px);
-  margin-inline: auto;
-  padding: 2rem 1rem;
-}
+/* ========================================================================
+   4. Layout Utilities
+   ======================================================================== */
+.container { /* …unchanged… */ }
 
-/* ==========================================================================
-   5.  Links & Buttons
-   ========================================================================== */
-a {
-  color: inherit;
-  text-decoration: none;
-}
+/* ========================================================================
+   5. Links & Buttons
+   ======================================================================== */
+a { /* …unchanged… */ }
 
-.btn {
-  display: inline-block;
-  background: #F4B942;
-  color: #000;
-  font-weight: 600;
-  padding: 0.75rem 1.25rem;
-  border-radius: 8px;
-  text-align: center;
-  transition: opacity 0.3s ease;
-}
+.btn { /* …unchanged… */ }
 
-.btn:hover { opacity: 0.85; }
-
-/* ==========================================================================
-   6.  Navigation
-   ========================================================================== */
+/* ========================================================================
+   6. Navigation
+   ======================================================================== */
 nav a {
-  font-family: 'DM Sans', sans-serif;   /* keeps it consistent with body */
+  font-family: 'DM Sans', sans-serif;   /* already matches body now */
   font-size: 0.85rem;
   font-weight: 500;
   text-transform: uppercase;
