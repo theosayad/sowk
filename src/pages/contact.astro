@@ -1,31 +1,50 @@
 ---
 /*
-  Contact page — boutique style
+  Bookings page — boutique style
   ─────────────────────────────────────────────────────
-  • Instagram CTA + elegant fallback form
+  • WhatsApp CTA + Airbnb CTA + elegant fallback form
   • Fully static-compatible
 */
 import Layout from '../layouts/Default.astro';
+
+/*
+  🔹 Replace NUMBER below with your full international number
+     without spaces or “+”. Example: 96170987654
+  🔹 The text param pre-fills the chat with a greeting.
+*/
+const whatsappNumber = '96176492276';
+const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+  "Hi! I'm interested in booking a stay at SOWK."
+)}`;
 ---
 
-<Layout title="Contact · SOWK">
+<Layout title="Bookings · SOWK">
   <section class="contact-wrapper">
-    <h1 class="contact-title">Get in touch</h1>
+    <h1 class="contact-title">Book your stay</h1>
 
     <p class="contact-description">
-      For availability and pricing, message us directly on Instagram.<br />
+      The quickest way to reserve is via WhatsApp or through our Airbnb listing.
       We usually reply within a few hours.
     </p>
 
     <div class="button-wrapper">
-      <a class="contact-btn" href="https://instagram.com/sowk.smarjbeil" target="_blank" rel="noopener">
-        Book via Instagram
+      <a class="contact-btn" href={whatsappLink} target="_blank" rel="noopener">
+        Book via WhatsApp
+      </a>
+
+      <a
+        class="contact-btn secondary"
+        href="https://www.airbnb.com/l/56Gqsqb7"
+        target="_blank"
+        rel="noopener"
+      >
+        Book via Airbnb
       </a>
     </div>
 
     <div class="separator"></div>
 
-    <h2 class="form-title">Or use the form below</h2>
+    <h2 class="form-title">Prefer e-mail?</h2>
 
     <div class="form-wrapper">
       <form
@@ -35,11 +54,15 @@ import Layout from '../layouts/Default.astro';
       >
         <input type="text" name="name" placeholder="Name" required />
         <input type="email" name="_replyto" placeholder="Email" required />
-        <textarea rows="4" name="message" placeholder="Your message" required></textarea>
-        <button type="submit" class="contact-btn">Send Enquiry</button>
+        <textarea
+          rows="4"
+          name="message"
+          placeholder="Your message"
+          required
+        ></textarea>
+        <button type="submit" class="contact-btn">Send enquiry</button>
       </form>
     </div>
-
   </section>
 
   <style>
@@ -66,24 +89,37 @@ import Layout from '../layouts/Default.astro';
       margin: 0 auto 2rem;
     }
 
+    .button-wrapper {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
+    }
+
     .contact-btn {
       display: block;
-      margin: 0 auto;
-      width: fit-content;
       padding: 0.75rem 1.5rem;
       font-weight: 600;
       background: #c89a2a;
       color: white;
       border: none;
       border-radius: 999px;
-      text-align: center;
       text-decoration: none;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
       transition: background 0.3s ease;
     }
-
     .contact-btn:hover {
       background-color: #b3881f;
+    }
+
+    /* subtle variant for the second button */
+    .contact-btn.secondary {
+      background: #637a9f;
+    }
+    .contact-btn.secondary:hover {
+      background: #546a8a;
     }
 
     .separator {
@@ -127,7 +163,6 @@ import Layout from '../layouts/Default.astro';
       font-family: 'Poppins', sans-serif;
       box-sizing: border-box;
     }
-
     .contact-form input:focus,
     .contact-form textarea:focus {
       outline: none;
@@ -138,12 +173,6 @@ import Layout from '../layouts/Default.astro';
     .contact-form button {
       justify-self: center;
       width: fit-content;
-    }
-
-    .button-wrapper {
-      display: flex;
-      justify-content: center;
-      margin-top: 1.5rem;
     }
 
     @media (max-width: 600px) {
