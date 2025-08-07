@@ -16,9 +16,25 @@ const slugify = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 ---
 
-<Layout title="Experience · SOWK">
+<Layout
+  title="Curated Experiences Around SOWK"
+  description="Uncover curated nature, heritage, and wellness experiences surrounding our guesthouse in Smar Jbeil. From scenic hikes to cultural landmarks, discover the timeless beauty of North Lebanon at your own pace."
+  url="https://sowk.org/experience"
+  image="https://bunny-wp-pullzone-eqa83h6t2a.b‑cdn.net/wp-content/uploads/2023/09/DSC_3824.jpg"
+  type="website"
+>
+  <fragment slot="head">
+    <!-- Optional additional SEO metadata -->
+    <meta name="keywords" content="SOWK, Smar Jbeil, boutique guesthouse, things to do Lebanon, North Lebanon travel, eco experiences, cultural escapes, scenic hikes, nature retreats" />
+
+    <!-- Open Graph + Twitter image with alt text -->
+    <meta property="og:image" content="https://bunny-wp-pullzone-eqa83h6t2a.b-cdn.net/wp-content/uploads/2023/09/DSC_3824.jpg" />
+    <meta name="twitter:image" content="https://bunny-wp-pullzone-eqa83h6t2a.b-cdn.net/wp-content/uploads/2023/09/DSC_3824.jpg" />
+    <meta property="og:image:alt" content="View from inside the Smar Jbeil citadel, framed by stone arches and wild greenery" />
+  </fragment>
+
   <section class="experience-hero">
-    <h1>Things to do in &amp; around Smar Jbeil</h1>
+    <h1>Curated Experiences &amp; Around SOWK</h1>
   </section>
 
   <!-- ─────────────── boutique minimal separator ─────────────── -->
