@@ -19,9 +19,57 @@ if (activity.image2) images.push(activity.image2);
 if (activity.image3) images.push(activity.image3);
 if (activity.image4) images.push(activity.image4);
 if (activity.image5) images.push(activity.image5);
+
+// SEO data preparation
+const pageTitle = `${activity.name} · SOWK`;
+const pageDescription = activity.copy ? 
+  activity.copy.slice(0, 160) + (activity.copy.length > 160 ? '...' : '') : 
+  `Discover ${activity.name} - an amazing experience in ${activity.location || 'Lebanon'}.`;
+const canonicalURL = `https://sowk.org/experience/${slug}`;
+const ogImage = activity.image || '/default-og-image.jpg'; // fallback image
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "TouristAttraction",
+  "name": activity.name,
+  "description": activity.copy,
+  "url": canonicalURL,
+  "image": ogImage,
+  ...(activity.location && { "address": activity.location }),
+  ...(activity.official_website && { "sameAs": activity.official_website })
+};
 ---
 
-<Layout title={`${activity.name} · SOWK`}>
+<Layout title={pageTitle}>
+  <!-- SEO Meta Tags -->
+  <meta slot="head" name="description" content={pageDescription} />
+  <meta slot="head" name="keywords" content={`${activity.name}, Lebanon travel, experiences, tourism, ${activity.location || ''}, ${activity.category || ''}`} />
+  <meta slot="head" name="author" content="SOWK" />
+  <meta slot="head" name="robots" content="index, follow" />
+  <link slot="head" rel="canonical" href={canonicalURL} />
+
+  <!-- Open Graph / Facebook -->
+  <meta slot="head" property="og:type" content="website" />
+  <meta slot="head" property="og:title" content={pageTitle} />
+  <meta slot="head" property="og:description" content={pageDescription} />
+  <meta slot="head" property="og:image" content={ogImage} />
+  <meta slot="head" property="og:url" content={canonicalURL} />
+  <meta slot="head" property="og:site_name" content="SOWK" />
+  <meta slot="head" property="og:locale" content="en_US" />
+
+  <!-- Twitter Card -->
+  <meta slot="head" name="twitter:card" content="summary_large_image" />
+  <meta slot="head" name="twitter:title" content={pageTitle} />
+  <meta slot="head" name="twitter:description" content={pageDescription} />
+  <meta slot="head" name="twitter:image" content={ogImage} />
+
+  <!-- Additional SEO Meta Tags -->
+  <meta slot="head" name="geo.region" content="LB" />
+  <meta slot="head" name="geo.placename" content={activity.location || 'Lebanon'} />
+  <meta slot="head" name="theme-color" content="#c89a2a" />
+
+  <!-- Structured Data (JSON-LD) -->
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
+
   <article class="activity-detail">
     <!-- Image Gallery -->
     <div class="image-gallery">
@@ -33,29 +81,30 @@ if (activity.image5) images.push(activity.image5);
           width="1200"
           height="600"
           data-full-src={images[0]}
+          loading="eager"
         />
       )}
       
       {images.length === 2 && (
         <div class="two-images">
-          <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image main gallery-clickable" data-full-src={images[0]} />
-          <img src={images[1]} alt={`${activity.name} - Image 2`} class="gallery-image secondary gallery-clickable" data-full-src={images[1]} />
+          <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image main gallery-clickable" data-full-src={images[0]} loading="eager" />
+          <img src={images[1]} alt={`${activity.name} - Image 2`} class="gallery-image secondary gallery-clickable" data-full-src={images[1]} loading="lazy" />
         </div>
       )}
       
       {images.length === 3 && (
         <div class="three-images">
-          <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image main gallery-clickable" data-full-src={images[0]} />
+          <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image main gallery-clickable" data-full-src={images[0]} loading="eager" />
           <div class="side-images">
-            <img src={images[1]} alt={`${activity.name} - Image 2`} class="gallery-image side gallery-clickable" data-full-src={images[1]} />
-            <img src={images[2]} alt={`${activity.name} - Image 3`} class="gallery-image side gallery-clickable" data-full-src={images[2]} />
+            <img src={images[1]} alt={`${activity.name} - Image 2`} class="gallery-image side gallery-clickable" data-full-src={images[1]} loading="lazy" />
+            <img src={images[2]} alt={`${activity.name} - Image 3`} class="gallery-image side gallery-clickable" data-full-src={images[2]} loading="lazy" />
           </div>
         </div>
       )}
       
       {images.length >= 4 && (
         <div class="four-plus-images">
-          <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image hero gallery-clickable" data-full-src={images[0]} />
+          <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image hero gallery-clickable" data-full-src={images[0]} loading="eager" />
           <div class="image-grid">
             {images.slice(1, 4).map((img, index) => (
               <img 
@@ -63,6 +112,7 @@ if (activity.image5) images.push(activity.image5);
                 alt={`${activity.name} - Image ${index + 2}`} 
                 class="gallery-image grid-item gallery-clickable" 
                 data-full-src={img}
+                loading="lazy"
               />
             ))}
             {images.length > 4 && (
@@ -72,6 +122,7 @@ if (activity.image5) images.push(activity.image5);
                   alt={`${activity.name} - Image 5`} 
                   class="gallery-image grid-item dimmed gallery-clickable" 
                   data-full-src={images[4]}
+                  loading="lazy"
                 />
                 <span class="more-count">+{images.length - 4}</span>
               </div>
@@ -81,52 +132,59 @@ if (activity.image5) images.push(activity.image5);
       )}
     </div>
 
-    <h1>{activity.name}</h1>
-    <p class="activity-meta">
-      {formatTravelInfo(activity)}
-    </p>
-    <p class="activity-copy">{activity.copy}</p>
+    <header>
+      <h1>{activity.name}</h1>
+      <p class="activity-meta">
+        {formatTravelInfo(activity)}
+      </p>
+    </header>
 
-    <div class="activity-links">
-      {activity.official_website && (
-        <a href={activity.official_website} target="_blank" rel="noopener" class="more-link">
-          Official Website ↗
-        </a>
-      )}
-      {activity.instagram && (
-        <a href={activity.instagram} target="_blank" rel="noopener" class="more-link">
-          Instagram ↗
-        </a>
-      )}
-      {activity.wikipedia && (
-        <a href={activity.wikipedia} target="_blank" rel="noopener" class="more-link">
-          Wikipedia ↗
-        </a>
-      )}
-      {activity.wikiloc && (
-        <a href={activity.wikiloc} target="_blank" rel="noopener" class="more-link">
-          Wikiloc Trail ↗
-        </a>
-      )}
-      {activity.blog && (
-        <a href={activity.blog} target="_blank" rel="noopener" class="more-link">
-          Blog Post ↗
-        </a>
-      )}
-      {activity.link && (
-        <a href={activity.link} target="_blank" rel="noopener" class="more-link">
-          More Info ↗
-        </a>
-      )}
+    <div class="activity-content">
+      <p class="activity-copy">{activity.copy}</p>
+
+      <nav class="activity-links" aria-label="Related links">
+        {activity.official_website && (
+          <a href={activity.official_website} target="_blank" rel="noopener nofollow" class="more-link">
+            Official Website ↗
+          </a>
+        )}
+        {activity.instagram && (
+          <a href={activity.instagram} target="_blank" rel="noopener nofollow" class="more-link">
+            Instagram ↗
+          </a>
+        )}
+        {activity.wikipedia && (
+          <a href={activity.wikipedia} target="_blank" rel="noopener nofollow" class="more-link">
+            Wikipedia ↗
+          </a>
+        )}
+        {activity.wikiloc && (
+          <a href={activity.wikiloc} target="_blank" rel="noopener nofollow" class="more-link">
+            Wikiloc Trail ↗
+          </a>
+        )}
+        {activity.blog && (
+          <a href={activity.blog} target="_blank" rel="noopener nofollow" class="more-link">
+            Blog Post ↗
+          </a>
+        )}
+        {activity.link && (
+          <a href={activity.link} target="_blank" rel="noopener nofollow" class="more-link">
+            More Info ↗
+          </a>
+        )}
+      </nav>
     </div>
-
   </article>
-  <a href="/experience" class="back-link">← Back to all experiences</a>
+  
+  <nav aria-label="Breadcrumb navigation">
+    <a href="/experience" class="back-link">← Back to all experiences</a>
+  </nav>
 
   <!-- Full-screen image modal -->
-  <div id="imageModal" class="image-modal" style="display: none;">
+  <div id="imageModal" class="image-modal" style="display: none;" role="dialog" aria-modal="true" aria-label="Image gallery">
     <div class="modal-content">
-      <span class="close-modal">&times;</span>
+      <button class="close-modal" aria-label="Close image gallery">&times;</button>
       <img id="modalImage" src="" alt="" />
       <div class="modal-nav">
         <button id="prevBtn" class="nav-btn prev-btn" aria-label="Previous image">
@@ -174,6 +232,8 @@ if (activity.image5) images.push(activity.image5);
         modal.style.display = 'flex';
         updateModalImage();
         document.body.style.overflow = 'hidden';
+        // Focus management for accessibility
+        closeBtn.focus();
       }
 
       function closeModal() {
@@ -357,7 +417,6 @@ body, h1, p, a { font-family:'Poppins', sans-serif; }
   height: 100%;
   object-fit: cover;
 }
-
 
 .more-count {
   position: absolute;
@@ -563,7 +622,6 @@ h1 {
   }
 }
 
-
 @media (max-width: 768px) {
   .close-modal {
     top: -30px;
@@ -584,21 +642,20 @@ h1 {
   }
 }
 
-  .activity-links {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
-  }
-  
-  .more-link {
-    font-weight: 600;
-    color: #c89a2a;
-    text-decoration: none;
-  }
-  
-  .more-link:hover {
-    text-decoration: underline;
-  }
+.activity-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
 
+.more-link {
+  font-weight: 600;
+  color: #c89a2a;
+  text-decoration: none;
+}
+
+.more-link:hover {
+  text-decoration: underline;
+}
 </style>
