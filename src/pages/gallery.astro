@@ -21,7 +21,7 @@ const structuredData = {
   "@context": "https://schema.org",
   "@type": "ImageGallery",
   "name": "SOWK Guesthouse Gallery",
-  "description": "Visual journey through our Lebanese guesthouse in Smar Jbeil featuring luxury accommodations, stunning views, and authentic Lebanese hospitality",
+  "description": "Visual journey through our Lebanese guesthouse in Smar Jbeil featuring stunning views and authentic Lebanese hospitality",
   "url": "https://sowk.org/gallery",
   "image": images.map(img => ({
     "@type": "ImageObject",
@@ -33,32 +33,29 @@ const structuredData = {
 };
 ---
 
-<Layout title="Gallery · SOWK Guesthouse">
-  <head>
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Explore our luxury guesthouse gallery featuring stunning views, elegant interiors, and authentic Lebanese hospitality in Smar Jbeil. Book your unforgettable mountain retreat today." />
-    <meta name="keywords" content="Lebanon guesthouse, Smar Jbeil accommodation, luxury hotel Lebanon, mountain views Lebanon, Lebanese hospitality, boutique hotel" />
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="SOWK Guesthouse Gallery - Luxury Lebanese Mountain Retreat" />
-    <meta property="og:description" content="Discover breathtaking views, elegant interiors, and authentic Lebanese hospitality at our luxury guesthouse in Smar Jbeil." />
+<Layout
+  title="Gallery · SOWK Guesthouse"
+  description="Browse the curated image gallery of SOWK Guesthouse—an exclusive Lebanese mountain retreat where every suite frames sweeping cedar‑clad horizons, sunset‑drenched stone terraces, and a tranquil infinity‑edge pool."
+  url="https://sowk.org/gallery"
+  image="/images/pool.jpg"
+  type="website"
+>
+  <fragment slot="head">
+    <!-- Page‑specific SEO metadata (overrides defaults from Default.astro) -->
+    <meta name="keywords" content="luxury guesthouse Lebanon, boutique hotel Smar Jbeil, mountain retreat Lebanon, Lebanese hospitality, infinity pool Lebanon, sunset views Lebanon, artisanal stone suites" />
+
+    <!-- Open Graph + Twitter image with descriptive alt text -->
     <meta property="og:image" content="/images/pool.jpg" />
-    <meta property="og:url" content="https://sowk.org/gallery" />
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:title" content="SOWK Guesthouse Gallery - Luxury Lebanese Mountain Retreat" />
-    <meta property="twitter:description" content="Discover breathtaking views, elegant interiors, and authentic Lebanese hospitality." />
-    <meta property="twitter:image" content="/images/pool.jpg" />
-    
+    <meta name="twitter:image" content="/images/pool.jpg" />
+    <meta property="og:image:alt" content="Infinity-edge pool overlooking cedar‑clad mountains at golden hour" />
+
     <!-- Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-    
+
     <!-- Preload critical images -->
     <link rel="preload" as="image" href="/images/pool.webp" type="image/webp" />
     <link rel="preload" as="image" href="/images/sunset.webp" type="image/webp" />
-  </head>
+  </fragment>
 
   <section class="gallery-hero">
     <div class="hero-content">
@@ -116,17 +113,17 @@ const structuredData = {
             data-category={image.category}
             data-index={index}
           >
-          <div class="image-container">
-            <div class="image-placeholder"></div>
-            <div class="gallery-image">
-              <img
-                src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201%201'%3e%3c/svg%3e"
-                alt={image.title}
-                loading="lazy"
-                data-src={`/images/${image.file}`}
-                data-webp={`/images/${toWebp(image.file)}`}
-              />
-            </div>
+            <div class="image-container">
+              <div class="image-placeholder"></div>
+              <div class="gallery-image">
+                <img
+                  src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201%201'%3e%3c/svg%3e"
+                  alt={image.title}
+                  loading="lazy"
+                  data-src={`/images/${image.file}`}
+                  data-webp={`/images/${toWebp(image.file)}`}
+                />
+              </div>
               
               <div class="image-overlay">
                 <div class="overlay-content">
