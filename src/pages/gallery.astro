@@ -4,10 +4,11 @@ import Layout from '../layouts/Default.astro';
 const images = [
   { file: 'pool.jpg', category: 'exterior', title: 'Little Pool Oasis', description: 'A serene, jewel-like pool nestled in the garden at SOWK Guesthouse in Smar Jbeil, Lebanon—perfect for quiet dips and Mediterranean daydreams.' },
   { file: 'interior.jpg', category: 'interior', title: 'Elegant Living Space', description: 'Thoughtfully designed interiors with modern Lebanese touches and traditional elements' },
-  { file: 'fireplace.jpg', category: 'interior', title: 'Cozy Fireplace Lounge', description: 'Intimate gathering space with traditional stone fireplace and comfortable seating' },
+  { file: 'fireplace.jpg', category: 'interior', title: 'Fireplace Lounge', description: 'A warm and simple space with a stone fireplace and soft seating—made for quiet evenings, shared stories, and moments of stillness at SOWK Guesthouse.' },
   { file: 'garden.jpg', category: 'exterior', title: 'Mediterranean Gardens', description: 'Lush gardens with native Lebanese flora and peaceful corners for relaxation' },
-  { file: 'bedroom.jpg', category: 'interior', title: 'Serene Bedroom Suite', description: 'Peaceful retreat with premium linens, natural light, and mountain views' },
+  { file: 'king-bedroom.jpg', category: 'interior', title: 'King Room', description: 'A simple, calming space with a comfortable king bed, natural textures, and thoughtful details—quietly designed for rest and ease at SOWK Guesthouse.' },
   { file: 'terrace.jpg', category: 'exterior', title: 'The Hammock Terrace', description: 'A breezy terrace designed for laid-back moments—featuring a dining table for sunset meals, two cozy hammocks, and a playful baby foot corner, all overlooking the hills of Smar Jbeil.' },
+  { file: 'twin-room.jpg', category: 'interior', title: 'Twin Room', description: 'Quiet and simple, this twin room offers two single beds, soft lighting, and a clean, uncluttered design—made for slow mornings and easy rest at SOWK Guesthouse.' },
 ];
 
 const categories = ['all', ...new Set(images.map(img => img.category))];
@@ -876,10 +877,11 @@ const structuredData = {
         this.images = [
           { file: 'pool.jpg', category: 'exterior', title: 'Little Pool Oasis', description: 'A serene, jewel-like pool nestled in the garden at SOWK Guesthouse in Smar Jbeil, Lebanon—perfect for quiet dips and Mediterranean daydreams.' },
           { file: 'interior.jpg', category: 'interior', title: 'Elegant Living Space', description: 'Thoughtfully designed interiors with modern Lebanese touches' },
-          { file: 'fireplace.jpg', category: 'interior', title: 'Cozy Fireplace Lounge', description: 'Intimate gathering space with traditional stone fireplace' },
+          { file: 'fireplace.jpg', category: 'interior', title: 'Fireplace Lounge', description: 'A warm and simple space with a stone fireplace and soft seating—made for quiet evenings, shared stories, and moments of stillness at SOWK Guesthouse.' },
           { file: 'garden.jpg', category: 'exterior', title: 'Mediterranean Gardens', description: 'Lush gardens with native flora and peaceful corners' },
-          { file: 'bedroom.jpg', category: 'interior', title: 'Serene Bedroom Suite', description: 'Peaceful retreat with premium linens and natural light' },
+          { file: 'king-bedroom.jpg', category: 'interior', title: 'King Room', description: 'A simple, calming space with a comfortable king bed, natural textures, and thoughtful details—quietly designed for rest and ease at SOWK Guesthouse.' },
           { file: 'terrace.jpg', category: 'exterior', title: 'The Hammock Terrace', description: 'A breezy terrace designed for laid-back moments—featuring a dining table for sunset meals, two cozy hammocks, and a playful baby foot corner, all overlooking the hills of Smar Jbeil.' },
+          { file: 'twin-room.jpg', category: 'interior', title: 'Twin Room', description: 'Quiet and simple, this twin room offers two single beds, soft lighting, and a clean, uncluttered design—made for slow mornings and easy rest at SOWK Guesthouse.' },
         ];
         this.filteredImages = [...this.images];
       }
