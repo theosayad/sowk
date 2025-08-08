@@ -2,15 +2,13 @@
 import Layout from '../layouts/Default.astro';
 
 const images = [
-  { file: 'pool.jpg', category: 'exterior', title: 'Infinity Pool Oasis', description: 'Stunning infinity pool overlooking the Mediterranean coastline at SOWK Guesthouse in Smar Jbeil, Lebanon' },
-  { file: 'sunset.jpg', category: 'views', title: 'Golden Hour Magic', description: 'Breathtaking sunset views from our panoramic terrace in the Lebanese mountains' },
+  { file: 'pool.jpg', category: 'exterior', title: 'Little Pool Oasis', description: 'A serene, jewel-like pool nestled in the garden at SOWK Guesthouse in Smar Jbeil, Lebanon—perfect for quiet dips and Mediterranean daydreams.' },
   { file: 'interior.jpg', category: 'interior', title: 'Elegant Living Space', description: 'Thoughtfully designed interiors with modern Lebanese touches and traditional elements' },
   { file: 'fireplace.jpg', category: 'interior', title: 'Cozy Fireplace Lounge', description: 'Intimate gathering space with traditional stone fireplace and comfortable seating' },
   { file: 'citadel.jpg', category: 'views', title: 'Historic Citadel Views', description: 'Ancient Lebanese architecture meets modern comfort with views of historic citadel' },
-  { file: 'breakfast.jpg', category: 'dining', title: 'Morning Delights', description: 'Fresh local Lebanese breakfast served with mountain views and traditional hospitality' },
   { file: 'garden.jpg', category: 'exterior', title: 'Mediterranean Gardens', description: 'Lush gardens with native Lebanese flora and peaceful corners for relaxation' },
   { file: 'bedroom.jpg', category: 'interior', title: 'Serene Bedroom Suite', description: 'Peaceful retreat with premium linens, natural light, and mountain views' },
-  { file: 'terrace.jpg', category: 'exterior', title: 'Panoramic Terrace', description: 'Expansive outdoor living space with spectacular vistas of Smar Jbeil and beyond' },
+  { file: 'terrace.jpg', category: 'exterior', title: 'The Hammock Terrace', description: 'A breezy terrace designed for laid-back moments—featuring a dining table for sunset meals, two cozy hammocks, and a playful baby foot corner, all overlooking the hills of Smar Jbeil.' },
 ];
 
 const categories = ['all', ...new Set(images.map(img => img.category))];
@@ -226,7 +224,7 @@ const structuredData = {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      background: linear-gradient(135deg, #dfe5d1 0%, #bfcbb3 100%);
       overflow: hidden;
     }
 
@@ -877,15 +875,13 @@ const structuredData = {
 
       private setupImageData(): void {
         this.images = [
-          { file: 'pool.jpg', category: 'exterior', title: 'Infinity Pool Oasis', description: 'Stunning infinity pool overlooking the Mediterranean coastline' },
-          { file: 'sunset.jpg', category: 'views', title: 'Golden Hour Magic', description: 'Breathtaking sunset views from our panoramic terrace' },
+          { file: 'pool.jpg', category: 'exterior', title: 'Little Pool Oasis', description: 'A serene, jewel-like pool nestled in the garden at SOWK Guesthouse in Smar Jbeil, Lebanon—perfect for quiet dips and Mediterranean daydreams.' },
           { file: 'interior.jpg', category: 'interior', title: 'Elegant Living Space', description: 'Thoughtfully designed interiors with modern Lebanese touches' },
           { file: 'fireplace.jpg', category: 'interior', title: 'Cozy Fireplace Lounge', description: 'Intimate gathering space with traditional stone fireplace' },
           { file: 'citadel.jpg', category: 'views', title: 'Historic Citadel Views', description: 'Ancient architecture meets modern comfort' },
-          { file: 'breakfast.jpg', category: 'dining', title: 'Morning Delights', description: 'Fresh local breakfast served with mountain views' },
           { file: 'garden.jpg', category: 'exterior', title: 'Mediterranean Gardens', description: 'Lush gardens with native flora and peaceful corners' },
           { file: 'bedroom.jpg', category: 'interior', title: 'Serene Bedroom Suite', description: 'Peaceful retreat with premium linens and natural light' },
-          { file: 'terrace.jpg', category: 'exterior', title: 'Panoramic Terrace', description: 'Expansive outdoor living with spectacular vistas' },
+          { file: 'terrace.jpg', category: 'exterior', title: 'The Hammock Terrace', description: 'A breezy terrace designed for laid-back moments—featuring a dining table for sunset meals, two cozy hammocks, and a playful baby foot corner, all overlooking the hills of Smar Jbeil.' },
         ];
         this.filteredImages = [...this.images];
       }
