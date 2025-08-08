@@ -1290,27 +1290,30 @@ const structuredData = {
       }
     });
   </script>
-<!-- Mobile-friendly horizontal scroll for filter tabs -->
-<style is:global>
-  @media (max-width: 768px) {
-    .filter-tabs {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch; /* smooth iOS momentum scroll */
-      scroll-snap-type: x mandatory;     /* optional snap if you like */
-      white-space: nowrap;               /* keep buttons on one line */
-      gap: 0.25rem;                      /* tighter gap on mobile */
-    }
+  <!-- Mobile-friendly horizontal scroll for filter tabs -->
+  <style is:global>
+    @media (max-width: 768px) {
+      .filter-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch; /* smooth iOS momentum scroll */
+        scroll-snap-type: x mandatory;     /* optional snap */
+        white-space: nowrap;               /* keep buttons on one line */
+        gap: 0.25rem;                      /* tighter gap on mobile */
+        width: 100%;                       /* ensure container fits viewport */
+        min-width: 0;                      /* allow flexbox to shrink it */
+        flex: 0 0 100%;                    /* occupy full line but not expand page */
+      }
 
-    /* Hide scrollbar while still allowing swipe */
-    .filter-tabs::-webkit-scrollbar {
-      display: none;
-    }
+      /* Hide scrollbar while still allowing swipe */
+      .filter-tabs::-webkit-scrollbar {
+        display: none;
+      }
 
-    .filter-btn {
-      flex: 0 0 auto;          /* prevent shrinking so each btn keeps width */
-      scroll-snap-align: start;
+      .filter-btn {
+        flex: 0 0 auto;          /* prevent shrinking so each btn keeps width */
+        scroll-snap-align: start;
+      }
     }
-  }
-</style>
+  </style>
 
 </Layout>
