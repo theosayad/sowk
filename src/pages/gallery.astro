@@ -55,6 +55,18 @@ const structuredData = {
     <link rel="preload" as="image" href="/images/sunset.webp" type="image/webp" />
   </fragment>
 
+  <!-- Mobile Pull-to-Refresh Indicator -->
+  <div class="pull-refresh-indicator" id="pullRefreshIndicator">
+    <div class="refresh-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="23,4 23,10 17,10"></polyline>
+        <polyline points="1,20 1,14 7,14"></polyline>
+        <path d="m3.51,9a9,9 0 0 1 14.85,-3.36L23,10M1,14l4.64,4.36A9,9 0 0 0 20.49,15"></path>
+      </svg>
+    </div>
+    <span>Pull to refresh</span>
+  </div>
+
   <section class="gallery-hero">
     <div class="hero-content">
       <h1 class="gallery-title">
@@ -66,21 +78,40 @@ const structuredData = {
       </p>
     </div>
     <div class="hero-gradient"></div>
+    
+    <!-- Scroll indicator for mobile -->
+    <div class="scroll-indicator">
+      <div class="scroll-arrow">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6,9 12,15 18,9"></polyline>
+        </svg>
+      </div>
+    </div>
   </section>
 
   <section class="gallery-main">
+    <!-- Mobile-optimized sticky header -->
+    <div class="mobile-header">
+      <div class="header-content">
+        <h2 class="section-title">Our Gallery</h2>
+        <div class="image-count" id="imageCount">9 images</div>
+      </div>
+    </div>
+
     <div class="gallery-controls">
-      <div class="filter-tabs" role="tablist">
-        {categories.map((category) => (
-          <button 
-            class={`filter-btn ${category === 'all' ? 'active' : ''}`}
-            data-category={category}
-            role="tab"
-            aria-selected={category === 'all' ? 'true' : 'false'}
-          >
-            {category === 'all' ? 'All' : category.charAt(0).toUpperCase() + category.slice(1)}
-          </button>
-        ))}
+      <div class="filter-container">
+        <div class="filter-tabs" role="tablist">
+          {categories.map((category) => (
+            <button 
+              class={`filter-btn ${category === 'all' ? 'active' : ''}`}
+              data-category={category}
+              role="tab"
+              aria-selected={category === 'all' ? 'true' : 'false'}
+            >
+              {category === 'all' ? 'All' : category.charAt(0).toUpperCase() + category.slice(1)}
+            </button>
+          ))}
+        </div>
       </div>
       
       <div class="view-controls">
@@ -111,28 +142,37 @@ const structuredData = {
             data-category={image.category}
             data-index={index}
           >
-            <div class="image-container">
-              <div class="image-placeholder"></div>
-              <div class="gallery-image">
-                <img
-                  src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201%201'%3e%3c/svg%3e"
-                  alt={image.title}
-                  loading="lazy"
-                  data-src={`/images/${image.file}`}
-                  data-webp={`/images/${toWebp(image.file)}`}
-                />
-              </div>
+          <div class="image-container">
+            <div class="image-placeholder"></div>
+            <div class="gallery-image">
+              <img
+                src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201%201'%3e%3c/svg%3e"
+                alt={image.title}
+                loading="lazy"
+                data-src={`/images/${image.file}`}
+                data-webp={`/images/${toWebp(image.file)}`}
+              />
+            </div>
               
               <div class="image-overlay">
                 <div class="overlay-content">
                   <h3 class="image-title">{image.title}</h3>
                   <p class="image-description">{image.description}</p>
-                  <button class="view-btn-overlay" data-index={index}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                    </svg>
-                    View Full Size
-                  </button>
+                  <div class="overlay-actions">
+                    <button class="view-btn-overlay" data-index={index}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                      </svg>
+                      <span>View</span>
+                    </button>
+                    <button class="quick-share-btn" data-index={index}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/>
+                        <polyline points="16,6 12,2 8,6"/>
+                        <line x1="12" y1="2" x2="12" y2="15"/>
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -140,59 +180,99 @@ const structuredData = {
         ))}
       </div>
     </div>
+
+    <!-- Mobile Floating Action Button -->
+    <div class="fab-container">
+      <button class="fab" id="scrollToTop" aria-label="Scroll to top">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="18,15 12,9 6,15"></polyline>
+        </svg>
+      </button>
+    </div>
   </section>
 
-  <!-- Advanced Lightbox -->
+  <!-- Enhanced Mobile Lightbox -->
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="lightbox-backdrop"></div>
     <div class="lightbox-container">
-      <button class="lightbox-close" aria-label="Close lightbox">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-      
-      <button class="lightbox-nav prev" aria-label="Previous image">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="15,18 9,12 15,6"></polyline>
-        </svg>
-      </button>
-      
-      <button class="lightbox-nav next" aria-label="Next image">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="9,18 15,12 9,6"></polyline>
-        </svg>
-      </button>
+      <!-- Mobile-first header -->
+      <div class="lightbox-header">
+        <div class="lightbox-progress">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <button class="lightbox-close" aria-label="Close lightbox">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
       
       <div class="lightbox-content">
         <div class="lightbox-image-container">
+          <!-- Swipe indicators -->
+          <div class="swipe-indicators">
+            <div class="swipe-indicator left">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15,18 9,12 15,6"></polyline>
+              </svg>
+            </div>
+            <div class="swipe-indicator right">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9,18 15,12 9,6"></polyline>
+              </svg>
+            </div>
+          </div>
+          
           <img class="lightbox-image" src="" alt="" />
           <div class="lightbox-loader">
             <div class="loader-spinner"></div>
           </div>
+          
+          <!-- Touch navigation areas -->
+          <button class="touch-nav touch-nav-prev" aria-label="Previous image"></button>
+          <button class="touch-nav touch-nav-next" aria-label="Next image"></button>
         </div>
         
+        <!-- Mobile-optimized info panel -->
         <div class="lightbox-info">
-          <h2 class="lightbox-title"></h2>
+          <div class="info-header">
+            <h2 class="lightbox-title"></h2>
+            <div class="image-counter"></div>
+          </div>
           <p class="lightbox-description"></p>
-          <div class="lightbox-meta">
-            <span class="image-counter"></span>
-            <div class="lightbox-actions">
-              <button class="action-btn" id="share-btn" aria-label="Share image">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/>
-                  <polyline points="16,6 12,2 8,6"/>
-                  <line x1="12" y1="2" x2="12" y2="15"/>
-                </svg>
-                Share
-              </button>
-            </div>
+          
+          <div class="lightbox-actions">
+            <button class="action-btn primary" id="share-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/>
+                <polyline points="16,6 12,2 8,6"/>
+                <line x1="12" y1="2" x2="12" y2="15"/>
+              </svg>
+              Share
+            </button>
+            <button class="action-btn" id="favorite-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+              Like
+            </button>
+            <button class="action-btn" id="download-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                <polyline points="7,10 12,15 17,10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Save
+            </button>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Mobile Toast Notifications -->
+  <div class="toast-container" id="toastContainer"></div>
 
   <style>
     * {
@@ -202,29 +282,82 @@ const structuredData = {
     :root {
       --primary: #1a1a1a;
       --accent: #d4af37;
+      --accent-light: #e6c866;
       --text: #333;
       --text-light: #666;
       --text-lighter: #999;
       --bg: #ffffff;
       --bg-light: #f8f9fa;
+      --bg-dark: #1a1a1a;
       --border: #e1e5e9;
       --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
       --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-      --radius: 16px;
-      --radius-sm: 8px;
+      --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      --radius: 20px;
+      --radius-lg: 24px;
+      --radius-sm: 12px;
+      --radius-xs: 8px;
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
       --bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      --elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    /* Hero Section */
+    /* Enhanced Mobile-First Design */
+    body {
+      overscroll-behavior: none;
+      -webkit-overflow-scrolling: touch;
+      touch-action: manipulation;
+    }
+
+    /* Pull to Refresh Indicator */
+    .pull-refresh-indicator {
+      position: fixed;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 12px 20px;
+      border-radius: 0 0 var(--radius) var(--radius);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 500;
+      z-index: 1000;
+      transition: var(--transition);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .pull-refresh-indicator.visible {
+      top: 0;
+    }
+
+    .refresh-icon {
+      animation: spin 1s linear infinite;
+    }
+
+    .refresh-icon.stopped {
+      animation: none;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Enhanced Hero Section */
     .gallery-hero {
       position: relative;
-      height: 60vh;
-      min-height: 400px;
+      height: 100vh;
+      height: 100dvh; /* Dynamic viewport height for mobile */
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #dfe5d1 0%, #bfcbb3 100%);
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
       overflow: hidden;
     }
 
@@ -249,14 +382,15 @@ const structuredData = {
       color: white;
       z-index: 2;
       position: relative;
+      padding: 0 1rem;
     }
 
     .gallery-title {
-      font-size: clamp(3rem, 8vw, 6rem);
-      font-weight: 800;
+      font-size: clamp(2.5rem, 12vw, 4rem);
+      font-weight: 900;
       margin: 0;
-      line-height: 0.9;
-      letter-spacing: -0.02em;
+      line-height: 0.85;
+      letter-spacing: -0.03em;
     }
 
     .title-line {
@@ -275,6 +409,7 @@ const structuredData = {
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      filter: drop-shadow(0 2px 4px rgba(212, 175, 55, 0.3));
     }
 
     @keyframes slideUp {
@@ -285,12 +420,15 @@ const structuredData = {
     }
 
     .gallery-intro {
-      font-size: 1.25rem;
-      margin: 2rem 0 0;
-      max-width: 600px;
+      font-size: clamp(1rem, 4vw, 1.125rem);
+      margin: 1.5rem 0 0;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
       opacity: 0.9;
       animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards;
       opacity: 0;
+      line-height: 1.6;
     }
 
     @keyframes fadeInUp {
@@ -308,76 +446,165 @@ const structuredData = {
       bottom: 0;
       left: 0;
       right: 0;
-      height: 100px;
+      height: 120px;
       background: linear-gradient(to bottom, transparent, var(--bg));
       z-index: 1;
     }
 
-    /* Main Gallery */
+    /* Mobile Scroll Indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      animation: bounce 2s infinite;
+    }
+
+    .scroll-arrow {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+
+    /* Mobile Header */
+    .mobile-header {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      margin-bottom: 1rem;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0;
+      color: var(--primary);
+    }
+
+    .image-count {
+      font-size: 0.875rem;
+      color: var(--text-light);
+      background: var(--bg-light);
+      padding: 0.375rem 0.75rem;
+      border-radius: var(--radius-xs);
+      font-weight: 500;
+    }
+
+    /* Enhanced Gallery Controls */
     .gallery-main {
-      padding: 4rem 2rem;
+      padding: 0;
       max-width: 1600px;
       margin: 0 auto;
     }
 
     .gallery-controls {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 3rem;
-      gap: 2rem;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding: 0 1rem;
+    }
+
+    .filter-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .filter-container::-webkit-scrollbar {
+      display: none;
     }
 
     .filter-tabs {
       display: flex;
       gap: 0.5rem;
       background: var(--bg-light);
-      padding: 4px;
+      padding: 6px;
       border-radius: var(--radius);
       border: 1px solid var(--border);
+      min-width: max-content;
+      box-shadow: var(--shadow);
     }
 
     .filter-btn {
-      padding: 0.75rem 1.5rem;
+      padding: 0.875rem 1.25rem;
       border: none;
       background: transparent;
       color: var(--text-light);
-      font-weight: 500;
+      font-weight: 600;
       border-radius: var(--radius-sm);
       cursor: pointer;
       transition: var(--transition);
       white-space: nowrap;
       text-transform: capitalize;
+      font-size: 0.9rem;
+      min-width: max-content;
     }
 
     .filter-btn:hover {
       background: rgba(255, 255, 255, 0.8);
       color: var(--text);
+      transform: translateY(-1px);
     }
 
     .filter-btn.active {
       background: white;
       color: var(--primary);
-      box-shadow: var(--shadow);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(-1px);
     }
 
     .view-controls {
       display: flex;
       gap: 0.5rem;
       background: var(--bg-light);
-      padding: 4px;
-      border-radius: var(--radius-sm);
+      padding: 6px;
+      border-radius: var(--radius);
       border: 1px solid var(--border);
+      align-self: flex-start;
+      box-shadow: var(--shadow);
     }
 
     .view-btn {
-      padding: 0.75rem;
+      padding: 0.875rem;
       border: none;
       background: transparent;
       color: var(--text-light);
       cursor: pointer;
-      border-radius: 6px;
+      border-radius: var(--radius-sm);
       transition: var(--transition);
       display: flex;
       align-items: center;
@@ -387,38 +614,42 @@ const structuredData = {
     .view-btn:hover {
       background: rgba(255, 255, 255, 0.8);
       color: var(--text);
+      transform: scale(1.05);
     }
 
     .view-btn.active {
       background: white;
       color: var(--primary);
-      box-shadow: var(--shadow);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: scale(1.05);
     }
 
-    /* Gallery Grid */
+    /* Enhanced Gallery Grid */
     .gallery-container {
       position: relative;
+      padding: 0 1rem;
     }
 
     .gallery-grid {
       display: grid;
-      gap: 2rem;
+      gap: 1rem;
       transition: var(--transition);
     }
 
     .gallery-grid.masonry {
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
       grid-auto-rows: 10px;
     }
 
     .gallery-grid.grid {
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
     }
 
     .gallery-item {
       opacity: 1;
       transform: scale(1);
       transition: var(--transition);
+      break-inside: avoid;
     }
 
     .gallery-item.hidden {
@@ -435,6 +666,7 @@ const structuredData = {
       cursor: pointer;
       transition: var(--transition);
       height: 100%;
+      box-shadow: var(--shadow);
     }
 
     .gallery-grid.masonry .image-container {
@@ -442,7 +674,7 @@ const structuredData = {
     }
 
     .gallery-grid.grid .image-container {
-      height: 280px;
+      height: 300px;
     }
 
     .image-placeholder {
@@ -483,7 +715,7 @@ const structuredData = {
     .gallery-grid.masonry .gallery-image img {
       height: auto;
       min-height: 200px;
-      max-height: 500px;
+      max-height: 600px;
     }
 
     .image-overlay {
@@ -492,25 +724,34 @@ const structuredData = {
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.8));
+      background: linear-gradient(to bottom, transparent 20%, rgba(0, 0, 0, 0.8));
       opacity: 0;
       transition: var(--transition);
       display: flex;
       align-items: flex-end;
-      padding: 2rem;
+      padding: 1.5rem;
     }
 
-    .image-container:hover .image-overlay {
+    .image-container:hover .image-overlay,
+    .image-container:focus-within .image-overlay {
       opacity: 1;
     }
 
-    .image-container:hover {
+    .image-container:hover,
+    .image-container:focus-within {
       transform: translateY(-4px);
-      box-shadow: var(--shadow-lg);
+      box-shadow: var(--shadow-xl);
     }
 
-    .image-container:hover .gallery-image img {
+    .image-container:hover .gallery-image img,
+    .image-container:focus-within .gallery-image img {
       transform: scale(1.05);
+    }
+
+    /* Enhanced Mobile Touch Interactions */
+    .image-container:active {
+      transform: translateY(-2px) scale(0.98);
+      transition: var(--transition-fast);
     }
 
     .overlay-content {
@@ -519,21 +760,33 @@ const structuredData = {
     }
 
     .image-title {
-      font-size: 1.25rem;
-      font-weight: 600;
+      font-size: 1.125rem;
+      font-weight: 700;
       margin: 0 0 0.5rem;
       line-height: 1.3;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     }
 
     .image-description {
-      font-size: 0.9rem;
+      font-size: 0.875rem;
       margin: 0 0 1rem;
       opacity: 0.9;
-      line-height: 1.4;
+      line-height: 1.5;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .overlay-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
     }
 
     .view-btn-overlay {
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.25);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.3);
       color: white;
@@ -544,26 +797,92 @@ const structuredData = {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      font-size: 0.9rem;
-      font-weight: 500;
+      font-size: 0.875rem;
+      font-weight: 600;
+      flex: 1;
+      justify-content: center;
     }
 
-    .view-btn-overlay:hover {
-      background: rgba(255, 255, 255, 0.3);
+    .view-btn-overlay:hover,
+    .view-btn-overlay:active {
+      background: rgba(255, 255, 255, 0.35);
       transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
-    /* Lightbox */
+    .quick-share-btn {
+      background: rgba(212, 175, 55, 0.9);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 0.75rem;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      height: 44px;
+    }
+
+    .quick-share-btn:hover,
+    .quick-share-btn:active {
+      background: var(--accent);
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+    }
+
+    /* Floating Action Button */
+    .fab-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 1rem;
+      z-index: 90;
+    }
+
+    .fab {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: none;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-lg);
+      transition: var(--transition);
+      opacity: 0;
+      transform: scale(0.8);
+    }
+
+    .fab.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .fab:hover,
+    .fab:active {
+      transform: scale(1.1);
+      box-shadow: var(--shadow-xl);
+      background: var(--accent-light);
+    }
+
+    /* Enhanced Mobile Lightbox */
     .lightbox {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
+      height: 100dvh;
       z-index: 1000;
       opacity: 0;
       visibility: hidden;
       transition: var(--transition);
+      overscroll-behavior: contain;
     }
 
     .lightbox.active {
@@ -578,7 +897,7 @@ const structuredData = {
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.95);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(20px);
     }
 
     .lightbox-container {
@@ -586,76 +905,62 @@ const structuredData = {
       width: 100%;
       height: 100%;
       display: flex;
+      flex-direction: column;
+    }
+
+    /* Mobile Lightbox Header */
+    .lightbox-header {
+      position: relative;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 1rem;
+      display: flex;
       align-items: center;
-      justify-content: center;
-      padding: 2rem;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .lightbox-progress {
+      flex: 1;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-right: 1rem;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width 0.3s ease;
     }
 
     .lightbox-close {
-      position: absolute;
-      top: 2rem;
-      right: 2rem;
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
       color: white;
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: var(--transition);
-      z-index: 10;
     }
 
-    .lightbox-close:hover {
+    .lightbox-close:hover,
+    .lightbox-close:active {
       background: rgba(255, 255, 255, 0.2);
-      transform: scale(1.1);
-    }
-
-    .lightbox-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white;
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: var(--transition);
-      z-index: 10;
-    }
-
-    .lightbox-nav:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-50%) scale(1.1);
-    }
-
-    .lightbox-nav.prev {
-      left: 2rem;
-    }
-
-    .lightbox-nav.next {
-      right: 2rem;
+      transform: scale(1.05);
     }
 
     .lightbox-content {
-      max-width: 90vw;
-      max-height: 90vh;
+      flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 2rem;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: var(--radius);
-      border: 1px solid rgba(255, 255, 255, 0.1);
       overflow: hidden;
-      backdrop-filter: blur(20px);
     }
 
     .lightbox-image-container {
@@ -664,16 +969,52 @@ const structuredData = {
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 60vh;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    /* Swipe Indicators */
+    .swipe-indicators {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+      z-index: 10;
+      padding: 0 1rem;
+    }
+
+    .swipe-indicator {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: var(--transition);
+    }
+
+    .swipe-indicator.show {
+      opacity: 1;
+      transform: scale(1);
     }
 
     .lightbox-image {
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
-      border-radius: var(--radius-sm);
       opacity: 0;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.5s ease, transform 0.3s ease;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .lightbox-image.loaded {
@@ -691,27 +1032,66 @@ const structuredData = {
       width: 40px;
       height: 40px;
       border: 3px solid rgba(255, 255, 255, 0.3);
-      border-top: 3px solid white;
+      border-top: 3px solid var(--accent);
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    /* Touch Navigation Areas */
+    .touch-nav {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 25%;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      z-index: 5;
     }
 
+    .touch-nav-prev {
+      left: 0;
+    }
+
+    .touch-nav-next {
+      right: 0;
+    }
+
+    /* Mobile Info Panel */
     .lightbox-info {
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(10px);
-      padding: 2rem;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(20px);
+      padding: 1.5rem;
       color: white;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      max-height: 40vh;
+      overflow-y: auto;
+    }
+
+    .info-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      gap: 1rem;
     }
 
     .lightbox-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin: 0 0 0.5rem;
+      font-size: 1.375rem;
+      font-weight: 700;
+      margin: 0;
+      line-height: 1.3;
+      flex: 1;
+    }
+
+    .image-counter {
+      font-size: 0.875rem;
+      opacity: 0.7;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.375rem 0.75rem;
+      border-radius: var(--radius-xs);
+      white-space: nowrap;
+      font-weight: 500;
     }
 
     .lightbox-description {
@@ -721,124 +1101,457 @@ const structuredData = {
       line-height: 1.6;
     }
 
-    .lightbox-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .image-counter {
-      font-size: 0.9rem;
-      opacity: 0.7;
-    }
-
     .lightbox-actions {
-      display: flex;
-      gap: 1rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.75rem;
     }
 
     .action-btn {
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
       color: white;
-      padding: 0.75rem 1rem;
+      padding: 0.875rem;
       border-radius: var(--radius-sm);
       cursor: pointer;
       transition: var(--transition);
       display: flex;
+      flex-direction: column;
       align-items: center;
       gap: 0.5rem;
-      font-size: 0.9rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-align: center;
     }
 
-    .action-btn:hover {
+    .action-btn:hover,
+    .action-btn:active {
       background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
     }
 
-    /* Responsive Design */
+    .action-btn.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .action-btn.primary:hover,
+    .action-btn.primary:active {
+      background: var(--accent-light);
+      border-color: var(--accent-light);
+    }
+
+    .action-btn.favorited {
+      background: rgba(220, 53, 69, 0.8);
+      border-color: rgba(220, 53, 69, 0.8);
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+      position: fixed;
+      top: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1100;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .toast {
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      min-width: 280px;
+      opacity: 0;
+      transform: translateY(-20px);
+      animation: slideInToast 0.3s ease forwards, slideOutToast 0.3s ease 2.7s forwards;
+    }
+
+    .toast.success {
+      border-left: 4px solid #10b981;
+    }
+
+    .toast.error {
+      border-left: 4px solid #ef4444;
+    }
+
+    .toast.info {
+      border-left: 4px solid var(--accent);
+    }
+
+    @keyframes slideInToast {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideOutToast {
+      to {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+    }
+
+    /* Enhanced Mobile Responsive Design */
     @media (max-width: 768px) {
       .gallery-hero {
-        height: 50vh;
-        min-height: 300px;
-      }
-
-      .gallery-main {
-        padding: 2rem 1rem;
+        height: 85vh;
+        height: 85dvh;
       }
 
       .gallery-controls {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 1rem;
+        position: sticky;
+        top: 4rem;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        margin: 0;
+        padding: 1rem;
+        border-bottom: 1px solid var(--border);
+        z-index: 50;
       }
 
-      .filter-tabs {
-        overflow-x: auto;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-      }
-
-      .filter-tabs::-webkit-scrollbar {
-        display: none;
-      }
-
-      .gallery-grid {
-        gap: 1rem;
-      }
-
-      .gallery-grid.masonry {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      }
-
-      .lightbox-container {
+      .gallery-container {
         padding: 1rem;
       }
 
-      .lightbox-content {
-        max-width: 95vw;
-        max-height: 95vh;
+      .gallery-grid {
+        gap: 0.875rem;
       }
 
-      .lightbox-close {
-        top: 1rem;
-        right: 1rem;
-      }
-
-      .lightbox-nav {
-        width: 48px;
-        height: 48px;
-      }
-
-      .lightbox-nav.prev {
-        left: 1rem;
-      }
-
-      .lightbox-nav.next {
-        right: 1rem;
-      }
-
-      .lightbox-info {
-        padding: 1.5rem;
-      }
-
-      .lightbox-meta {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
-
-    @media (max-width: 480px) {
       .gallery-grid.masonry {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(auto-fill, minmax(min(280px, calc(50vw - 1.5rem)), 1fr));
+      }
+
+      .gallery-grid.grid {
+        grid-template-columns: repeat(auto-fit, minmax(min(250px, calc(50vw - 1.5rem)), 1fr));
       }
 
       .image-overlay {
         padding: 1rem;
+        background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.9));
       }
 
-      .lightbox-nav {
+      .image-title {
+        font-size: 1rem;
+      }
+
+      .image-description {
+        font-size: 0.8125rem;
+        -webkit-line-clamp: 1;
+      }
+
+      .overlay-actions {
+        gap: 0.5rem;
+      }
+
+      .view-btn-overlay {
+        padding: 0.625rem 0.875rem;
+        font-size: 0.8125rem;
+      }
+
+      .quick-share-btn {
+        min-width: 40px;
+        height: 40px;
+      }
+
+      .lightbox-info {
+        padding: 1.25rem;
+        max-height: 35vh;
+      }
+
+      .info-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+      }
+
+      .image-counter {
+        align-self: flex-start;
+      }
+
+      .lightbox-title {
+        font-size: 1.25rem;
+      }
+
+      .lightbox-description {
+        font-size: 0.9375rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .action-btn {
+        padding: 0.75rem;
+        font-size: 0.8125rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .gallery-title {
+        font-size: clamp(2rem, 10vw, 3rem);
+      }
+
+      .gallery-intro {
+        font-size: 0.9375rem;
+        margin-top: 1rem;
+      }
+
+      .mobile-header {
+        margin-bottom: 0;
+      }
+
+      .header-content {
+        padding: 0.875rem;
+      }
+
+      .section-title {
+        font-size: 1.125rem;
+      }
+
+      .image-count {
+        font-size: 0.8125rem;
+        padding: 0.25rem 0.625rem;
+      }
+
+      .gallery-grid.masonry,
+      .gallery-grid.grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+
+      .gallery-grid.grid .image-container {
+        height: 250px;
+      }
+
+      .filter-tabs {
+        padding: 4px;
+        gap: 0.25rem;
+      }
+
+      .filter-btn {
+        padding: 0.75rem 1rem;
+        font-size: 0.8125rem;
+      }
+
+      .view-controls {
+        padding: 4px;
+      }
+
+      .view-btn {
+        padding: 0.75rem;
+      }
+
+      .image-overlay {
+        padding: 0.875rem;
+      }
+
+      .overlay-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .view-btn-overlay {
+        width: 100%;
+      }
+
+      .quick-share-btn {
+        align-self: flex-end;
+      }
+
+      .fab-container {
+        bottom: 1.5rem;
+        right: 0.875rem;
+      }
+
+      .fab {
+        width: 52px;
+        height: 52px;
+      }
+
+      .lightbox-header {
+        padding: 0.875rem;
+      }
+
+      .lightbox-info {
+        padding: 1rem;
+        max-height: 45vh;
+      }
+
+      .lightbox-title {
+        font-size: 1.125rem;
+      }
+
+      .lightbox-description {
+        font-size: 0.875rem;
+      }
+
+      .lightbox-actions {
+        gap: 0.5rem;
+      }
+
+      .action-btn {
+        padding: 0.625rem;
+        font-size: 0.75rem;
+        gap: 0.375rem;
+      }
+
+      .toast {
+        min-width: calc(100vw - 2rem);
+        margin: 0 1rem;
+      }
+    }
+
+    /* Ultra-wide screens */
+    @media (min-width: 1200px) {
+      .gallery-main {
+        padding: 4rem 2rem;
+      }
+
+      .gallery-controls {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0;
+        position: static;
+        background: transparent;
+        backdrop-filter: none;
+        border: none;
+        margin-bottom: 3rem;
+      }
+
+      .gallery-container {
+        padding: 0;
+      }
+
+      .gallery-grid {
+        gap: 2rem;
+      }
+
+      .gallery-grid.masonry {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      }
+
+      .gallery-grid.grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      }
+
+      .mobile-header {
+        display: none;
+      }
+
+      .image-overlay {
+        padding: 2rem;
+      }
+
+      .fab-container {
+        display: none;
+      }
+    }
+
+    /* High DPI displays */
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+      .gallery-image img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+      }
+    }
+
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f0f0f;
+        --bg-light: #1a1a1a;
+        --text: #ffffff;
+        --text-light: #b0b0b0;
+        --text-lighter: #808080;
+        --border: #2a2a2a;
+      }
+
+      .mobile-header,
+      .gallery-controls {
+        background: rgba(15, 15, 15, 0.95);
+        border-color: var(--border);
+      }
+
+      .filter-tabs,
+      .view-controls {
+        background: var(--bg-light);
+        border-color: var(--border);
+      }
+
+      .filter-btn.active,
+      .view-btn.active {
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      .image-count {
+        background: var(--bg-light);
+        color: var(--text-light);
+      }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .gallery-hero::before {
+        animation: none;
+      }
+
+      .scroll-indicator {
+        animation: none;
+      }
+
+      .title-line,
+      .gallery-intro {
+        animation: none;
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* Print styles */
+    @media print {
+      .gallery-hero,
+      .gallery-controls,
+      .mobile-header,
+      .fab-container,
+      .lightbox {
+        display: none;
+      }
+
+      .gallery-main {
+        padding: 0;
+      }
+
+      .gallery-grid {
+        display: block;
+        columns: 2;
+        gap: 1rem;
+      }
+
+      .gallery-item {
+        break-inside: avoid;
+        margin-bottom: 1rem;
+      }
+
+      .image-overlay {
         display: none;
       }
     }
@@ -852,12 +1565,23 @@ const structuredData = {
       description: string;
     }
 
-    class PremiumGallery {
+    interface TouchData {
+      startX: number;
+      startY: number;
+      startTime: number;
+      element: HTMLElement | null;
+    }
+
+    class PremiumMobileGallery {
       private images: ImageData[] = [];
       private currentIndex = 0;
       private filteredImages: ImageData[] = [];
       private lightbox: HTMLElement;
       private galleryGrid: HTMLElement;
+      private touchData: TouchData = { startX: 0, startY: 0, startTime: 0, element: null };
+      private pullRefreshThreshold = 80;
+      private isPullRefreshing = false;
+      private favorites: Set<number> = new Set();
 
       constructor() {
         this.init();
@@ -869,16 +1593,19 @@ const structuredData = {
         this.setupEventListeners();
         this.setupIntersectionObserver();
         this.setupKeyboardNavigation();
-        this.setupTouchGestures();
+        this.setupAdvancedTouchGestures();
+        this.setupPullToRefresh();
+        this.setupScrollEffects();
         this.loadImages();
+        this.loadFavorites();
       }
 
       private setupImageData(): void {
         this.images = [
           { file: 'pool.jpg', category: 'exterior', title: 'Little Pool Oasis', description: 'A serene, jewel-like pool nestled in the garden at SOWK Guesthouse in Smar Jbeil, Lebanon—perfect for quiet dips and Mediterranean daydreams.' },
-          { file: 'interior.jpg', category: 'interior', title: 'Elegant Living Space', description: 'Thoughtfully designed interiors with modern Lebanese touches' },
+          { file: 'interior.jpg', category: 'interior', title: 'Elegant Living Space', description: 'Thoughtfully designed interiors with modern Lebanese touches and traditional elements' },
           { file: 'fireplace.jpg', category: 'interior', title: 'Fireplace Lounge', description: 'A warm and simple space with a stone fireplace and soft seating—made for quiet evenings, shared stories, and moments of stillness at SOWK Guesthouse.' },
-          { file: 'garden.jpg', category: 'exterior', title: 'Mediterranean Gardens', description: 'Lush gardens with native flora and peaceful corners' },
+          { file: 'garden.jpg', category: 'exterior', title: 'Mediterranean Gardens', description: 'Lush gardens with native Lebanese flora and peaceful corners for relaxation' },
           { file: 'king-bedroom.jpg', category: 'interior', title: 'King Room', description: 'A simple, calming space with a comfortable king bed, natural textures, and thoughtful details—quietly designed for rest and ease at SOWK Guesthouse.' },
           { file: 'terrace.jpg', category: 'exterior', title: 'The Hammock Terrace', description: 'A breezy terrace designed for laid-back moments—featuring a dining table for sunset meals, two cozy hammocks, and a playful baby foot corner, all overlooking the hills of Smar Jbeil.' },
           { file: 'twin-room.jpg', category: 'interior', title: 'Twin Room', description: 'Quiet and simple, this twin room offers two single beds, soft lighting, and a clean, uncluttered design—made for slow mornings and easy rest at SOWK Guesthouse.' },
@@ -913,20 +1640,49 @@ const structuredData = {
         // Lightbox controls
         const lightboxClose = document.querySelector('.lightbox-close');
         const lightboxBackdrop = document.querySelector('.lightbox-backdrop');
-        const prevBtn = document.querySelector('.lightbox-nav.prev');
-        const nextBtn = document.querySelector('.lightbox-nav.next');
+        const touchNavs = document.querySelectorAll('.touch-nav');
 
         lightboxClose?.addEventListener('click', () => this.closeLightbox());
         lightboxBackdrop?.addEventListener('click', () => this.closeLightbox());
-        prevBtn?.addEventListener('click', () => this.previousImage());
-        nextBtn?.addEventListener('click', () => this.nextImage());
+        
+        touchNavs.forEach(nav => {
+          nav.addEventListener('click', (e) => {
+            if ((e.target as HTMLElement).classList.contains('touch-nav-prev')) {
+              this.previousImage();
+            } else {
+              this.nextImage();
+            }
+          });
+        });
 
-        // Share button
+        // Action buttons
         const shareBtn = document.getElementById('share-btn');
+        const favoriteBtn = document.getElementById('favorite-btn');
+        const downloadBtn = document.getElementById('download-btn');
+
         shareBtn?.addEventListener('click', () => this.shareImage());
+        favoriteBtn?.addEventListener('click', () => this.toggleFavorite());
+        downloadBtn?.addEventListener('click', () => this.downloadImage());
+
+        // Quick share buttons
+        const quickShareBtns = document.querySelectorAll('.quick-share-btn');
+        quickShareBtns.forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const index = parseInt((e.target as HTMLElement).closest('[data-index]')?.getAttribute('data-index') || '0');
+            this.quickShare(index);
+          });
+        });
+
+        // Floating action button
+        const fab = document.getElementById('scrollToTop');
+        fab?.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
       }
 
       private setupIntersectionObserver(): void {
+        // Image lazy loading
         const imageObserver = new IntersectionObserver(
           (entries) => {
             entries.forEach(entry => {
@@ -937,11 +1693,26 @@ const structuredData = {
               }
             });
           },
-          { rootMargin: '50px' }
+          { rootMargin: '100px' }
         );
 
         const images = document.querySelectorAll('.gallery-image img');
         images.forEach(img => imageObserver.observe(img));
+
+        // Scroll animations
+        const animationObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+              }
+            });
+          },
+          { rootMargin: '50px' }
+        );
+
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        galleryItems.forEach(item => animationObserver.observe(item));
       }
 
       private setupKeyboardNavigation(): void {
@@ -954,55 +1725,226 @@ const structuredData = {
               break;
             case 'ArrowLeft':
               this.previousImage();
+              this.showSwipeIndicator('left');
               break;
             case 'ArrowRight':
+              this.nextImage();
+              this.showSwipeIndicator('right');
+              break;
+            case ' ':
+              e.preventDefault();
               this.nextImage();
               break;
           }
         });
       }
 
-      private setupTouchGestures(): void {
-        let startX = 0;
-        let startY = 0;
+      private setupAdvancedTouchGestures(): void {
+        let startX = 0, startY = 0, moveX = 0, moveY = 0;
+        let isScrolling = false;
+        let swipeThreshold = 50;
+        let velocityThreshold = 0.3;
 
+        // Lightbox touch gestures
         this.lightbox.addEventListener('touchstart', (e) => {
+          if (!this.lightbox.classList.contains('active')) return;
           startX = e.touches[0].clientX;
           startY = e.touches[0].clientY;
-        });
+          this.touchData.startTime = Date.now();
+          isScrolling = false;
+        }, { passive: true });
 
         this.lightbox.addEventListener('touchmove', (e) => {
-          e.preventDefault();
-        });
+          if (!this.lightbox.classList.contains('active')) return;
+          
+          moveX = e.touches[0].clientX - startX;
+          moveY = e.touches[0].clientY - startY;
+
+          // Determine if user is scrolling vertically
+          if (!isScrolling && Math.abs(moveY) > Math.abs(moveX)) {
+            isScrolling = true;
+          }
+
+          // Show swipe indicators for horizontal swipes
+          if (!isScrolling && Math.abs(moveX) > 20) {
+            if (moveX > 0) {
+              this.showSwipeIndicator('left');
+            } else {
+              this.showSwipeIndicator('right');
+            }
+          }
+
+          // Visual feedback for image swiping
+          if (!isScrolling && Math.abs(moveX) > 10) {
+            const lightboxImage = document.querySelector('.lightbox-image') as HTMLElement;
+            if (lightboxImage) {
+              const progress = Math.min(Math.abs(moveX) / 100, 1);
+              lightboxImage.style.transform = `translateX(${moveX * 0.5}px) scale(${1 - progress * 0.1})`;
+              lightboxImage.style.opacity = `${1 - progress * 0.3}`;
+            }
+          }
+        }, { passive: true });
 
         this.lightbox.addEventListener('touchend', (e) => {
           if (!this.lightbox.classList.contains('active')) return;
           
-          const endX = e.changedTouches[0].clientX;
-          const endY = e.changedTouches[0].clientY;
-          const diffX = startX - endX;
-          const diffY = startY - endY;
+          const endTime = Date.now();
+          const timeDiff = endTime - this.touchData.startTime;
+          const velocity = Math.abs(moveX) / timeDiff;
 
-          // Horizontal swipe
-          if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
-            if (diffX > 0) {
-              this.nextImage();
-            } else {
-              this.previousImage();
+          // Reset image transform
+          const lightboxImage = document.querySelector('.lightbox-image') as HTMLElement;
+          if (lightboxImage) {
+            lightboxImage.style.transform = '';
+            lightboxImage.style.opacity = '';
+          }
+
+          this.hideSwipeIndicators();
+
+          // Handle swipe gestures
+          if (!isScrolling) {
+            if (Math.abs(moveX) > swipeThreshold || velocity > velocityThreshold) {
+              if (moveX > 0) {
+                this.previousImage();
+              } else {
+                this.nextImage();
+              }
+            } else if (Math.abs(moveY) > 100 && moveY > 0) {
+              // Swipe down to close
+              this.closeLightbox();
             }
           }
-          // Vertical swipe down to close
-          else if (diffY < -100) {
-            this.closeLightbox();
-          }
+
+          // Reset values
+          startX = startY = moveX = moveY = 0;
+          isScrolling = false;
+        }, { passive: true });
+
+        // Gallery item touch feedback
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        galleryItems.forEach(item => {
+          let touchStartTime = 0;
+          
+          item.addEventListener('touchstart', (e) => {
+            touchStartTime = Date.now();
+            item.classList.add('touch-active');
+          }, { passive: true });
+
+          item.addEventListener('touchend', () => {
+            setTimeout(() => {
+              item.classList.remove('touch-active');
+            }, 150);
+          }, { passive: true });
+
+          item.addEventListener('touchcancel', () => {
+            item.classList.remove('touch-active');
+          }, { passive: true });
         });
       }
 
-      private loadImages(): void {
-        const images = document.querySelectorAll('.gallery-image img');
-        images.forEach(img => {
-          this.loadImage(img as HTMLImageElement);
+      private setupPullToRefresh(): void {
+        let startY = 0;
+        let currentY = 0;
+        let isPulling = false;
+        const indicator = document.getElementById('pullRefreshIndicator')!;
+        const refreshIcon = indicator.querySelector('.refresh-icon')!;
+
+        document.addEventListener('touchstart', (e) => {
+          if (window.scrollY === 0 && !this.lightbox.classList.contains('active')) {
+            startY = e.touches[0].clientY;
+            isPulling = true;
+          }
+        }, { passive: true });
+
+        document.addEventListener('touchmove', (e) => {
+          if (!isPulling || this.isPullRefreshing) return;
+
+          currentY = e.touches[0].clientY;
+          const diff = currentY - startY;
+
+          if (diff > 0 && window.scrollY === 0) {
+            e.preventDefault();
+            const progress = Math.min(diff / this.pullRefreshThreshold, 1);
+            
+            indicator.style.transform = `translateY(${Math.min(diff * 0.5, 60)}px)`;
+            indicator.style.opacity = `${progress}`;
+            
+            if (diff > this.pullRefreshThreshold) {
+              indicator.classList.add('visible');
+              refreshIcon.classList.remove('stopped');
+            } else {
+              indicator.classList.remove('visible');
+              refreshIcon.classList.add('stopped');
+            }
+          }
         });
+
+        document.addEventListener('touchend', () => {
+          if (!isPulling) return;
+
+          const diff = currentY - startY;
+          
+          if (diff > this.pullRefreshThreshold && !this.isPullRefreshing) {
+            this.performPullRefresh();
+          } else {
+            this.resetPullRefresh();
+          }
+
+          isPulling = false;
+          startY = currentY = 0;
+        }, { passive: true });
+      }
+
+      private setupScrollEffects(): void {
+        let ticking = false;
+
+        const updateScrollEffects = () => {
+          const scrollY = window.scrollY;
+          const fab = document.getElementById('scrollToTop')!;
+          
+          // Show/hide floating action button
+          if (scrollY > 300) {
+            fab.classList.add('visible');
+          } else {
+            fab.classList.remove('visible');
+          }
+
+          // Parallax effect for hero
+          const hero = document.querySelector('.gallery-hero') as HTMLElement;
+          if (hero && scrollY < hero.offsetHeight) {
+            hero.style.transform = `translate3d(0, ${scrollY * 0.5}px, 0)`;
+          }
+
+          ticking = false;
+        };
+
+        window.addEventListener('scroll', () => {
+          if (!ticking) {
+            requestAnimationFrame(updateScrollEffects);
+            ticking = true;
+          }
+        }, { passive: true });
+      }
+
+      private loadImages(): void {
+        // Load images with progressive enhancement
+        const images = document.querySelectorAll('.gallery-image img');
+        images.forEach((img, index) => {
+          setTimeout(() => {
+            this.loadImage(img as HTMLImageElement);
+          }, index * 50); // Stagger loading
+        });
+      }
+
+      private loadFavorites(): void {
+        const saved = localStorage.getItem('sowk-gallery-favorites');
+        if (saved) {
+          this.favorites = new Set(JSON.parse(saved));
+        }
+      }
+
+      private saveFavorites(): void {
+        localStorage.setItem('sowk-gallery-favorites', JSON.stringify([...this.favorites]));
       }
 
       private loadImage(img: HTMLImageElement): void {
@@ -1011,43 +1953,52 @@ const structuredData = {
         
         if (!src) return;
 
+        // Create a loading animation
+        const container = img.closest('.image-container');
+        const placeholder = container?.querySelector('.image-placeholder') as HTMLElement;
+
         const tempImg = new Image();
         
-        // Success handler - image loaded successfully
         tempImg.onload = () => {
           img.src = tempImg.src;
           img.classList.add('loaded');
-          const placeholder = img.closest('.image-container')?.querySelector('.image-placeholder');
+          
           if (placeholder) {
-            (placeholder as HTMLElement).style.opacity = '0';
-            setTimeout(() => placeholder.remove(), 300);
+            placeholder.style.opacity = '0';
+            setTimeout(() => {
+              placeholder.remove();
+            }, 300);
+          }
+
+          // Trigger masonry layout if needed
+          if (this.galleryGrid.classList.contains('masonry')) {
+            this.layoutMasonry();
           }
         };
 
-        // ERROR HANDLER - This is the key addition!
         tempImg.onerror = () => {
-          console.log('WebP failed, falling back to JPG:', src);
-          // Remove the error handler to avoid infinite loops
+          console.warn('WebP failed, falling back to JPG:', src);
           tempImg.onerror = null;
-          // Try the JPG version
           tempImg.src = src;
         };
 
-        // Try WebP first if browser supports it AND we have a WebP URL
+        // Progressive loading: try WebP first
         if (webpSrc && this.supportsWebP()) {
-          console.log('Trying WebP first:', webpSrc);
           tempImg.src = webpSrc;
         } else {
-          console.log('Using JPG directly:', src);
           tempImg.src = src;
         }
       }
 
       private supportsWebP(): boolean {
-        const canvas = document.createElement('canvas');
-        canvas.width = 1;
-        canvas.height = 1;
-        return canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+        try {
+          const canvas = document.createElement('canvas');
+          canvas.width = 1;
+          canvas.height = 1;
+          return canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+        } catch {
+          return false;
+        }
       }
 
       private handleFilter(e: Event): void {
@@ -1056,21 +2007,29 @@ const structuredData = {
         
         if (!category) return;
 
-        // Update active button
+        // Haptic feedback if available
+        this.hapticFeedback();
+
+        // Update active button with smooth transition
         document.querySelectorAll('.filter-btn').forEach(b => {
           b.classList.remove('active');
           b.setAttribute('aria-selected', 'false');
         });
+        
         btn.classList.add('active');
         btn.setAttribute('aria-selected', 'true');
 
-        // Filter images with animation
+        // Filter images with staggered animation
         this.filterImages(category);
+        
+        // Update image count
+        this.updateImageCount(category);
       }
 
       private filterImages(category: string): void {
         const items = document.querySelectorAll('.gallery-item');
         
+        // Filter with staggered animation
         items.forEach((item, index) => {
           const itemCategory = (item as HTMLElement).dataset.category;
           const shouldShow = category === 'all' || itemCategory === category;
@@ -1081,7 +2040,7 @@ const structuredData = {
             } else {
               item.classList.add('hidden');
             }
-          }, index * 50);
+          }, index * 30);
         });
 
         // Update filtered images for lightbox navigation
@@ -1092,23 +2051,39 @@ const structuredData = {
         }
       }
 
+      private updateImageCount(category: string): void {
+        const counter = document.getElementById('imageCount');
+        if (counter) {
+          const count = category === 'all' ? this.images.length : 
+                       this.images.filter(img => img.category === category).length;
+          counter.textContent = `${count} image${count !== 1 ? 's' : ''}`;
+        }
+      }
+
       private handleViewToggle(e: Event): void {
         const btn = e.target as HTMLButtonElement;
         const view = btn.dataset.view;
         
         if (!view) return;
 
+        this.hapticFeedback();
+
         // Update active button
         document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
 
-        // Toggle grid class
-        this.galleryGrid.className = `gallery-grid ${view}`;
-
-        // Trigger masonry layout if needed
-        if (view === 'masonry') {
-          this.layoutMasonry();
-        }
+        // Toggle grid class with transition
+        this.galleryGrid.style.opacity = '0.7';
+        
+        setTimeout(() => {
+          this.galleryGrid.className = `gallery-grid ${view}`;
+          
+          if (view === 'masonry') {
+            this.layoutMasonry();
+          }
+          
+          this.galleryGrid.style.opacity = '1';
+        }, 150);
       }
 
       private layoutMasonry(): void {
@@ -1116,9 +2091,11 @@ const structuredData = {
         
         items.forEach((item, index) => {
           const img = item.querySelector('img') as HTMLImageElement;
-          if (img && img.complete) {
-            const height = img.naturalHeight;
-            const spans = Math.ceil(height / 200);
+          if (img && img.complete && img.naturalHeight > 0) {
+            const aspectRatio = img.naturalHeight / img.naturalWidth;
+            const baseHeight = 300;
+            const height = Math.round(baseHeight * aspectRatio);
+            const spans = Math.ceil(height / 10);
             (item as HTMLElement).style.gridRowEnd = `span ${spans}`;
           }
         });
@@ -1129,6 +2106,7 @@ const structuredData = {
         const item = (e.target as Element).closest('.gallery-item') as HTMLElement;
         const index = parseInt(item.dataset.index || '0');
         
+        this.hapticFeedback('medium');
         this.currentIndex = index;
         this.openLightbox();
       }
@@ -1138,23 +2116,36 @@ const structuredData = {
         this.lightbox.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
         
+        // Prevent background scrolling on iOS
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+        
         this.updateLightboxContent();
+        this.updateProgress();
       }
 
       private closeLightbox(): void {
         this.lightbox.classList.remove('active');
         this.lightbox.setAttribute('aria-hidden', 'true');
+        
+        // Restore scrolling
         document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
       }
 
       private previousImage(): void {
         this.currentIndex = this.currentIndex > 0 ? this.currentIndex - 1 : this.images.length - 1;
         this.updateLightboxContent();
+        this.updateProgress();
+        this.hapticFeedback('light');
       }
 
       private nextImage(): void {
         this.currentIndex = this.currentIndex < this.images.length - 1 ? this.currentIndex + 1 : 0;
         this.updateLightboxContent();
+        this.updateProgress();
+        this.hapticFeedback('light');
       }
 
       private updateLightboxContent(): void {
@@ -1166,6 +2157,7 @@ const structuredData = {
         const lightboxDesc = document.querySelector('.lightbox-description') as HTMLElement;
         const imageCounter = document.querySelector('.image-counter') as HTMLElement;
         const loader = document.querySelector('.lightbox-loader') as HTMLElement;
+        const favoriteBtn = document.getElementById('favorite-btn') as HTMLElement;
 
         // Show loader
         if (loader) loader.style.display = 'block';
@@ -1178,10 +2170,18 @@ const structuredData = {
           imageCounter.textContent = `${this.currentIndex + 1} of ${this.images.length}`;
         }
 
-        // Load high-res image with fallback
+        // Update favorite button
+        if (favoriteBtn) {
+          if (this.favorites.has(this.currentIndex)) {
+            favoriteBtn.classList.add('favorited');
+          } else {
+            favoriteBtn.classList.remove('favorited');
+          }
+        }
+
+        // Load high-res image
         const tempImg = new Image();
         
-        // Success handler
         tempImg.onload = () => {
           if (lightboxImg) {
             lightboxImg.src = tempImg.src;
@@ -1191,43 +2191,215 @@ const structuredData = {
           if (loader) loader.style.display = 'none';
         };
 
-        // ERROR HANDLER for lightbox too!
         tempImg.onerror = () => {
-          console.log('Lightbox WebP failed, falling back to JPG');
-          tempImg.onerror = null; // Prevent infinite loops
-          const originalSrc = `/images/${image.file}`;
-          tempImg.src = originalSrc;
+          console.warn('Lightbox WebP failed, falling back to JPG');
+          tempImg.onerror = null;
+          tempImg.src = `/images/${image.file}`;
         };
 
-        // Try WebP first, fallback to JPG
+        // Try WebP first
         const webpSrc = `/images/${this.toWebp(image.file)}`;
         const originalSrc = `/images/${image.file}`;
         
         if (this.supportsWebP()) {
-          console.log('Lightbox trying WebP:', webpSrc);
           tempImg.src = webpSrc;
         } else {
-          console.log('Lightbox using JPG:', originalSrc);
           tempImg.src = originalSrc;
         }
+
+        // Preload adjacent images
+        this.preloadAdjacentImages();
+      }
+
+      private preloadAdjacentImages(): void {
+        const preloadIndexes = [
+          this.currentIndex > 0 ? this.currentIndex - 1 : this.images.length - 1,
+          this.currentIndex < this.images.length - 1 ? this.currentIndex + 1 : 0
+        ];
+
+        preloadIndexes.forEach(index => {
+          const image = this.images[index];
+          if (image) {
+            const link = document.createElement('link');
+            link.rel = 'preload';
+            link.as = 'image';
+            link.href = this.supportsWebP() ? 
+              `/images/${this.toWebp(image.file)}` : 
+              `/images/${image.file}`;
+            document.head.appendChild(link);
+          }
+        });
+      }
+
+      private updateProgress(): void {
+        const progressBar = document.getElementById('progressBar') as HTMLElement;
+        if (progressBar) {
+          const progress = ((this.currentIndex + 1) / this.images.length) * 100;
+          progressBar.style.width = `${progress}%`;
+        }
+      }
+
+      private showSwipeIndicator(direction: 'left' | 'right'): void {
+        const indicator = document.querySelector(`.swipe-indicator.${direction}`) as HTMLElement;
+        if (indicator) {
+          indicator.classList.add('show');
+          setTimeout(() => {
+            indicator.classList.remove('show');
+          }, 1000);
+        }
+      }
+
+      private hideSwipeIndicators(): void {
+        const indicators = document.querySelectorAll('.swipe-indicator');
+        indicators.forEach(indicator => {
+          indicator.classList.remove('show');
+        });
       }
 
       private shareImage(): void {
         const image = this.images[this.currentIndex];
         if (!image) return;
 
-        if (navigator.share) {
-          navigator.share({
-            title: image.title,
-            text: image.description,
-            url: window.location.href
-          }).catch(console.error);
+        const shareData = {
+          title: image.title,
+          text: image.description,
+          url: `${window.location.origin}${window.location.pathname}#image-${this.currentIndex}`
+        };
+
+        if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+          navigator.share(shareData)
+            .then(() => this.showToast('Image shared successfully!', 'success'))
+            .catch(() => this.fallbackShare(shareData));
         } else {
-          // Fallback: copy URL to clipboard
-          navigator.clipboard.writeText(window.location.href).then(() => {
-            // Could show a toast notification here
-            console.log('URL copied to clipboard');
-          }).catch(console.error);
+          this.fallbackShare(shareData);
+        }
+      }
+
+      private quickShare(index: number): void {
+        const image = this.images[index];
+        if (!image) return;
+
+        this.hapticFeedback();
+        
+        const shareData = {
+          title: image.title,
+          text: image.description,
+          url: `${window.location.origin}${window.location.pathname}#image-${index}`
+        };
+
+        if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+          navigator.share(shareData)
+            .then(() => this.showToast('Image shared!', 'success'))
+            .catch(() => this.fallbackShare(shareData));
+        } else {
+          this.fallbackShare(shareData);
+        }
+      }
+
+      private fallbackShare(shareData: any): void {
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(shareData.url)
+            .then(() => this.showToast('Link copied to clipboard!', 'info'))
+            .catch(() => this.showToast('Unable to share image', 'error'));
+        } else {
+          this.showToast('Sharing not supported', 'error');
+        }
+      }
+
+      private toggleFavorite(): void {
+        this.hapticFeedback('medium');
+        
+        if (this.favorites.has(this.currentIndex)) {
+          this.favorites.delete(this.currentIndex);
+          this.showToast('Removed from favorites', 'info');
+        } else {
+          this.favorites.add(this.currentIndex);
+          this.showToast('Added to favorites!', 'success');
+        }
+
+        this.saveFavorites();
+        
+        // Update UI
+        const favoriteBtn = document.getElementById('favorite-btn') as HTMLElement;
+        if (favoriteBtn) {
+          if (this.favorites.has(this.currentIndex)) {
+            favoriteBtn.classList.add('favorited');
+          } else {
+            favoriteBtn.classList.remove('favorited');
+          }
+        }
+      }
+
+      private downloadImage(): void {
+        const image = this.images[this.currentIndex];
+        if (!image) return;
+
+        this.hapticFeedback();
+        
+        const link = document.createElement('a');
+        link.href = `/images/${image.file}`;
+        link.download = `sowk-guesthouse-${image.file}`;
+        link.target = '_blank';
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        this.showToast('Image download started!', 'success');
+      }
+
+      private performPullRefresh(): void {
+        if (this.isPullRefreshing) return;
+        
+        this.isPullRefreshing = true;
+        const indicator = document.getElementById('pullRefreshIndicator')!;
+        
+        // Simulate refresh (in real app, this would reload data)
+        setTimeout(() => {
+          this.showToast('Gallery refreshed!', 'success');
+          this.resetPullRefresh();
+          this.isPullRefreshing = false;
+        }, 1500);
+      }
+
+      private resetPullRefresh(): void {
+        const indicator = document.getElementById('pullRefreshIndicator')!;
+        const refreshIcon = indicator.querySelector('.refresh-icon')!;
+        
+        indicator.style.transform = '';
+        indicator.style.opacity = '';
+        indicator.classList.remove('visible');
+        refreshIcon.classList.add('stopped');
+      }
+
+      private showToast(message: string, type: 'success' | 'error' | 'info' = 'info'): void {
+        const container = document.getElementById('toastContainer')!;
+        
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        const icon = type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ';
+        toast.innerHTML = `
+          <span class="toast-icon">${icon}</span>
+          <span class="toast-message">${message}</span>
+        `;
+        
+        container.appendChild(toast);
+        
+        // Remove toast after animation
+        setTimeout(() => {
+          toast.remove();
+        }, 3000);
+      }
+
+      private hapticFeedback(type: 'light' | 'medium' | 'heavy' = 'light'): void {
+        if ('vibrate' in navigator) {
+          const patterns = {
+            light: [10],
+            medium: [20],
+            heavy: [30]
+          };
+          navigator.vibrate(patterns[type]);
         }
       }
 
@@ -1236,80 +2408,105 @@ const structuredData = {
       }
     }
 
+    // Enhanced CSS class for touch feedback
+    const style = document.createElement('style');
+    style.textContent = `
+      .touch-active {
+        transform: scale(0.98) !important;
+        transition: transform 0.1s ease !important;
+      }
+      
+      .animate-in {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+      }
+      
+      .gallery-item {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+      }
+      
+      .toast-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      
+      .toast.success .toast-icon {
+        background: #10b981;
+        color: white;
+      }
+      
+      .toast.error .toast-icon {
+        background: #ef4444;
+        color: white;
+      }
+      
+      .toast.info .toast-icon {
+        background: var(--accent);
+        color: white;
+      }
+    `;
+    document.head.appendChild(style);
+
     // Initialize gallery when DOM is loaded
     document.addEventListener('DOMContentLoaded', () => {
-      new PremiumGallery();
+      new PremiumMobileGallery();
     });
 
-    // Smooth scroll effect for hero section
-    window.addEventListener('scroll', () => {
-      const hero = document.querySelector('.gallery-hero') as HTMLElement;
-      if (hero) {
-        const scrolled = window.pageYOffset;
-        const rate = scrolled * -0.5;
-        hero.style.transform = `translate3d(0, ${rate}px, 0)`;
-      }
-    });
-
-    // Performance optimization: Preload next/previous images
-    let preloadedImages: Set<string> = new Set();
-    
-    function preloadImage(src: string): void {
-      if (preloadedImages.has(src)) return;
-      
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = 'image';
-      link.href = src;
-      document.head.appendChild(link);
-      preloadedImages.add(src);
+    // Service Worker registration for better mobile performance
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(registration => {
+            console.log('SW registered: ', registration);
+          })
+          .catch(registrationError => {
+            console.log('SW registration failed: ', registrationError);
+          });
+      });
     }
 
-    // Accessibility improvements
-    document.addEventListener('keydown', (e) => {
-      // Focus management for gallery navigation
-      if (e.key === 'Tab') {
-        const focusableElements = document.querySelectorAll(
-          'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-        
-        const firstElement = focusableElements[0] as HTMLElement;
-        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
-        
-        if (e.shiftKey && document.activeElement === firstElement) {
-          e.preventDefault();
-          lastElement.focus();
-        } else if (!e.shiftKey && document.activeElement === lastElement) {
-          e.preventDefault();
-          firstElement.focus();
+    // Prevent zoom on double tap for better UX
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', (e) => {
+      const now = (new Date()).getTime();
+      if (now - lastTouchEnd <= 300) {
+        e.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, false);
+
+    // Handle orientation changes
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => {
+        // Recalculate masonry layout
+        const gallery = document.querySelector('.gallery-grid.masonry') as HTMLElement;
+        if (gallery) {
+          const event = new CustomEvent('recalculate-masonry');
+          gallery.dispatchEvent(event);
         }
-      }
+      }, 500);
     });
+
+    // Optimize scroll performance
+    let scrollTimer: number | null = null;
+    window.addEventListener('scroll', () => {
+      document.body.classList.add('scrolling');
+      
+      if (scrollTimer !== null) {
+        clearTimeout(scrollTimer);
+      }
+      
+      scrollTimer = setTimeout(() => {
+        document.body.classList.remove('scrolling');
+      }, 150);
+    }, { passive: true });
   </script>
-  <!-- Mobile-friendly horizontal scroll for filter tabs -->
-  <style is:global>
-    @media (max-width: 768px) {
-      .filter-tabs {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch; /* smooth iOS momentum scroll */
-        scroll-snap-type: x mandatory;     /* optional snap */
-        white-space: nowrap;               /* keep buttons on one line */
-        gap: 0.25rem;                      /* tighter gap on mobile */
-        width: 100%;                       /* ensure container fits viewport */
-        min-width: 0;                      /* allow flexbox to shrink it */
-        flex: 0 0 100%;                    /* occupy full line but not expand page */
-      }
-
-      /* Hide scrollbar while still allowing swipe */
-      .filter-tabs::-webkit-scrollbar {
-        display: none;
-      }
-
-      .filter-btn {
-        flex: 0 0 auto;          /* prevent shrinking so each btn keeps width */
-        scroll-snap-align: start;
-      }
-    }
-  </style>
-
 </Layout>
