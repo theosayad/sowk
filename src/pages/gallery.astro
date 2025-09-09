@@ -9,6 +9,7 @@ const images = [
   { file: 'king-bedroom.jpg', category: 'interior', title: 'King Room', description: 'A simple, calming space with a comfortable king bed, natural textures, and thoughtful details—quietly designed for rest and ease at SOWK Guesthouse.' },
   { file: 'terrace.jpg', category: 'exterior', title: 'The Hammock Terrace', description: 'A breezy terrace designed for laid-back moments—featuring a dining table for sunset meals, two cozy hammocks, and a playful baby foot corner, all overlooking the hills of Smar Jbeil.' },
   { file: 'twin-room.jpg', category: 'interior', title: 'Twin Room', description: 'Quiet and simple, this twin room offers two single beds, soft lighting, and a clean, uncluttered design—made for slow mornings and easy rest at SOWK Guesthouse.' },
+  { file: 'pizza-oven.jpg', category: 'exterior', title: 'Artisan Pizza Terrace', description: 'A handcrafted wood-fire oven set against ancient Lebanese stone walls—where Mediterranean ingredients meet centuries-old culinary traditions under the open sky.' },
 ];
 
 const categories = ['all', ...new Set(images.map(img => img.category))];
@@ -70,8 +71,7 @@ const structuredData = {
   <section class="gallery-hero">
     <div class="hero-content">
       <h1 class="gallery-title">
-        <span class="title-line">Visual</span>
-        <span class="title-line accent">Journey</span>
+        <span class="title-line">Our Gallery</span>
       </h1>
       <p class="gallery-intro">
         Discover the essence of Lebanese hospitality through our curated collection of moments and spaces
@@ -94,7 +94,7 @@ const structuredData = {
     <div class="mobile-header">
       <div class="header-content">
         <h2 class="section-title">Our Gallery</h2>
-        <div class="image-count" id="imageCount">9 images</div>
+        <div class="image-count" id="imageCount">8 images</div>
       </div>
     </div>
 
@@ -637,8 +637,16 @@ const structuredData = {
     }
 
     .gallery-grid.masonry {
-      grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
-      grid-auto-rows: 10px;
+      columns: 2;
+      column-gap: 1rem;
+      column-fill: balance;
+    }
+
+    .gallery-grid.masonry .gallery-item {
+      display: inline-block;
+      width: 100%;
+      margin-bottom: 1rem;
+      break-inside: avoid;
     }
 
     .gallery-grid.grid {
@@ -1230,7 +1238,8 @@ const structuredData = {
       }
 
       .gallery-grid.masonry {
-        grid-template-columns: repeat(auto-fill, minmax(min(280px, calc(50vw - 1.5rem)), 1fr));
+        columns: 2;
+        column-gap: 0.875rem;
       }
 
       .gallery-grid.grid {
@@ -1322,7 +1331,10 @@ const structuredData = {
         padding: 0.25rem 0.625rem;
       }
 
-      .gallery-grid.masonry,
+      .gallery-grid.masonry {
+        columns: 1;
+        column-gap: 0;
+      }
       .gallery-grid.grid {
         grid-template-columns: 1fr;
         gap: 0.75rem;
@@ -1609,6 +1621,7 @@ const structuredData = {
           { file: 'king-bedroom.jpg', category: 'interior', title: 'King Room', description: 'A simple, calming space with a comfortable king bed, natural textures, and thoughtful details—quietly designed for rest and ease at SOWK Guesthouse.' },
           { file: 'terrace.jpg', category: 'exterior', title: 'The Hammock Terrace', description: 'A breezy terrace designed for laid-back moments—featuring a dining table for sunset meals, two cozy hammocks, and a playful baby foot corner, all overlooking the hills of Smar Jbeil.' },
           { file: 'twin-room.jpg', category: 'interior', title: 'Twin Room', description: 'Quiet and simple, this twin room offers two single beds, soft lighting, and a clean, uncluttered design—made for slow mornings and easy rest at SOWK Guesthouse.' },
+          { file: 'pizza-oven.jpg', category: 'exterior', title: 'Artisan Pizza Terrace', description: 'A wood-fire oven set against ancient Lebanese stone walls—where Mediterranean ingredients meet centuries-old culinary traditions under the open sky.' },
         ];
         this.filteredImages = [...this.images];
       }
@@ -2087,18 +2100,6 @@ const structuredData = {
       }
 
       private layoutMasonry(): void {
-        const items = document.querySelectorAll('.gallery-item:not(.hidden)');
-        
-        items.forEach((item, index) => {
-          const img = item.querySelector('img') as HTMLImageElement;
-          if (img && img.complete && img.naturalHeight > 0) {
-            const aspectRatio = img.naturalHeight / img.naturalWidth;
-            const baseHeight = 300;
-            const height = Math.round(baseHeight * aspectRatio);
-            const spans = Math.ceil(height / 10);
-            (item as HTMLElement).style.gridRowEnd = `span ${spans}`;
-          }
-        });
       }
 
       private handleImageClick(e: Event): void {

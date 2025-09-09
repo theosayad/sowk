@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Default.astro';
 import { Image } from 'astro:assets';
+import slideMainHome from '../images/main-home.jpeg';
 import slideKitchen from '../images/kitchen.jpeg';
 import slidePool from '../images/pool.jpeg';
 import slideFruits from '../images/pool_fruits.jpeg';
@@ -23,7 +24,18 @@ const type        = 'website';
   <section class="hero-swiper" aria-label="Highlights of SOWK Guesthouse">
     <div class="swiper">
       <div class="swiper-wrapper">
-  
+        
+        <!-- Slide 1 – main home -->
+        <div class="swiper-slide">
+          <Image
+            src={slideMainHome}
+            alt="Contemporary hillside villa with olive trees, rustic stone walls, serene garden terrace and private pool at SOWK Guesthouse"
+            widths={[640, 960, 1440]}
+            formats={['avif', 'webp', 'jpeg']}
+            loading="eager"
+          />
+        </div>
+
         <!-- Slide 1 – kitchen -->
         <div class="swiper-slide">
           <Image
@@ -118,7 +130,7 @@ const type        = 'website';
         loading="lazy"
       />
       <figcaption class="quote-overlay">
-        <q>Breathe deep—this is where time slows down.</q>
+        <q>This is Where Heritage meets Comfort</q>
       </figcaption>
     </figure>
   </section>
@@ -251,15 +263,15 @@ z-index: 2;
 }
 
 .quote-overlay q {
-font-size: clamp(1.1rem, 4vw, 1.8rem);
-font-weight: 400;
-line-height: 1.4;
-max-width: 90%;
-margin: 0 0 0.5rem 0;
-font-family: ‘Playfair Display’, serif;
-font-style: italic;
-display: block;
-text-align: center;
+  font-size: clamp(1.1rem, 4vw, 1.8rem);
+  font-weight: 400;
+  line-height: 1.4;
+  max-width: 90%;
+  margin: 0 0 0.5rem 0;
+  font-family: 'Poppins', sans-serif; /* switched to normal font */
+  font-style: normal;                 /* removed italics */
+  display: block;
+  text-align: center;
 }
 
 .quote-author {
