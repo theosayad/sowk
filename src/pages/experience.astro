@@ -5,7 +5,6 @@ import Layout from '../layouts/Default.astro';
 import activities from '../data/activities.json' assert { type: 'json' };
 import { formatTravelInfo } from '../utils/formatTravelInfo.ts';
 
-
 // all unique, non‐empty categories
 const categories = [
   ...new Set(activities.map((a) => a.category).filter(Boolean))
@@ -17,218 +16,622 @@ const slugify = (s: string) =>
 ---
 
 <Layout
-  title="Things To Do In & Around Smar Jbeil"
-  description="Uncover curated nature, heritage, and wellness experiences surrounding our guesthouse in Smar Jbeil. From scenic hikes to cultural landmarks, discover the timeless beauty of North Lebanon at your own pace."
+  title="Curated Experiences | SOWK Guesthouse"
+  description="Discover carefully selected experiences that honor the heritage and natural beauty of Smar Jbeil and North Lebanon—from ancient ruins to pristine coastlines."
   url="https://sowk.org/experience"
   image="https://bunny-wp-pullzone-eqa83h6t2a.b‑cdn.net/wp-content/uploads/2023/09/DSC_3824.jpg"
   type="website"
 >
   <fragment slot="head">
-    <!-- Optional additional SEO metadata -->
-    <meta name="keywords" content="SOWK, Smar Jbeil, boutique guesthouse, things to do Lebanon, North Lebanon travel, eco experiences, cultural escapes, scenic hikes, nature retreats" />
+    <!-- Enhanced SEO metadata -->
+    <meta name="keywords" content="SOWK, luxury experiences Lebanon, boutique travel North Lebanon, heritage tours Batroun, curated activities Smar Jbeil, exclusive Lebanese experiences" />
 
     <!-- Open Graph + Twitter image with alt text -->
     <meta property="og:image" content="https://bunny-wp-pullzone-eqa83h6t2a.b-cdn.net/wp-content/uploads/2023/09/DSC_3824.jpg" />
     <meta name="twitter:image" content="https://bunny-wp-pullzone-eqa83h6t2a.b-cdn.net/wp-content/uploads/2023/09/DSC_3824.jpg" />
-    <meta property="og:image:alt" content="View from inside the Smar Jbeil citadel, framed by stone arches and wild greenery" />
+    <meta property="og:image:alt" content="Ancient stone archway in Smar Jbeil citadel framing Mediterranean landscape" />
   </fragment>
 
+  <!-- Hero Section with Sophisticated Typography -->
   <section class="experience-hero">
-    <h1>Curated Experiences Around Smar Jbeil</h1>
+    <div class="hero-content">
+      <span class="hero-accent">Curated by SOWK</span>
+      <h1>Experiences Worth<br/>Your Precious Time</h1>
+      <p class="hero-description">
+        Each recommendation reflects our commitment to authentic Lebanese heritage, 
+        natural beauty, and experiences that resonate long after you return home.
+      </p>
+    </div>
   </section>
 
-  <!-- ─────────────── boutique minimal separator ─────────────── -->
-  <div class="experience-separator"></div>
-   
+  <!-- Elegant Separator -->
+  <div class="experience-separator">
+    <div class="separator-line"></div>
+    <div class="separator-ornament">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/>
+      </svg>
+    </div>
+    <div class="separator-line"></div>
+  </div>
 
-  {categories.map((cat) => {
-    const id = slugify(cat);
-    return (
-      <details class="category-section" open>
-        <summary id={id} class="experience-category">{cat}</summary>
-        <div class="experience-row">
-          {activities
-            .filter((a) => a.category === cat)
-            .map((a) => (
-              <a href={`/experience/${a.slug}`} class="experience-card">
-                <img
-                  src={a.image || '/images/placeholder.jpg'}
-                  alt={a.name}
-                  class="experience-thumb"
-                  loading="lazy"
-                  width="300"
-                  height="200"
-                />
-                <h3>{a.name}</h3>
-                <p class="experience-meta">{formatTravelInfo(a)}</p>
-                <span class="experience-link">More info ↗</span>
-              </a>
-          ))}
-        </div>
-      </details>
-    );
-  })}
+  <!-- Enhanced Category Sections -->
+  <div class="experiences-container">
+    {categories.map((cat, index) => {
+      const id = slugify(cat);
+      const categoryActivities = activities.filter((a) => a.category === cat);
+      
+      return (
+        <section class="category-section" data-category={index}>
+          <div class="category-header">
+            <h2 id={id} class="category-title">{cat}</h2>
+            <div class="category-count">{categoryActivities.length} experiences</div>
+          </div>
+          
+          <div class="experiences-grid">
+            {categoryActivities.map((activity, actIndex) => (
+              <article class="experience-card" data-index={actIndex}>
+                <a href={`/experience/${activity.slug}`} class="card-link">
+                  <div class="card-image-container">
+                    <img
+                      src={activity.image || '/images/placeholder.jpg'}
+                      alt={activity.name}
+                      class="card-image"
+                      loading="lazy"
+                      width="400"
+                      height="300"
+                    />
+                    <div class="card-overlay">
+                      <span class="view-details">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="m9 18 6-6-6-6"/>
+                        </svg>
+                        Discover
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div class="card-content">
+                    <h3 class="card-title">{activity.name}</h3>
+                    <p class="card-meta">{formatTravelInfo(activity)}</p>
+                    
+                    <div class="card-footer">
+                      <span class="experience-type">
+                        {activity.duration ? `${activity.duration}` : 'Flexible timing'}
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              </article>
+            ))}
+          </div>
+        </section>
+      );
+    })}
+  </div>
 
+  <!-- Call to Action -->
+  <section class="experience-cta">
+    <div class="cta-content">
+      <h2>Need Personalized Recommendations?</h2>
+      <p>Our local knowledge runs deep. Let us curate the perfect itinerary for your interests and schedule.</p>
+      <a href="/contact" class="cta-button">
+        Speak with Our Team
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="m9 18 6-6-6-6"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+</Layout>
+
+<!-- Enhanced JavaScript for Sophisticated Interactions -->
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const rows = document.querySelectorAll('.experience-row');
-    rows.forEach((row, i) => {
-      // how far to nudge (px)
-      const distance = 80;
-      // delay each row so it feels staggered
-      const delay = 600 + i * 200;
+    // Staggered entrance animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '-20px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('animate-in');
+          }, index * 100);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Observe all animatable elements
+    document.querySelectorAll('.experience-card, .category-header, .hero-content').forEach(el => {
+      el.classList.add('animate-prepare');
+      observer.observe(el);
+    });
+
+    // Smooth reveal for category sections
+    document.querySelectorAll('.category-section').forEach((section, index) => {
       setTimeout(() => {
-        row.scrollBy({ left: distance, behavior: 'smooth' });
-        // scroll back after a short pause
-        setTimeout(() => {
-          row.scrollBy({ left: -distance, behavior: 'smooth' });
-        }, 800);
-      }, delay);
+        section.classList.add('section-visible');
+      }, index * 200);
+    });
+
+    // Enhanced card hover effects
+    document.querySelectorAll('.experience-card').forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        card.classList.add('card-elevated');
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.classList.remove('card-elevated');
+      });
     });
   });
 </script>
 
-</Layout>
-
 <style>
-  /* force Poppins */
-  body, h1, h3, p, a { font-family:'Poppins',sans-serif; }
+  /* CSS Custom Properties for Boutique Design System */
+  :root {
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'Inter', -apple-system, sans-serif;
+    --font-accent: 'Poppins', sans-serif;
+    
+    --color-primary: #2C3E35;
+    --color-accent: #C9A876;
+    --color-gold: #D4AF37;
+    --color-stone: #F8F6F1;
+    --color-mist: #FAFAFA;
+    --color-charcoal: #3A3A3A;
+    --color-sage: #8B9A8C;
+    
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 2rem;
+    --spacing-lg: 4rem;
+    --spacing-xl: 6rem;
+    
+    --border-radius: 12px;
+    --border-radius-lg: 20px;
+    
+    --shadow-soft: 0 4px 20px rgba(44, 62, 53, 0.08);
+    --shadow-elevated: 0 20px 40px rgba(44, 62, 53, 0.15);
+    
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
 
-  /* ---------- hero ---------- */
+  /* Reset and Base Styles */
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: var(--font-body);
+    line-height: 1.6;
+    color: var(--color-primary);
+    background: var(--color-mist);
+  }
+
+  /* Hero Section */
   .experience-hero {
+    background: linear-gradient(135deg, var(--color-stone) 0%, #FFFFFF 100%);
+    padding: var(--spacing-xl) var(--spacing-md);
     text-align: center;
-    margin: 4rem 0 2rem;
-    /* add horizontal padding on all viewports */
-    padding: 0 1.5rem;
+    position: relative;
+    overflow: hidden;
   }
-  .experience-hero h1 {
-    font-size: 2.2rem;
-    font-weight: 700;
-    line-height: 1.25;
-    /* keep it centered and constrain width */
-    max-width: 700px;
+
+  .experience-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(201, 168, 118, 0.05) 0%, transparent 70%);
+    animation: gentle-rotate 20s linear infinite;
+  }
+
+  @keyframes gentle-rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .hero-content {
+    max-width: 800px;
     margin: 0 auto;
-  }
-  
-  /* tighter on small screens */
-  @media (max-width: 640px) {
-    .experience-hero {
-      /* bump the vertical margins in a bit if you like */
-      margin: 3rem 0 1.5rem;
-      /* a bit more side padding */
-      padding: 0 2rem;
-    }
-    .experience-hero h1 {
-      /* slightly smaller text for mobile */
-      font-size: 1.8rem;
-    }
+    position: relative;
+    z-index: 2;
   }
 
-
-  /* details/summary styles */
-  .category-section {
-    margin-bottom:2rem;
+  .hero-accent {
+    font-family: var(--font-accent);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    display: block;
+    margin-bottom: var(--spacing-sm);
   }
-  .experience-category {
-    cursor:pointer;
-    font-size:1.5rem;
-    font-weight:600;
-    padding:0.5rem 2rem;
-    color:#294534;
-    list-style:none;
-  }
-  /* hide default arrow, use our own if you like */
-  .experience-category::-webkit-details-marker { display:none; }
 
-  /* ─── horizontal swipe row ─── */
-  .experience-row {
+  .experience-hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--color-primary);
+    margin: 0 0 var(--spacing-md) 0;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-description {
+    font-size: 1.1rem;
+    color: var(--color-charcoal);
+    line-height: 1.7;
+    margin: 0;
+    max-width: 600px;
+    margin: 0 auto;
+    opacity: 0.9;
+  }
+
+  /* Elegant Separator */
+  .experience-separator {
     display: flex;
-    gap: 1rem;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-  
-    /* keep your overall top/right/bottom padding */
-    padding: 1rem 2rem 1.5rem;
-  
-    /* ensure every snap-stop sits 2rem from *either* edge */
-    scroll-padding-inline-start: 2rem;
-    scroll-padding-inline-end:   2rem;
-  }
-  
-  /* hide the scrollbar in WebKit browsers */
-  .experience-row::-webkit-scrollbar {
-    display: none;
+    align-items: center;
+    justify-content: center;
+    margin: var(--spacing-lg) auto;
+    max-width: 300px;
+    gap: var(--spacing-md);
   }
 
-  /* card */
+  .separator-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+  }
+
+  .separator-ornament {
+    color: var(--color-accent);
+    opacity: 0.7;
+  }
+
+  /* Experiences Container */
+  .experiences-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+  }
+
+  /* Category Sections */
+  .category-section {
+    margin-bottom: var(--spacing-xl);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: var(--transition-smooth);
+  }
+
+  .category-section.section-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .category-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid rgba(201, 168, 118, 0.1);
+  }
+
+  .category-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 500;
+    color: var(--color-primary);
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .category-count {
+    font-family: var(--font-accent);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-sage);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: rgba(201, 168, 118, 0.1);
+    border-radius: 20px;
+  }
+
+  /* Experiences Grid */
+  .experiences-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--spacing-lg);
+  }
+
+  /* Experience Cards */
   .experience-card {
-    flex:0 0 180px;
-    scroll-snap-align:start;
-    background:#fff;
-    border-radius:0.75rem;
-    box-shadow:0 12px 32px rgba(0,0,0,0.06);
-    text-decoration:none;
-    color:inherit;
-    display:flex;
-    flex-direction:column;
-    transition:transform .2s ease;
-  }
-  .experience-card:hover { transform:translateY(-4px); }
-
-  .experience-thumb {
-    width:100%; height:130px;
-    object-fit:cover;
-    border-bottom:1px solid #eee;
-    border-radius:0.75rem 0.75rem 0 0;
+    background: white;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition-smooth);
+    position: relative;
   }
 
-  .experience-card h3 {
-    font-size:1rem;
-    font-weight:600;
-    margin:0.6rem 0 0;
-    padding:0 0.8rem;
+  .experience-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-accent), var(--color-gold));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: var(--transition-smooth);
   }
-  .experience-meta {
-    font-size:0.8rem;
-    color:#667;
-    padding:0.2rem 0.8rem;
-    margin-bottom:auto;
+
+  .experience-card:hover::before {
+    transform: scaleX(1);
+  }
+
+  .experience-card.card-elevated {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+  }
+
+  .card-image-container {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-smooth);
+  }
+
+  .experience-card:hover .card-image {
+    transform: scale(1.05);
+    filter: brightness(0.9);
+  }
+
+  .card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 60%,
+      rgba(44, 62, 53, 0.8) 100%
+    );
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: var(--spacing-md);
+    opacity: 0;
+    transition: var(--transition-smooth);
+  }
+
+  .experience-card:hover .card-overlay {
+    opacity: 1;
+  }
+
+  .view-details {
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--color-primary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 25px;
+    font-family: var(--font-accent);
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: var(--transition-smooth);
+  }
+
+  .view-details:hover {
+    background: var(--color-accent);
+    color: white;
+  }
+
+  .card-content {
+    padding: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+  }
+
+  .card-title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--color-primary);
+    margin: 0 0 var(--spacing-sm) 0;
     line-height: 1.3;
   }
-  .experience-link {
-    font-size:0.85rem;
-    font-weight:600;
-    color:#c89a2a;
-    padding:0.6rem 0.8rem;
-  }
-  .experience-link:hover { text-decoration:underline; }
 
-  /* ───── Mobile tweaks ───── */
-  @media (max-width: 600px) {
-    .experience-row {
-      /* reduce left/right padding on phones */
-      padding: 0.75rem 1rem 1rem;
-    }
-    .experience-category {
-      /* reduce the category indent */
-      padding-left: 1rem;
-    }
+  .card-meta {
+    font-size: 0.95rem;
+    color: var(--color-charcoal);
+    line-height: 1.5;
+    margin: 0 0 auto 0;
+    opacity: 0.8;
   }
 
-  /* ───── Mobile headline tweak ───── */
-  @media (max-width: 600px) {
-    .experience-hero h1 {
-      font-size: 1.5rem;    /* adjust as needed */
-      line-height: 1.2;
+  .card-footer {
+    margin-top: auto;
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid rgba(201, 168, 118, 0.2);
+  }
+
+  .experience-type {
+    font-family: var(--font-accent);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* CTA Section */
+  .experience-cta {
+    background: linear-gradient(135deg, var(--color-primary) 0%, #1E2E25 100%);
+    margin-top: var(--spacing-xl);
+    padding: var(--spacing-xl) var(--spacing-md);
+    text-align: center;
+    color: white;
+  }
+
+  .cta-content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .experience-cta h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 400;
+    margin: 0 0 var(--spacing-md) 0;
+    color: white;
+  }
+
+  .experience-cta p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin: 0 0 var(--spacing-lg) 0;
+    opacity: 0.9;
+  }
+
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    background: var(--color-accent);
+    color: var(--color-primary);
+    padding: 1rem 2rem;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-family: var(--font-accent);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: var(--transition-smooth);
+    letter-spacing: 0.02em;
+  }
+
+  .cta-button:hover {
+    background: var(--color-gold);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(201, 168, 118, 0.3);
+  }
+
+  /* Animation Classes */
+  .animate-prepare {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: var(--transition-smooth);
+  }
+
+  .animate-in {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    :root {
+      --spacing-md: 1.5rem;
+      --spacing-lg: 3rem;
+      --spacing-xl: 4rem;
+    }
+
+    .experience-hero {
+      padding: var(--spacing-lg) var(--spacing-md);
+    }
+
+    .experiences-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-md);
+    }
+
+    .category-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--spacing-sm);
+    }
+
+    .card-content {
+      padding: var(--spacing-sm);
+      height: auto;
     }
   }
 
-   /* ─────── boutique minimal separator ─────── */
-  .experience-separator {
-    width: 60px;
-    height: 2px;
-    background-color: #C8B7A6;
-    margin: 2.5rem auto;
-    opacity: 0.6;
+  @media (max-width: 480px) {
+    .experiences-container {
+      padding: 0 var(--spacing-sm);
+    }
+
+    .experience-hero {
+      padding: var(--spacing-md) var(--spacing-sm);
+    }
+
+    .hero-description {
+      font-size: 1rem;
+    }
+  }
+
+  /* High-end visual enhancements */
+  @media (prefers-reduced-motion: no-preference) {
+    .experience-card {
+      transition: var(--transition-spring);
+    }
+    
+    .card-image {
+      transition: var(--transition-spring);
+    }
+  }
+
+  /* Accessibility improvements */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Focus styles for keyboard navigation */
+  .card-link:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .cta-button:focus {
+    outline: 2px solid white;
+    outline-offset: 2px;
   }
 </style>
