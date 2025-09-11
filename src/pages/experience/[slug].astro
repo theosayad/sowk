@@ -78,61 +78,160 @@ const structuredData = {
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
   </fragment>
 
-  <article class="activity-detail">
+  <!-- Breadcrumb Navigation -->
+  <nav class="breadcrumb-nav" aria-label="Breadcrumb navigation">
+    <div class="breadcrumb-container">
+      <a href="/experience" class="breadcrumb-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="m12 19-7-7 7-7"/>
+        </svg>
+        All Experiences
+      </a>
+      <span class="breadcrumb-separator">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="m9 18 6-6-6-6"/>
+        </svg>
+      </span>
+      <span class="breadcrumb-current">{activity.name}</span>
+    </div>
+  </nav>
+
+  <article class="experience-detail">
     <!-- Image Gallery -->
     <div class="image-gallery">
       {images.length === 1 && (
-        <img
-          src={images[0]}
-          alt={activity.name}
-          class="single-image gallery-clickable"
-          width="1200"
-          height="600"
-          data-full-src={images[0]}
-          loading="eager"
-        />
+        <div class="single-image-container">
+          <img
+            src={images[0]}
+            alt={activity.name}
+            class="single-image gallery-clickable"
+            width="1200"
+            height="600"
+            data-full-src={images[0]}
+            loading="eager"
+          />
+          <div class="image-overlay">
+            <button class="expand-button" aria-label="View full image">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
       )}
       
       {images.length === 2 && (
         <div class="two-images">
-          <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image main gallery-clickable" data-full-src={images[0]} loading="eager" />
-          <img src={images[1]} alt={`${activity.name} - Image 2`} class="gallery-image secondary gallery-clickable" data-full-src={images[1]} loading="lazy" />
+          <div class="image-wrapper main-wrapper">
+            <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image main gallery-clickable" data-full-src={images[0]} loading="eager" />
+            <div class="image-overlay">
+              <button class="expand-button" aria-label="View full image">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="image-wrapper secondary-wrapper">
+            <img src={images[1]} alt={`${activity.name} - Image 2`} class="gallery-image secondary gallery-clickable" data-full-src={images[1]} loading="lazy" />
+            <div class="image-overlay">
+              <button class="expand-button" aria-label="View full image">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
       )}
       
       {images.length === 3 && (
         <div class="three-images">
-          <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image main gallery-clickable" data-full-src={images[0]} loading="eager" />
+          <div class="image-wrapper main-wrapper">
+            <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image main gallery-clickable" data-full-src={images[0]} loading="eager" />
+            <div class="image-overlay">
+              <button class="expand-button" aria-label="View full image">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
           <div class="side-images">
-            <img src={images[1]} alt={`${activity.name} - Image 2`} class="gallery-image side gallery-clickable" data-full-src={images[1]} loading="lazy" />
-            <img src={images[2]} alt={`${activity.name} - Image 3`} class="gallery-image side gallery-clickable" data-full-src={images[2]} loading="lazy" />
+            <div class="image-wrapper side-wrapper">
+              <img src={images[1]} alt={`${activity.name} - Image 2`} class="gallery-image side gallery-clickable" data-full-src={images[1]} loading="lazy" />
+              <div class="image-overlay">
+                <button class="expand-button" aria-label="View full image">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="image-wrapper side-wrapper">
+              <img src={images[2]} alt={`${activity.name} - Image 3`} class="gallery-image side gallery-clickable" data-full-src={images[2]} loading="lazy" />
+              <div class="image-overlay">
+                <button class="expand-button" aria-label="View full image">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
       
       {images.length >= 4 && (
         <div class="four-plus-images">
-          <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image hero gallery-clickable" data-full-src={images[0]} loading="eager" />
+          <div class="image-wrapper hero-wrapper">
+            <img src={images[0]} alt={`${activity.name} - Image 1`} class="gallery-image hero gallery-clickable" data-full-src={images[0]} loading="eager" />
+            <div class="image-overlay">
+              <button class="expand-button" aria-label="View full image">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
           <div class="image-grid">
             {images.slice(1, 4).map((img, index) => (
-              <img 
-                src={img} 
-                alt={`${activity.name} - Image ${index + 2}`} 
-                class="gallery-image grid-item gallery-clickable" 
-                data-full-src={img}
-                loading="lazy"
-              />
+              <div class="image-wrapper grid-wrapper">
+                <img 
+                  src={img} 
+                  alt={`${activity.name} - Image ${index + 2}`} 
+                  class="gallery-image grid-item gallery-clickable" 
+                  data-full-src={img}
+                  loading="lazy"
+                />
+                <div class="image-overlay">
+                  <button class="expand-button" aria-label="View full image">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
             ))}
             {images.length > 4 && (
               <div class="more-indicator">
-                <img 
-                  src={images[4]} 
-                  alt={`${activity.name} - Image 5`} 
-                  class="gallery-image grid-item dimmed gallery-clickable" 
-                  data-full-src={images[4]}
-                  loading="lazy"
-                />
-                <span class="more-count">+{images.length - 4}</span>
+                <div class="image-wrapper grid-wrapper">
+                  <img 
+                    src={images[4]} 
+                    alt={`${activity.name} - Image 5`} 
+                    class="gallery-image grid-item dimmed gallery-clickable" 
+                    data-full-src={images[4]}
+                    loading="lazy"
+                  />
+                  <div class="image-overlay more-overlay">
+                    <span class="more-count">+{images.length - 4} more</span>
+                    <button class="expand-button" aria-label="View all images">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
               </div>
             )}
           </div>
@@ -140,72 +239,214 @@ const structuredData = {
       )}
     </div>
 
-    <header>
-      <h1>{activity.name}</h1>
-      <p class="activity-meta">
-        {formatTravelInfo(activity)}
-      </p>
-    </header>
+    <!-- Content Section -->
+    <div class="experience-content">
+      <!-- Header with elegant separator -->
+      <header class="experience-header">
+        <div class="header-ornament">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/>
+          </svg>
+        </div>
+        
+        <h1 class="experience-title">{activity.name}</h1>
+        
+        <div class="experience-meta">
+          <div class="meta-content">
+            <span class="meta-location">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              {formatTravelInfo(activity)}
+            </span>
+            {activity.duration && (
+              <span class="meta-duration">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                {activity.duration}
+              </span>
+            )}
+            {activity.category && (
+              <span class="meta-category">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                  <line x1="7" y1="7" x2="7.01" y2="7"/>
+                </svg>
+                {activity.category}
+              </span>
+            )}
+          </div>
+        </div>
+      </header>
 
-    <div class="activity-content">
-      <p class="activity-copy">{activity.copy}</p>
+      <!-- Description -->
+      <div class="experience-description">
+        <p class="description-text">{activity.copy}</p>
+      </div>
 
-      <nav class="activity-links" aria-label="Related links">
-        {activity.official_website && (
-          <a href={activity.official_website} target="_blank" rel="noopener nofollow" class="more-link">
-            Official Website ↗
-          </a>
-        )}
-        {activity.instagram && (
-          <a href={activity.instagram} target="_blank" rel="noopener nofollow" class="more-link">
-            Instagram ↗
-          </a>
-        )}
-        {activity.wikipedia && (
-          <a href={activity.wikipedia} target="_blank" rel="noopener nofollow" class="more-link">
-            Wikipedia ↗
-          </a>
-        )}
-        {activity.wikiloc && (
-          <a href={activity.wikiloc} target="_blank" rel="noopener nofollow" class="more-link">
-            Wikiloc Trail ↗
-          </a>
-        )}
-        {activity.blog && (
-          <a href={activity.blog} target="_blank" rel="noopener nofollow" class="more-link">
-            Blog Post ↗
-          </a>
-        )}
-        {activity.link && (
-          <a href={activity.link} target="_blank" rel="noopener nofollow" class="more-link">
-            More Info ↗
-          </a>
-        )}
-      </nav>
+      <!-- Links Section -->
+      {(activity.official_website || activity.instagram || activity.wikipedia || activity.wikiloc || activity.blog || activity.link) && (
+        <section class="experience-links" aria-label="Related links">
+          <h2 class="links-title">Explore Further</h2>
+          <div class="links-grid">
+            {activity.official_website && (
+              <a href={activity.official_website} target="_blank" rel="noopener nofollow" class="link-card official">
+                <div class="link-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                  </svg>
+                </div>
+                <div class="link-content">
+                  <span class="link-title">Official Website</span>
+                  <span class="link-description">Visit the official site</span>
+                </div>
+                <div class="link-arrow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m9 18 6-6-6-6"/>
+                  </svg>
+                </div>
+              </a>
+            )}
+            
+            {activity.instagram && (
+              <a href={activity.instagram} target="_blank" rel="noopener nofollow" class="link-card instagram">
+                <div class="link-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                  </svg>
+                </div>
+                <div class="link-content">
+                  <span class="link-title">Instagram</span>
+                  <span class="link-description">See photos & stories</span>
+                </div>
+                <div class="link-arrow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m9 18 6-6-6-6"/>
+                  </svg>
+                </div>
+              </a>
+            )}
+            
+            {activity.wikipedia && (
+              <a href={activity.wikipedia} target="_blank" rel="noopener nofollow" class="link-card wikipedia">
+                <div class="link-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                  </svg>
+                </div>
+                <div class="link-content">
+                  <span class="link-title">Wikipedia</span>
+                  <span class="link-description">Learn more details</span>
+                </div>
+                <div class="link-arrow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m9 18 6-6-6-6"/>
+                  </svg>
+                </div>
+              </a>
+            )}
+            
+            {activity.wikiloc && (
+              <a href={activity.wikiloc} target="_blank" rel="noopener nofollow" class="link-card wikiloc">
+                <div class="link-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                </div>
+                <div class="link-content">
+                  <span class="link-title">Trail Map</span>
+                  <span class="link-description">View route on Wikiloc</span>
+                </div>
+                <div class="link-arrow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m9 18 6-6-6-6"/>
+                  </svg>
+                </div>
+              </a>
+            )}
+            
+            {activity.blog && (
+              <a href={activity.blog} target="_blank" rel="noopener nofollow" class="link-card blog">
+                <div class="link-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z"/>
+                  </svg>
+                </div>
+                <div class="link-content">
+                  <span class="link-title">Blog Post</span>
+                  <span class="link-description">Read our detailed guide</span>
+                </div>
+                <div class="link-arrow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m9 18 6-6-6-6"/>
+                  </svg>
+                </div>
+              </a>
+            )}
+            
+            {activity.link && (
+              <a href={activity.link} target="_blank" rel="noopener nofollow" class="link-card general">
+                <div class="link-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 16v-4"/>
+                    <path d="M12 8h.01"/>
+                  </svg>
+                </div>
+                <div class="link-content">
+                  <span class="link-title">More Information</span>
+                  <span class="link-description">Additional details</span>
+                </div>
+                <div class="link-arrow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m9 18 6-6-6-6"/>
+                  </svg>
+                </div>
+              </a>
+            )}
+          </div>
+        </section>
+      )}
     </div>
   </article>
-  
-  <nav aria-label="Breadcrumb navigation">
-    <a href="/experience" class="back-link">← Back to all experiences</a>
-  </nav>
 
   <!-- Full-screen image modal -->
   <div id="imageModal" class="image-modal" style="display: none;" role="dialog" aria-modal="true" aria-label="Image gallery">
+    <div class="modal-backdrop"></div>
     <div class="modal-content">
-      <button class="close-modal" aria-label="Close image gallery">&times;</button>
+      <button class="close-modal" aria-label="Close image gallery">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
       <img id="modalImage" src="" alt="" />
       <div class="modal-nav">
         <button id="prevBtn" class="nav-btn prev-btn" aria-label="Previous image">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="15 18 9 12 15 6" />
           </svg>
         </button>
         
         <button id="nextBtn" class="nav-btn next-btn" aria-label="Next image">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="9 18 15 12 9 6" />
           </svg>
         </button>
+      </div>
+      
+      <div class="modal-counter">
+        <span id="imageCounter">1 / 1</span>
       </div>
     </div>
   </div>
@@ -217,7 +458,9 @@ const structuredData = {
       const closeBtn = document.querySelector('.close-modal');
       const prevBtn = document.getElementById('prevBtn');
       const nextBtn = document.getElementById('nextBtn');
+      const counter = document.getElementById('imageCounter');
       const clickableImages = document.querySelectorAll('.gallery-clickable');
+      const expandButtons = document.querySelectorAll('.expand-button');
       
       let currentImageIndex = 0;
       let imageList = [];
@@ -228,10 +471,24 @@ const structuredData = {
           src: img.getAttribute('data-full-src') || img.src,
           alt: img.alt
         });
-        
+      });
+
+      // Add click listeners to images and expand buttons
+      clickableImages.forEach((img, index) => {
         img.style.cursor = 'pointer';
         img.addEventListener('click', function() {
           currentImageIndex = index;
+          openModal();
+        });
+      });
+
+      expandButtons.forEach((btn, index) => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          // Find the corresponding image index
+          const wrapper = btn.closest('.image-wrapper');
+          const img = wrapper.querySelector('.gallery-clickable');
+          currentImageIndex = Array.from(clickableImages).indexOf(img);
           openModal();
         });
       });
@@ -242,22 +499,33 @@ const structuredData = {
         document.body.style.overflow = 'hidden';
         // Focus management for accessibility
         closeBtn.focus();
+        
+        // Add entrance animation
+        requestAnimationFrame(() => {
+          modal.classList.add('modal-open');
+        });
       }
 
       function closeModal() {
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
+        modal.classList.remove('modal-open');
+        setTimeout(() => {
+          modal.style.display = 'none';
+          document.body.style.overflow = 'auto';
+        }, 300);
       }
 
       function updateModalImage() {
         if (imageList[currentImageIndex]) {
           modalImg.src = imageList[currentImageIndex].src;
           modalImg.alt = imageList[currentImageIndex].alt;
+          counter.textContent = `${currentImageIndex + 1} / ${imageList.length}`;
         }
         
         // Show/hide navigation buttons
-        prevBtn.style.display = imageList.length > 1 ? 'block' : 'none';
-        nextBtn.style.display = imageList.length > 1 ? 'block' : 'none';
+        const hasMultiple = imageList.length > 1;
+        prevBtn.style.display = hasMultiple ? 'flex' : 'none';
+        nextBtn.style.display = hasMultiple ? 'flex' : 'none';
+        counter.style.display = hasMultiple ? 'block' : 'none';
       }
 
       function showPrevImage() {
@@ -275,9 +543,9 @@ const structuredData = {
       prevBtn.addEventListener('click', showPrevImage);
       nextBtn.addEventListener('click', showNextImage);
 
-      // Close modal when clicking outside the image
+      // Close modal when clicking backdrop
       modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
+        if (e.target === modal || e.target.classList.contains('modal-backdrop')) {
           closeModal();
         }
       });
@@ -290,380 +558,764 @@ const structuredData = {
               closeModal();
               break;
             case 'ArrowLeft':
-              showPrevImage();
+              if (imageList.length > 1) showPrevImage();
               break;
             case 'ArrowRight':
-              showNextImage();
+              if (imageList.length > 1) showNextImage();
               break;
           }
         }
+      });
+
+      // Add staggered entrance animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '-20px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              entry.target.classList.add('animate-in');
+            }, index * 100);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      // Observe elements for animation
+      document.querySelectorAll('.image-wrapper, .experience-header, .experience-description, .link-card').forEach(el => {
+        el.classList.add('animate-prepare');
+        observer.observe(el);
       });
     });
   </script>
 </Layout>
 
 <style>
-body, h1, p, a { font-family:'Poppins', sans-serif; }
-
-.activity-detail { 
-  max-width: 780px; 
-  margin: 3rem auto; 
-  padding: 0 1rem; 
-}
-
-/* Image Gallery Styles */
-.image-gallery {
-  margin-bottom: 2rem;
-}
-
-.gallery-image {
-  border-radius: 0.75rem;
-  object-fit: cover;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.gallery-image:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-}
-
-.gallery-clickable {
-  cursor: pointer;
-}
-
-.gallery-clickable:hover {
-  transform: translateY(-2px) scale(1.02);
-}
-
-/* Single Image */
-.single-image {
-  width: 100%;
-  height: 400px;
-  border-radius: 1rem;
-  object-fit: cover;
-}
-
-/* Two Images Layout */
-.two-images {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 1rem;
-  height: 400px;
-}
-
-.two-images .main {
-  height: 100%;
-  width: 100%;
-}
-
-.two-images .secondary {
-  height: 100%;
-  width: 100%;
-}
-
-/* Three Images Layout */
-.three-images {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 1rem;
-  align-items: stretch;
-  margin-bottom: 2rem;
-}
-
-.three-images .main {
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
-}
-
-.side-images {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  height: 400px;
-}
-
-.side-images .side {
-  flex: 1;
-  width: 100%;
-  object-fit: cover;
-}
-
-/* Four+ Images Layout */
-.four-plus-images {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 1rem;
-  align-items: stretch;
-  margin-bottom: 2rem;
-}
-
-.four-plus-images .hero {
-  height: 100%;
-  width: 100%;
-}
-
-.image-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
-}
-
-.grid-item {
-  height: 100%;
-  object-fit: cover;
-  width: 100%;
-}
-
-.more-indicator {
-  position: relative;
-  width: 100%;
-}
-
-.dimmed {
-  filter: brightness(0.4);
-  height: 100%;
-  object-fit: cover;
-}
-
-.more-count {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  font-weight: 600;
-  font-size: 1.2rem;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-  pointer-events: none;
-}
-
-/* Responsive Design */
-@media (max-width: 640px) {
-  .two-images,
-  .three-images,
-  .four-plus-images {
-    grid-template-columns: 1fr;
-    height: auto;
+  /* CSS Custom Properties matching the main experience page */
+  :root {
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'Inter', -apple-system, sans-serif;
+    --font-accent: 'Poppins', sans-serif;
+    
+    --color-primary: #2C3E35;
+    --color-accent: #C9A876;
+    --color-gold: #D4AF37;
+    --color-stone: #F8F6F1;
+    --color-mist: #FAFAFA;
+    --color-charcoal: #3A3A3A;
+    --color-sage: #8B9A8C;
+    
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 2rem;
+    --spacing-lg: 4rem;
+    --spacing-xl: 6rem;
+    
+    --border-radius: 12px;
+    --border-radius-lg: 20px;
+    
+    --shadow-soft: 0 4px 20px rgba(44, 62, 53, 0.08);
+    --shadow-elevated: 0 20px 40px rgba(44, 62, 53, 0.15);
+    --shadow-image: 0 8px 32px rgba(44, 62, 53, 0.12);
+    
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-  
-  .two-images {
-    gap: 0.75rem;
+
+  /* Reset and Base */
+  * {
+    box-sizing: border-box;
   }
-  
-  .two-images .main,
-  .two-images .secondary {
-    height: 250px;
+
+  body {
+    font-family: var(--font-body);
+    line-height: 1.6;
+    color: var(--color-primary);
+    background: var(--color-mist);
   }
-  
-  .three-images .main {
-    height: 250px;
+
+  /* Breadcrumb Navigation */
+  .breadcrumb-nav {
+    background: white;
+    border-bottom: 1px solid rgba(201, 168, 118, 0.1);
+    padding: var(--spacing-sm) 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
   }
-  
-  .side-images {
-    flex-direction: row;
-    height: 150px;
+
+  .breadcrumb-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
   }
-  
-  .side-images .side {
-    height: 100%;
-    width: calc(50% - 0.5rem);
+
+  .breadcrumb-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--color-accent);
+    text-decoration: none;
+    font-family: var(--font-accent);
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: var(--transition-smooth);
   }
-  
-  .four-plus-images .hero {
-    height: 250px;
+
+  .breadcrumb-link:hover {
+    color: var(--color-gold);
   }
-  
-  .image-grid {
-    height: 150px;
-    grid-template-columns: repeat(3, 1fr);
+
+  .breadcrumb-separator {
+    color: var(--color-sage);
+    opacity: 0.6;
   }
-  
-  .grid-item {
-    height: 100%;
+
+  .breadcrumb-current {
+    font-family: var(--font-accent);
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--color-charcoal);
+  }
+
+  /* Main Experience Detail */
+  .experience-detail {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  /* Enhanced Image Gallery */
+  .image-gallery {
+    margin-bottom: var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-image);
+  }
+
+  .image-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--border-radius);
+  }
+
+  .image-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(201, 168, 118, 0.1) 0%,
+      transparent 50%,
+      rgba(44, 62, 53, 0.05) 100%
+    );
+    opacity: 0;
+    transition: var(--transition-smooth);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .image-wrapper:hover::before {
+    opacity: 1;
+  }
+
+  .gallery-image {
     width: 100%;
-  }
-}
-
-/* Rest of the existing styles */
-h1 { 
-  font-size: 2rem; 
-  margin: 1.5rem 0 0.75rem; 
-}
-
-.activity-meta { 
-  color: #667; 
-  margin-bottom: 1.5rem; 
-}
-
-.activity-copy { 
-  font-size: 1.05rem; 
-  line-height: 1.8; 
-  margin-bottom: 2rem; 
-}
-
-.more-link { 
-  font-weight: 600; 
-  color: #c89a2a; 
-  text-decoration: none; 
-}
-
-.more-link:hover { 
-  text-decoration: underline; 
-}
-
-.back-link { 
-  display: block; 
-  text-align: center; 
-  margin: 3rem 0 4rem;
-  color: #294534; 
-  font-weight: 600; 
-}
-
-/* Full-screen image modal */
-.image-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  border-radius: 0.5rem;
-}
-
-.close-modal {
-  position: absolute;
-  top: -40px;
-  right: 0;
-  color: white;
-  font-size: 2rem;
-  cursor: pointer;
-  background: none;
-  border: none;
-  z-index: 1001;
-}
-
-.close-modal:hover {
-  opacity: 0.7;
-}
-
-.modal-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  pointer-events: none;
-}
-
-/* --- New Boutique Nav Buttons --- */
-.nav-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.5rem;
-  opacity: 0.7;
-  transition: opacity 0.2s ease;
-  user-select: none;
-  pointer-events: auto;
-}
-
-.nav-btn:hover {
-  opacity: 1;
-}
-
-.nav-btn svg {
-  width: 28px;
-  height: 28px;
-  display: block;
-  stroke: white;
-}
-
-/* Align left/right arrow positions cleanly */
-.prev-btn {
-  position: absolute;
-  left: 1.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.next-btn {
-  position: absolute;
-  right: 1.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-/* Mobile tweak */
-@media (max-width: 640px) {
-  .nav-btn svg {
-    width: 22px;
-    height: 22px;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-spring);
+    cursor: pointer;
   }
 
-  .prev-btn {
-    left: 1rem;
+  .image-wrapper:hover .gallery-image {
+    transform: scale(1.05);
   }
 
-  .next-btn {
-    right: 1rem;
+  .image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 60%,
+      rgba(44, 62, 53, 0.7) 100%
+    );
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: var(--spacing-md);
+    opacity: 0;
+    transition: var(--transition-smooth);
+    z-index: 2;
   }
-}
 
-@media (max-width: 768px) {
+  .image-wrapper:hover .image-overlay {
+    opacity: 1;
+  }
+
+  .expand-button {
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    backdrop-filter: blur(10px);
+    color: var(--color-primary);
+  }
+
+  .expand-button:hover {
+    background: var(--color-accent);
+    color: white;
+    transform: scale(1.1);
+  }
+
+  /* Single Image Layout */
+  .single-image-container {
+    position: relative;
+    height: 500px;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+  }
+
+  .single-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Two Images Layout */
+  .two-images {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-sm);
+    height: 500px;
+  }
+
+  .main-wrapper {
+    height: 100%;
+  }
+
+  .secondary-wrapper {
+    height: 100%;
+  }
+
+  /* Three Images Layout */
+  .three-images {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-sm);
+    height: 500px;
+  }
+
+  .side-images {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    height: 100%;
+  }
+
+  .side-wrapper {
+    flex: 1;
+  }
+
+  /* Four+ Images Layout */
+  .four-plus-images {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-sm);
+    height: 500px;
+  }
+
+  .hero-wrapper {
+    height: 100%;
+  }
+
+  .image-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xs);
+    height: 100%;
+  }
+
+  .grid-wrapper {
+    height: 100%;
+  }
+
+  .more-indicator {
+    position: relative;
+  }
+
+  .dimmed {
+    filter: brightness(0.6);
+  }
+
+  .more-overlay {
+    background: rgba(44, 62, 53, 0.8) !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    opacity: 1 !important;
+  }
+
+  .more-count {
+    color: white;
+    font-family: var(--font-accent);
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  /* Experience Content */
+  .experience-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  /* Experience Header */
+  .experience-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-lg);
+    position: relative;
+  }
+
+  .header-ornament {
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-md);
+    opacity: 0.7;
+  }
+
+  .experience-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--color-primary);
+    margin: 0 0 var(--spacing-lg) 0;
+    letter-spacing: -0.02em;
+  }
+
+  .experience-meta {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .meta-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+  }
+
+  .meta-location,
+  .meta-duration,
+  .meta-category {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-family: var(--font-accent);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--color-charcoal);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: rgba(201, 168, 118, 0.1);
+    border-radius: 20px;
+  }
+
+  .meta-location svg,
+  .meta-duration svg,
+  .meta-category svg {
+    color: var(--color-accent);
+  }
+
+  /* Experience Description */
+  .experience-description {
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .description-text {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--color-charcoal);
+    text-align: center;
+    margin: 0;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  /* Experience Links */
+  .experience-links {
+    margin-top: var(--spacing-xl);
+  }
+
+  .links-title {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: var(--color-primary);
+    text-align: center;
+    margin: 0 0 var(--spacing-lg) 0;
+  }
+
+  .links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-md);
+  }
+
+  .link-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    transition: var(--transition-smooth);
+    border: 2px solid transparent;
+    box-shadow: var(--shadow-soft);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .link-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: var(--transition-smooth);
+  }
+
+  .link-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-elevated);
+    border-color: rgba(201, 168, 118, 0.2);
+  }
+
+  .link-card:hover::before {
+    transform: scaleX(1);
+  }
+
+  .link-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    background: rgba(201, 168, 118, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-accent);
+    transition: var(--transition-smooth);
+  }
+
+  .link-card:hover .link-icon {
+    background: var(--color-accent);
+    color: white;
+  }
+
+  .link-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .link-title {
+    font-family: var(--font-accent);
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--color-primary);
+  }
+
+  .link-description {
+    font-size: 0.9rem;
+    color: var(--color-sage);
+  }
+
+  .link-arrow {
+    flex-shrink: 0;
+    color: var(--color-sage);
+    transition: var(--transition-smooth);
+  }
+
+  .link-card:hover .link-arrow {
+    color: var(--color-accent);
+    transform: translateX(4px);
+  }
+
+  /* Full-screen Image Modal */
+  .image-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .image-modal.modal-open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+  }
+
+  .modal-content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+  }
+
+  .modal-content img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: var(--border-radius);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  }
+
   .close-modal {
-    top: -30px;
-    font-size: 1.5rem;
+    position: absolute;
+    top: -60px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    backdrop-filter: blur(10px);
+    z-index: 1002;
+    color: var(--color-primary);
   }
-  
+
+  .close-modal:hover {
+    background: white;
+    transform: scale(1.1);
+  }
+
+  .modal-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: calc(100% + 120px);
+    left: -60px;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+
   .nav-btn {
-    font-size: 1.5rem;
-    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    backdrop-filter: blur(10px);
+    pointer-events: auto;
+    color: var(--color-primary);
   }
-  
-  .prev-btn {
-    margin-left: -40px;
+
+  .nav-btn:hover {
+    background: white;
+    transform: scale(1.1);
   }
-  
-  .next-btn {
-    margin-right: -40px;
+
+  .modal-counter {
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--color-primary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 20px;
+    font-family: var(--font-accent);
+    font-weight: 500;
+    font-size: 0.9rem;
+    backdrop-filter: blur(10px);
   }
-}
 
-.activity-links {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 2rem;
-}
+  /* Animation Classes */
+  .animate-prepare {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: var(--transition-smooth);
+  }
 
-.more-link {
-  font-weight: 600;
-  color: #c89a2a;
-  text-decoration: none;
-}
+  .animate-in {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
 
-.more-link:hover {
-  text-decoration: underline;
-}
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    :root {
+      --spacing-md: 1.5rem;
+      --spacing-lg: 3rem;
+      --spacing-xl: 4rem;
+    }
+
+    .breadcrumb-container {
+      padding: 0 var(--spacing-sm);
+    }
+
+    .experience-detail {
+      padding: var(--spacing-lg) var(--spacing-sm);
+    }
+
+    .two-images,
+    .three-images,
+    .four-plus-images {
+      grid-template-columns: 1fr;
+      height: auto;
+      gap: var(--spacing-sm);
+    }
+
+    .two-images .main-wrapper,
+    .two-images .secondary-wrapper,
+    .three-images .main-wrapper,
+    .four-plus-images .hero-wrapper {
+      height: 300px;
+    }
+
+    .side-images {
+      flex-direction: row;
+      height: 200px;
+      gap: var(--spacing-xs);
+    }
+
+    .image-grid {
+      height: 200px;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .meta-content {
+      flex-direction: column;
+      gap: var(--spacing-sm);
+    }
+
+    .links-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .close-modal {
+      top: -50px;
+      width: 40px;
+      height: 40px;
+    }
+
+    .nav-btn {
+      width: 44px;
+      height: 44px;
+    }
+
+    .modal-nav {
+      width: calc(100% + 100px);
+      left: -50px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .experience-detail {
+      padding: var(--spacing-md) var(--spacing-sm);
+    }
+
+    .image-gallery {
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .single-image-container,
+    .two-images .main-wrapper,
+    .two-images .secondary-wrapper,
+    .three-images .main-wrapper,
+    .four-plus-images .hero-wrapper {
+      height: 250px;
+    }
+
+    .description-text {
+      font-size: 1.05rem;
+      text-align: left;
+    }
+  }
+
+  /* Accessibility improvements */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Focus styles for keyboard navigation */
+  .expand-button:focus,
+  .link-card:focus,
+  .nav-btn:focus,
+  .close-modal:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .breadcrumb-link:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
 </style>

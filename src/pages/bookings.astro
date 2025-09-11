@@ -1,15 +1,16 @@
 ---
 /*
-  Bookings page — boutique style
+  Bookings page — boutique style enhanced
   ─────────────────────────────────────────────────────
   • WhatsApp CTA + Airbnb CTA + elegant fallback form
   • Fully static-compatible
+  • Enhanced with sophisticated styling matching homepage
 */
 import Layout from '../layouts/Default.astro';
 
 /*
   🔹 Replace NUMBER below with your full international number
-     without spaces or “+”. Example: 96170987654
+     without spaces or "+". Example: 96170987654
   🔹 The text param pre-fills the chat with a greeting.
 */
 const whatsappNumber = '96176492276';
@@ -19,173 +20,622 @@ const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
 ---
 
 <Layout title="Bookings · SOWK">
-  <section class="contact-wrapper">
-    <h1 class="contact-title">Book your stay</h1>
-
-    <p class="contact-description">
-      The quickest way to reserve is via WhatsApp or through our Airbnb listing.
-      We usually reply within a few hours.
-    </p>
-
-    <div class="button-wrapper">
-      <a class="contact-btn" href={whatsappLink} target="_blank" rel="noopener">
-        Book via WhatsApp
-      </a>
-
-      <a
-        class="contact-btn secondary"
-        href="https://www.airbnb.com/l/56Gqsqb7"
-        target="_blank"
-        rel="noopener"
-      >
-        Book via Airbnb
-      </a>
-    </div>
-
-    <div class="separator"></div>
-
-    <h2 class="form-title">Prefer e-mail?</h2>
-
-    <div class="form-wrapper">
-      <form
-        action="https://formspree.io/f/xpwrygqr"
-        method="POST"
-        class="contact-form"
-      >
-        <input type="text" name="name" placeholder="Name" required />
-        <input type="email" name="_replyto" placeholder="Email" required />
-        <textarea
-          rows="4"
-          name="message"
-          placeholder="Your message"
-          required
-        ></textarea>
-        <button type="submit" class="contact-btn">Send enquiry</button>
-      </form>
+  <!-- Hero Section -->
+  <section class="booking-hero">
+    <div class="hero-overlay">
+      <div class="hero-content">
+        <span class="hero-accent">Reserve Your Sanctuary</span>
+        <h1 class="hero-title">Begin Your Journey<br/>to Tranquility</h1>
+        <p class="hero-subtitle">Limited availability ensures an intimate experience in Lebanon's most coveted village</p>
+      </div>
     </div>
   </section>
 
-  <style>
-    .contact-wrapper {
-      max-width: 600px;
-      margin: 4rem auto;
-      padding: 0 1.5rem;
-      font-family: 'Poppins', sans-serif;
-    }
+  <!-- Main Booking Section -->
+  <section class="booking-wrapper">
+    <div class="booking-content">
+      <!-- Primary Booking Options -->
+      <div class="booking-primary">
+        <div class="section-header">
+          <span class="section-accent">Preferred Booking Methods</span>
+          <h2 class="section-title">Swift & Seamless Reservations</h2>
+          <p class="section-description">
+            Connect instantly via WhatsApp or explore our curated Airbnb listing.
+            Our concierge team responds within hours to craft your perfect stay.
+          </p>
+        </div>
 
-    .contact-title {
-      font-size: 2rem;
-      margin-bottom: 1.25rem;
-      text-align: center;
-      color: #1e1e1e;
-    }
+        <div class="booking-options">
+          <div class="booking-card whatsapp">
+            <div class="card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 256 256">
+                <path d="M187.58,144.84l-32-16a8,8,0,0,0-8,.5l-14.69,9.8a40.55,40.55,0,0,1-16-16l9.8-14.69a8,8,0,0,0,.5-8l-16-32A8,8,0,0,0,104,64a40,40,0,0,0-40,40,88.1,88.1,0,0,0,88,88,40,40,0,0,0,40-40A8,8,0,0,0,187.58,144.84Z"/>
+              </svg>
+            </div>
+            <div class="card-content">
+              <h3>WhatsApp Booking</h3>
+              <p>Instant connection with our hospitality team for personalized service and immediate confirmation.</p>
+              <a class="booking-btn primary" href={whatsappLink} target="_blank" rel="noopener">
+                Start Conversation
+              </a>
+            </div>
+          </div>
 
-    .contact-description {
-      font-size: 1.05rem;
-      color: #555;
-      line-height: 1.7;
-      text-align: center;
-      max-width: 500px;
-      margin: 0 auto 2rem;
-    }
+          <div class="booking-card airbnb">
+            <div class="card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 256 256">
+                <path d="M128,16A112,112,0,1,0,240,128,112.13,112.13,0,0,0,128,16Zm0,192a80,80,0,1,1,80-80A80.09,80.09,0,0,1,128,208ZM173.66,90.34a8,8,0,0,1,0,11.32l-40,40a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L128,124.69l34.34-34.35A8,8,0,0,1,173.66,90.34Z"/>
+              </svg>
+            </div>
+            <div class="card-content">
+              <h3>Airbnb Platform</h3>
+              <p>Browse detailed photos, reviews, and availability through our carefully curated listing.</p>
+              <a class="booking-btn secondary" href="https://www.airbnb.com/l/56Gqsqb7" target="_blank" rel="noopener">
+                View Listing
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    .button-wrapper {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-top: 1.5rem;
-    }
+      <!-- Elegant Separator -->
+      <div class="divider-section">
+        <div class="ornamental-divider">
+          <svg width="60" height="20" viewBox="0 0 60 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 10C1 10 15 1 30 10C45 19 59 10 59 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
 
-    .contact-btn {
-      display: block;
-      padding: 0.75rem 1.5rem;
-      font-weight: 600;
-      background: #c89a2a;
-      color: white;
-      border: none;
-      border-radius: 999px;
-      text-decoration: none;
-      text-align: center;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-      transition: background 0.3s ease;
-    }
-    .contact-btn:hover {
-      background-color: #b3881f;
-    }
+      <!-- Email Form Section -->
+      <div class="booking-secondary">
+        <div class="form-section-header">
+          <span class="section-accent">Alternative Contact</span>
+          <h3 class="form-title">Prefer Traditional Correspondence?</h3>
+          <p class="form-description">
+            Send us your inquiry through our secure contact form, and we'll respond with personalized recommendations within 24 hours.
+          </p>
+        </div>
 
-    /* subtle variant for the second button */
-    .contact-btn.secondary {
-      background: #637a9f;
-    }
-    .contact-btn.secondary:hover {
-      background: #546a8a;
-    }
+        <div class="form-container">
+          <form
+            action="https://formspree.io/f/xpwrygqr"
+            method="POST"
+            class="contact-form"
+          >
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" name="name" id="name" required />
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" name="_replyto" id="email" required />
+            </div>
+            
+            <div class="form-group">
+              <label for="dates">Preferred Dates (Optional)</label>
+              <input type="text" name="dates" id="dates" placeholder="e.g., March 15-20, 2025" />
+            </div>
+            
+            <div class="form-group">
+              <label for="message">Your Message</label>
+              <textarea
+                rows="4"
+                name="message"
+                id="message"
+                placeholder="Tell us about your ideal stay, special occasions, or any specific requirements..."
+                required
+              ></textarea>
+            </div>
+            
+            <div class="form-submit">
+              <button type="submit" class="booking-btn primary">Send Inquiry</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    .separator {
-      width: 60px;
-      height: 2px;
-      background-color: #c8b7a6;
-      opacity: 0.5;
-      margin: 3rem auto;
-    }
+  <!-- Reassurance Section -->
+  <section class="booking-reassurance">
+    <div class="reassurance-content">
+      <div class="reassurance-grid">
+        <div class="reassurance-item">
+          <div class="reassurance-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </div>
+          <h4>Secure & Private</h4>
+          <p>Your personal information is protected with industry-standard encryption.</p>
+        </div>
+        
+        <div class="reassurance-item">
+          <div class="reassurance-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12,6 12,12 16,14"/>
+            </svg>
+          </div>
+          <h4>Rapid Response</h4>
+          <p>Our dedicated team responds to all inquiries within 2-4 hours during business days.</p>
+        </div>
+        
+        <div class="reassurance-item">
+          <div class="reassurance-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+          </div>
+          <h4>Flexible Booking</h4>
+          <p>Accommodating cancellation policies and personalized arrangements for your peace of mind.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
 
-    .form-title {
-      font-size: 1.4rem;
-      margin-bottom: 1rem;
-      text-align: center;
-      color: #333;
-    }
+<style>
+  /* Typography & Color Variables (matching homepage) */
+  :root {
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'Inter', -apple-system, sans-serif;
+    --font-accent: 'Poppins', sans-serif;
+    
+    --color-primary: #2C3E35;
+    --color-accent: #C9A876;
+    --color-gold: #D4AF37;
+    --color-stone: #F8F6F1;
+    --color-mist: #FAFAFA;
+    --color-charcoal: #3A3A3A;
+    
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 2rem;
+    --spacing-lg: 4rem;
+    --spacing-xl: 6rem;
+  }
 
-    .form-wrapper {
-      display: flex;
-      justify-content: center;
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: var(--font-body);
+    line-height: 1.6;
+    color: var(--color-primary);
+  }
+
+  /* Hero Section */
+  .booking-hero {
+    height: 50vh;
+    min-height: 400px;
+    background: linear-gradient(
+      135deg,
+      var(--color-primary) 0%,
+      #1E2E25 50%,
+      var(--color-charcoal) 100%
+    );
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .booking-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 70%, rgba(201, 168, 118, 0.1) 0%, transparent 50%);
+    z-index: 1;
+  }
+
+  .hero-overlay {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 800px;
+    padding: var(--spacing-md);
+  }
+
+  .hero-accent {
+    font-family: var(--font-accent);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    display: block;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 400;
+    color: white;
+    margin: 0 0 var(--spacing-md) 0;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0;
+    font-weight: 300;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Main Booking Section */
+  .booking-wrapper {
+    background: linear-gradient(to bottom, white 0%, var(--color-mist) 100%);
+    padding: var(--spacing-xl) var(--spacing-sm);
+  }
+
+  .booking-content {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .section-accent {
+    font-family: var(--font-accent);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    display: block;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 400;
+    color: var(--color-primary);
+    margin: 0 0 var(--spacing-md) 0;
+    letter-spacing: -0.01em;
+  }
+
+  .section-description {
+    font-size: 1.1rem;
+    color: var(--color-charcoal);
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto;
+    opacity: 0.9;
+  }
+
+  /* Booking Options */
+  .booking-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+  }
+
+  .booking-card {
+    background: white;
+    border-radius: 20px;
+    padding: var(--spacing-lg);
+    box-shadow: 
+      0 8px 30px rgba(44, 62, 53, 0.08),
+      0 2px 8px rgba(44, 62, 53, 0.04);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .booking-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-accent), var(--color-gold));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+
+  .booking-card:hover::before {
+    transform: scaleX(1);
+  }
+
+  .booking-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 
+      0 20px 50px rgba(44, 62, 53, 0.15),
+      0 8px 20px rgba(44, 62, 53, 0.08);
+  }
+
+  .card-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, var(--color-accent), var(--color-gold));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-bottom: var(--spacing-md);
+    transition: transform 0.3s ease;
+  }
+
+  .booking-card:hover .card-icon {
+    transform: scale(1.05) rotate(5deg);
+  }
+
+  .card-content h3 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--color-primary);
+    margin: 0 0 var(--spacing-sm) 0;
+  }
+
+  .card-content p {
+    font-size: 1rem;
+    color: var(--color-charcoal);
+    line-height: 1.6;
+    margin: 0 0 var(--spacing-md) 0;
+    opacity: 0.9;
+  }
+
+  .booking-btn {
+    font-family: var(--font-accent);
+    display: inline-block;
+    padding: 0.85rem 2rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
+    border-radius: 12px;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .booking-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .booking-btn:hover::before {
+    left: 100%;
+  }
+
+  .booking-btn.primary {
+    background: linear-gradient(135deg, var(--color-accent), var(--color-gold));
+    color: white;
+    box-shadow: 0 4px 15px rgba(201, 168, 118, 0.3);
+  }
+
+  .booking-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(201, 168, 118, 0.4);
+  }
+
+  .booking-btn.secondary {
+    background: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-accent);
+  }
+
+  .booking-btn.secondary:hover {
+    background: var(--color-accent);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(201, 168, 118, 0.3);
+  }
+
+  /* Divider Section */
+  .divider-section {
+    text-align: center;
+    margin: var(--spacing-xl) 0;
+  }
+
+  .ornamental-divider {
+    color: var(--color-accent);
+    opacity: 0.6;
+  }
+
+  /* Form Section */
+  .booking-secondary {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .form-section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .form-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-weight: 400;
+    color: var(--color-primary);
+    margin: 0 0 var(--spacing-md) 0;
+  }
+
+  .form-description {
+    font-size: 1rem;
+    color: var(--color-charcoal);
+    line-height: 1.6;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .form-container {
+    background: white;
+    border-radius: 20px;
+    padding: var(--spacing-lg);
+    box-shadow: 
+      0 8px 30px rgba(44, 62, 53, 0.08),
+      0 2px 8px rgba(44, 62, 53, 0.04);
+  }
+
+  .contact-form {
+    display: grid;
+    gap: var(--spacing-md);
+  }
+
+  .form-group {
+    display: grid;
+    gap: var(--spacing-xs);
+  }
+
+  .form-group label {
+    font-family: var(--font-accent);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    font-size: 1rem;
+    font-family: var(--font-body);
+    border: 2px solid #E5E5E5;
+    border-radius: 12px;
+    background-color: var(--color-mist);
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+  }
+
+  .contact-form input:focus,
+  .contact-form textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(201, 168, 118, 0.1);
+  }
+
+  .contact-form textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  .form-submit {
+    text-align: center;
+    margin-top: var(--spacing-sm);
+  }
+
+  /* Reassurance Section */
+  .booking-reassurance {
+    background: linear-gradient(135deg, var(--color-stone) 0%, #FFFFFF 100%);
+    padding: var(--spacing-xl) var(--spacing-sm);
+    border-top: 1px solid rgba(201, 168, 118, 0.2);
+  }
+
+  .reassurance-content {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .reassurance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+  }
+
+  .reassurance-item {
+    text-align: center;
+    padding: var(--spacing-md);
+  }
+
+  .reassurance-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--color-accent), var(--color-gold));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin: 0 auto var(--spacing-md) auto;
+  }
+
+  .reassurance-item h4 {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--color-primary);
+    margin: 0 0 var(--spacing-sm) 0;
+  }
+
+  .reassurance-item p {
+    font-size: 0.95rem;
+    color: var(--color-charcoal);
+    line-height: 1.5;
+    margin: 0;
+    opacity: 0.9;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .booking-options {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-md);
+    }
+    
+    .booking-card {
+      padding: var(--spacing-md);
+    }
+    
+    .hero-title {
+      font-size: 2.2rem;
+    }
+    
+    .reassurance-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-md);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .booking-wrapper {
+      padding: var(--spacing-lg) var(--spacing-sm);
+    }
+    
+    .form-container {
+      padding: var(--spacing-md);
+    }
+    
+    .booking-btn {
       width: 100%;
-      margin-top: 2rem;
+      padding: 1rem;
     }
-
-    .contact-form {
-      display: grid;
-      gap: 1rem;
-      width: 100%;
-      max-width: 500px;
-    }
-
-    .contact-form input,
-    .contact-form textarea {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      font-size: 1rem;
-      border: 1px solid #ddd;
-      border-radius: 0.5rem;
-      background-color: #fafafa;
-      transition: border 0.2s ease;
-      font-family: 'Poppins', sans-serif;
-      box-sizing: border-box;
-    }
-    .contact-form input:focus,
-    .contact-form textarea:focus {
-      outline: none;
-      border-color: #c89a2a;
-      background-color: #fff;
-    }
-
-    .contact-form button {
-      justify-self: center;
-      width: fit-content;
-    }
-
-    @media (max-width: 600px) {
-      .contact-title {
-        font-size: 1.6rem;
-      }
-      .form-title {
-        font-size: 1.2rem;
-      }
-      .contact-btn {
-        font-size: 0.95rem;
-        padding: 0.65rem 1.25rem;
-      }
-    }
-  </style>
+  }
+</style>
 </Layout>
