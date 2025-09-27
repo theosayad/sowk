@@ -23,59 +23,22 @@ const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
 
   <script is:inline>
     (() => {
-      // ---- configure your Google Ads conversion destination ----
-      // Replace REPLACE_WITH_YOUR_LABEL with the conversion label from Google Ads
+      // Google Ads destination (your label)
       const SEND_TO = 'AW-17545013639/8mwbCMrLg6MbEIfTjq5B';
     
-      // Guard so site doesn't crash if gtag isn't ready
       function safeGtag() {
-        if (typeof gtag === 'function') {
-          return gtag.apply(null, arguments);
-        }
+        if (typeof gtag === 'function') return gtag.apply(null, arguments);
       }
     
-      // Expose for button onclick handlers
-      // url: destination URL
-      // openInNewTab: whether to open in new tab
-      // label: 'whatsapp' | 'airbnb' | 'contact_form'
-      // value/currency: optional if you want to assign a lead value
-      window.gtagSendEvent = function gtagSendEvent(
-        url,
-        openInNewTab = false,
-        label = '',
-        value = null,
-        currency = null
-      ) {
-        const navigate = function () {
-          if (typeof url === 'string') {
-            if (openInNewTab) {
-              window.open(url, '_blank', 'noopener');
-            } else {
-              window.location = url;
-            }
-          }
-        };
-    
-        // 1) Send Ads-native conversion (drives bidding in Google Ads)
-        const adsParams = {
-          event_callback: navigate,
-          event_timeout: 2000,
-          send_to: SEND_TO,
-          event_label: label
-        };
-        if (value != null) adsParams.value = value;
-        if (currency) adsParams.currency = currency;
-        safeGtag('event', 'conversion', adsParams);
-    
-        // 2) (Optional) also log a GA4 custom event for Analytics reporting
+      // 🔔 Buttons: fire-and-forget (do NOT block the click/new tab)
+      window.gtagSendEvent = function gtagSendEvent(label = '') {
+        // Ads-native conversion (used for bidding)
+        safeGtag('event', 'conversion', { send_to: SEND_TO, event_label: label });
+        // GA4 mirror (for Analytics reporting)
         safeGtag('event', 'ads_conversion_Contact_1', { event_label: label });
-    
-        // If gtag missing, just navigate now
-        if (typeof gtag !== 'function') navigate();
-        return false; // prevent immediate navigation; callback will handle it
       };
     
-      // Fire conversion on Formspree submit, then submit the form
+      // 📨 Form: delay submit until event is sent, then submit
       function attachFormTracking() {
         const form = document.querySelector('.contact-form');
         if (!form) return;
@@ -87,24 +50,25 @@ const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
     
           const submitForm = () => form.submit();
     
-          // Ads-native conversion
+          // Ads-native conversion with callback
           safeGtag('event', 'conversion', {
-            event_callback: submitForm,
-            event_timeout: 2000,
             send_to: SEND_TO,
-            event_label: 'contact_form'
+            event_label: 'contact_form',
+            event_timeout: 2000,
+            event_callback: submitForm,
           });
     
-          // GA4 mirror (optional)
+          // GA4 mirror
           safeGtag('event', 'ads_conversion_Contact_1', { event_label: 'contact_form' });
     
-          if (typeof gtag !== 'function') submitForm(); // fallback
+          // Fallback if gtag missing
+          if (typeof gtag !== 'function') submitForm();
         });
       }
     
       document.addEventListener('DOMContentLoaded', attachFormTracking);
     })();
-  </script>
+    </script>
 
   <!-- Hero Section -->
   <section class="booking-hero">
@@ -142,13 +106,14 @@ const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
               <h3>WhatsApp Booking</h3>
               <p>Instant connection with our hospitality team for personalized service and immediate confirmation.</p>
                 <a
-                  class="booking-btn primary"
-                  href={whatsappLink}
-                  onclick={`return gtagSendEvent('${whatsappLink}', true, 'whatsapp');`}
-                  rel="noopener"
-                >
-                  Start Conversation
-                </a>
+                class="booking-btn primary"
+                href={whatsappLink}
+                target="_blank"
+                rel="noopener"
+                onclick="gtagSendEvent('whatsapp')"
+              >
+                Start Conversation
+              </a>
             </div>
           </div>
 
@@ -160,12 +125,12 @@ const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
             </div>
             <div class="card-content">
               <h3>Airbnb Platform</h3>
-              <p>Browse detailed photos, reviews, and availability through our carefully curated listing.</p>
-              <a
+                <a
                 class="booking-btn secondary"
                 href="https://www.airbnb.com/l/56Gqsqb7"
-                onclick={`return gtagSendEvent('https://www.airbnb.com/l/56Gqsqb7', true, 'airbnb');`}
+                target="_blank"
                 rel="noopener"
+                onclick="gtagSendEvent('airbnb')"
               >
                 View Listing
               </a>
