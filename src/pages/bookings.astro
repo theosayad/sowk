@@ -20,6 +20,55 @@ const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
 ---
 
 <Layout title="Bookings · SOWK">
+
+  <script is:inline>
+    // Google tag (gtag.js) event - delayed navigation helper
+    // Works with same-tab or new-tab navigation.
+    function gtagSendEvent(url, openInNewTab = false) {
+      const callback = function () {
+        if (typeof url === 'string') {
+          if (openInNewTab) {
+            window.open(url, '_blank', 'noopener');
+          } else {
+            window.location = url;
+          }
+        }
+      };
+    
+      // Fire your Google Ads conversion event
+      gtag('event', 'ads_conversion_Contact_1', {
+        event_callback: callback,
+        event_timeout: 2000,
+        // You can add extra params here, e.g. value, currency, send_to, etc.
+        // value: 1.0, currency: 'USD'
+        event_label: label // 👈 This is the extra detail
+      });
+    
+      // Prevent the browser from navigating immediately.
+      return false;
+    }
+
+    // 👇 New: form handler
+    function attachFormTracking() {
+      const form = document.querySelector('.contact-form');
+      if (!form) return;
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault(); // stop default for now
+
+        const submitForm = () => form.submit(); // helper to continue
+
+        gtag('event', 'ads_conversion_Contact_1', {
+          event_callback: submitForm,
+          event_timeout: 2000,
+          event_label: 'contact_form'
+        });
+      });
+
+    // Attach after DOM is ready
+    document.addEventListener('DOMContentLoaded', attachFormTracking);
+  </script>
+
   <!-- Hero Section -->
   <section class="booking-hero">
     <div class="hero-overlay">
@@ -55,9 +104,14 @@ const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
             <div class="card-content">
               <h3>WhatsApp Booking</h3>
               <p>Instant connection with our hospitality team for personalized service and immediate confirmation.</p>
-              <a class="booking-btn primary" href={whatsappLink} target="_blank" rel="noopener">
-                Start Conversation
-              </a>
+                <a
+                  class="booking-btn primary"
+                  href={whatsappLink}
+                  onclick={`return gtagSendEvent('${whatsappLink}', true, 'whatsapp');`}
+                  rel="noopener"
+                >
+                  Start Conversation
+                </a>
             </div>
           </div>
 
@@ -70,7 +124,12 @@ const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
             <div class="card-content">
               <h3>Airbnb Platform</h3>
               <p>Browse detailed photos, reviews, and availability through our carefully curated listing.</p>
-              <a class="booking-btn secondary" href="https://www.airbnb.com/l/56Gqsqb7" target="_blank" rel="noopener">
+              <a
+                class="booking-btn secondary"
+                href="https://www.airbnb.com/l/56Gqsqb7"
+                onclick={`return gtagSendEvent('https://www.airbnb.com/l/56Gqsqb7', true, 'airbnb');`}
+                rel="noopener"
+              >
                 View Listing
               </a>
             </div>
