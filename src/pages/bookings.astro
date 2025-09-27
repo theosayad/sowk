@@ -22,51 +22,88 @@ const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
 <Layout title="Bookings · SOWK">
 
   <script is:inline>
-    // Google tag (gtag.js) event - delayed navigation helper
-    // Works with same-tab or new-tab navigation.
-    function gtagSendEvent(url, openInNewTab = false) {
-      const callback = function () {
-        if (typeof url === 'string') {
-          if (openInNewTab) {
-            window.open(url, '_blank', 'noopener');
-          } else {
-            window.location = url;
-          }
+    (() => {
+      // ---- configure your Google Ads conversion destination ----
+      // Replace REPLACE_WITH_YOUR_LABEL with the conversion label from Google Ads
+      const SEND_TO = 'AW-17545013639/8mwbCMrLg6MbEIfTjq5B';
+    
+      // Guard so site doesn't crash if gtag isn't ready
+      function safeGtag() {
+        if (typeof gtag === 'function') {
+          return gtag.apply(null, arguments);
         }
+      }
+    
+      // Expose for button onclick handlers
+      // url: destination URL
+      // openInNewTab: whether to open in new tab
+      // label: 'whatsapp' | 'airbnb' | 'contact_form'
+      // value/currency: optional if you want to assign a lead value
+      window.gtagSendEvent = function gtagSendEvent(
+        url,
+        openInNewTab = false,
+        label = '',
+        value = null,
+        currency = null
+      ) {
+        const navigate = function () {
+          if (typeof url === 'string') {
+            if (openInNewTab) {
+              window.open(url, '_blank', 'noopener');
+            } else {
+              window.location = url;
+            }
+          }
+        };
+    
+        // 1) Send Ads-native conversion (drives bidding in Google Ads)
+        const adsParams = {
+          event_callback: navigate,
+          event_timeout: 2000,
+          send_to: SEND_TO,
+          event_label: label
+        };
+        if (value != null) adsParams.value = value;
+        if (currency) adsParams.currency = currency;
+        safeGtag('event', 'conversion', adsParams);
+    
+        // 2) (Optional) also log a GA4 custom event for Analytics reporting
+        safeGtag('event', 'ads_conversion_Contact_1', { event_label: label });
+    
+        // If gtag missing, just navigate now
+        if (typeof gtag !== 'function') navigate();
+        return false; // prevent immediate navigation; callback will handle it
       };
     
-      // Fire your Google Ads conversion event
-      gtag('event', 'ads_conversion_Contact_1', {
-        event_callback: callback,
-        event_timeout: 2000,
-        // You can add extra params here, e.g. value, currency, send_to, etc.
-        // value: 1.0, currency: 'USD'
-        event_label: label // 👈 This is the extra detail
-      });
+      // Fire conversion on Formspree submit, then submit the form
+      function attachFormTracking() {
+        const form = document.querySelector('.contact-form');
+        if (!form) return;
     
-      // Prevent the browser from navigating immediately.
-      return false;
-    }
-
-    // 👇 New: form handler
-    function attachFormTracking() {
-      const form = document.querySelector('.contact-form');
-      if (!form) return;
-
-      form.addEventListener('submit', function (e) {
-        e.preventDefault(); // stop default for now
-
-        const submitForm = () => form.submit(); // helper to continue
-
-        gtag('event', 'ads_conversion_Contact_1', {
-          event_callback: submitForm,
-          event_timeout: 2000,
-          event_label: 'contact_form'
+        form.addEventListener('submit', function (e) {
+          if (form.__submitting) return; // avoid duplicates
+          e.preventDefault();
+          form.__submitting = true;
+    
+          const submitForm = () => form.submit();
+    
+          // Ads-native conversion
+          safeGtag('event', 'conversion', {
+            event_callback: submitForm,
+            event_timeout: 2000,
+            send_to: SEND_TO,
+            event_label: 'contact_form'
+          });
+    
+          // GA4 mirror (optional)
+          safeGtag('event', 'ads_conversion_Contact_1', { event_label: 'contact_form' });
+    
+          if (typeof gtag !== 'function') submitForm(); // fallback
         });
-      });
-
-    // Attach after DOM is ready
-    document.addEventListener('DOMContentLoaded', attachFormTracking);
+      }
+    
+      document.addEventListener('DOMContentLoaded', attachFormTracking);
+    })();
   </script>
 
   <!-- Hero Section -->
