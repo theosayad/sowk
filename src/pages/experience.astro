@@ -16,13 +16,13 @@ const slugify = (s: string) =>
 ---
 
 <Layout
-  title="Curated Experiences | SOWK Guesthouse"
+  title="Curated Experiences • SOWK Guesthouse"
   description="Discover carefully selected experiences that honor the heritage and natural beauty of Smar Jbeil and North Lebanon—from ancient ruins to pristine coastlines."
   url="https://sowk.org/experience"
   image="https://upload.wikimedia.org/wikipedia/commons/d/da/Mseilha_fort%2C_Lebanon.jpg"
   type="website"
 >
-  <fragment slot="head">
+  <Fragment slot="head">
     <!-- Keep extra tags that SEO.astro doesn't set or when you need custom values: -->
     <meta name="keywords" content="SOWK, luxury experiences Lebanon, boutique travel Batroun, heritage tours Batroun, curated activities Smar Jbeil, exclusive Lebanese experiences" />
 
@@ -45,7 +45,7 @@ const slugify = (s: string) =>
         }))
       })}
     ></script>
-  </fragment>
+  </Fragment>
 
   <!-- Hero Section with Sophisticated Typography -->
   <section class="experience-hero">
