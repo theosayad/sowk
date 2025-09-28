@@ -3,9 +3,9 @@
 
 import Layout from '../layouts/Default.astro';
 import activities from '../data/activities.json' assert { type: 'json' };
-import { formatTravelInfo } from '../utils/formatTravelInfo.ts';
+import { formatTravelInfo } from '../utils/formatTravelInfo';
 
-// all unique, non‐empty categories
+// all unique, non-empty categories
 const categories = [
   ...new Set(activities.map((a) => a.category).filter(Boolean))
 ];
@@ -19,17 +19,32 @@ const slugify = (s: string) =>
   title="Curated Experiences | SOWK Guesthouse"
   description="Discover carefully selected experiences that honor the heritage and natural beauty of Smar Jbeil and North Lebanon—from ancient ruins to pristine coastlines."
   url="https://sowk.org/experience"
-  image="https://bunny-wp-pullzone-eqa83h6t2a.b‑cdn.net/wp-content/uploads/2023/09/DSC_3824.jpg"
+  image="https://upload.wikimedia.org/wikipedia/commons/d/da/Mseilha_fort%2C_Lebanon.jpg"
   type="website"
 >
   <fragment slot="head">
-    <!-- Enhanced SEO metadata -->
-    <meta name="keywords" content="SOWK, luxury experiences Lebanon, boutique travel North Lebanon, heritage tours Batroun, curated activities Smar Jbeil, exclusive Lebanese experiences" />
+    <!-- Keep extra tags that SEO.astro doesn't set or when you need custom values: -->
+    <meta name="keywords" content="SOWK, luxury experiences Lebanon, boutique travel Batroun, heritage tours Batroun, curated activities Smar Jbeil, exclusive Lebanese experiences" />
 
-    <!-- Open Graph + Twitter image with alt text -->
-    <meta property="og:image" content="https://bunny-wp-pullzone-eqa83h6t2a.b-cdn.net/wp-content/uploads/2023/09/DSC_3824.jpg" />
-    <meta name="twitter:image" content="https://bunny-wp-pullzone-eqa83h6t2a.b-cdn.net/wp-content/uploads/2023/09/DSC_3824.jpg" />
+    <!-- Optional alt text for social previews (SEO.astro already sets og:image and twitter:image) -->
     <meta property="og:image:alt" content="Ancient stone archway in Smar Jbeil citadel framing Mediterranean landscape" />
+
+    <!-- Optional: Structured data telling Google this page lists many child pages -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "@id": "https://sowk.org/experience/#items",  // or https://sowk.org/... if you choose www
+        "name": "Experiences near Batroun",
+        "itemListElement": activities.map((a, i) => ({
+          "@type": "ListItem",
+          "position": i + 1,
+          "name": a.name,
+          "url": `https://sowk.org/experience/${a.slug}`
+        }))
+      })}
+    ></script>
   </fragment>
 
   <!-- Hero Section with Sophisticated Typography -->

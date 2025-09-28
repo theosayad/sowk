@@ -1,68 +1,151 @@
 ---
+export interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  url?: string;
+  type?: "website" | "article";
+  keywords?: string | string[];
+}
 /*
   Default site-wide layout
   ────────────────────────────────────────────────────────────────
-  • Adds SEO meta, GA4, favicon, fonts, header & footer on every page
-  • BASE handles GitHub Pages sub-folder builds
+  • Adds SEO meta (via SEO.astro), GA4, favicon, fonts, header & footer
+  • Emits JSON-LD per page:
+      - site-wide graph (from siteGraph)
+      - per-page WebPage + BreadcrumbList (auto from props/URL)
 */
+import { siteGraph, ORIGIN } from "../lib/ld-schema.js"; // ORIGIN + siteGraph
+
 import SEO    from '../components/SEO.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-const BASE = import.meta.env.BASE_URL;      // "/" on Netlify, "/sowk/" on GitHub Pages
+const BASE = import.meta.env.BASE_URL; // "/" on Netlify, "/sowk/" on GH Pages
+
+// Props used both by SEO.astro and for JSON-LD
+const {
+  title = "SOWK | Boutique Escape in Smar Jbeil, Batroun",
+  description = "Unwind at SOWK, a design-led guesthouse in Smar Jbeil, Batroun. Stone details, terraces, private pool and campfire evenings—calm stays with sunset views.",
+  image = "/images/main-home.jpeg",
+  url   = new URL(Astro.url.pathname, ORIGIN).href,
+  type  = "website",
+  keywords,
+} = Astro.props;
+
+// Normalize keywords → always a single string or undefined
+let pageKeywords: string | undefined;
+if (Array.isArray(keywords)) {
+  pageKeywords = keywords.filter(Boolean).join(", ");
+} else if (typeof keywords === "string") {
+  pageKeywords = keywords.trim() || undefined;
+} else {
+  pageKeywords = undefined;
+}
+
+// Normalize absolute URL & image (JSON-LD requires absolute)
+const pageUrl = url; // use the already-defaulted canonical from props
+const pagePath = new URL(pageUrl).pathname.replace(/\/$/, "");
+const imgAbs   = image?.startsWith("http") ? image : new URL(image || "/images/hero.jpg", ORIGIN).href;
+
+// Detect page type for breadcrumb depth
+const isExperienceIndex = pagePath === "/experience";
+const isActivity        = pagePath.startsWith("/experience/") && pagePath !== "/experience";
+
+// Build breadcrumb items (2-level or 3-level)
+const crumbLabel = (title || "Page").replace(/\s*[|·]\s*SOWK.*$/i, "").trim();
+const breadcrumbs = [
+  { "@type": "ListItem", "position": 1, "name": "Home", "item": `${ORIGIN}/` },
+  ...(isActivity
+    ? [
+        { "@type": "ListItem", "position": 2, "name": "Experience", "item": `${ORIGIN}/experience` },
+        { "@type": "ListItem", "position": 3, "name": crumbLabel, "item": pageUrl }
+      ]
+    : [
+        { "@type": "ListItem", "position": 2, "name": isExperienceIndex ? "Experience" : crumbLabel, "item": pageUrl }
+      ])
+];
+
+// Per-page JSON-LD nodes
+const canonicalNoSlash = pageUrl.replace(/\/$/, "");
+const pageGraph = [
+  {
+    "@type": isActivity ? ["WebPage", "ItemPage"] : "WebPage",
+    "@id": `${canonicalNoSlash}/#webpage`,
+    "url": pageUrl,
+    "name": title,
+    "description": description,
+    "isPartOf": { "@id": `${ORIGIN}/#website` },
+    ...(pageKeywords ? { "keywords": pageKeywords } : {}),
+    "about":    { "@id": `${ORIGIN}/#business` },
+    "primaryImageOfPage": { "@type": "ImageObject", "url": imgAbs },
+    "image": [imgAbs],
+    "breadcrumb": { "@id": `${canonicalNoSlash}/#breadcrumbs` },
+    "inLanguage": "en"
+  },
+  {
+    "@type": "BreadcrumbList",
+    "@id": `${canonicalNoSlash}/#breadcrumbs`,
+    "itemListElement": breadcrumbs
+  }
+];
+
+// Merge site-wide + page graph
+const graph = [...siteGraph, ...pageGraph];
 ---
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- ────────── Core meta & charset ────────── -->
+    <!-- Core meta -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
 
-    <!-- ────────── Dynamic SEO (title, description, OG, etc.) ────────── -->
+    <!-- Dynamic SEO (title, description, OG/Twitter, canonical) -->
     <SEO {...Astro.props} />
 
-    <!-- ✅ Extra head tags injected from pages like [slug].astro -->
+    <!-- JSON-LD (site graph + per-page WebPage + Breadcrumb) -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": graph   // <-- graph is [...siteGraph, ...pageGraph]
+    })}></script>
+
+    <!-- Default.astro -->
+    <!-- Favicon & manifest (robust across routes) -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+    <link rel="manifest" href="/images/site.webmanifest" />
+
+    <!-- Page-level extra head tags (e.g., TouristAttraction on activity pages) -->
     <slot name="head" />
 
-    <!-- ────────── Favicon & manifest ────────── -->
-    <link rel="icon" type="image/png" sizes="32x32" href={`${BASE}images/favicon-32x32.png`} />
-    <link rel="icon" type="image/png" sizes="16x16" href={`${BASE}images/favicon-16x16.png`} />
-    <link rel="apple-touch-icon" href={`${BASE}images/apple-touch-icon.png`} />
-    <link rel="manifest" href={`${BASE}images/site.webmanifest`} />
-    <link rel="icon" href={`${BASE}images/favicon.ico`} />
-
-    <!-- ────────── Google Fonts - Boutique Typography ────────── -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet" />
 
-    <!-- ────────── Global stylesheet ────────── -->
+    <!-- Global CSS -->
     <link rel="stylesheet" href={`${BASE}styles/global.css`} />
 
-    <!-- ────────── Google Analytics 4 (site-wide) ────────── -->
-
-      <!-- Google tag (gtag.js) -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-1HFCFNVN10"></script>
-      <script is:inline>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){ dataLayer.push(arguments); }
-        gtag('js', new Date());
-      
-        gtag('config', 'G-1HFCFNVN10');  // GA4
-        gtag('config', 'AW-17545013639'); // Ads
-      </script>
-    </head>
+    <!-- GA4 + Ads -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1HFCFNVN10"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-1HFCFNVN10');  // GA4
+      gtag('config', 'AW-17545013639'); // Ads
+    </script>
+  </head>
 
   <body>
     <Header />
-
-    <main>
-      <slot />
-    </main>
-
+    <main><slot /></main>
     <Footer />
   </body>
 </html>

@@ -2,23 +2,25 @@
 import Layout from '../layouts/Default.astro';
 import { Image } from 'astro:assets';
 import slideMainHome from '../images/main-home.jpeg';
-import slideKitchen from '../images/kitchen.jpeg';
-import slidePool from '../images/pool.jpeg';
-import slideFruits from '../images/pool_fruits.jpeg';
-import { schema } from '../lib/ld-schema.js';
+import slideKitchen  from '../images/kitchen.jpeg';
+import slidePool     from '../images/pool.jpeg';
+import slideFruits   from '../images/pool_fruits.jpeg';
+// ❌ remove: import { schema } from '../lib/ld-schema.js';
 
-const title       = "SOWK | A Refined Sanctuary in Smar Jbeil's Ancient Hills";
-const description = 'An intimate stone villa where centuries-old heritage meets contemporary luxury—just moments from Batroun\'s vibrant soul.';
-const image       = '/images/hero.jpg';
-const type        = 'website';
+const title       = "SOWK | Boutique Guest House in Batroun's Mountains";
+const description = "An intimate stone villa where centuries-old heritage meets contemporary luxury—just moments from Batroun's vibrant soul.";
+const image       = "/images/main-home.jpg";     // can be relative; SEO.astro will make it absolute
+const url         = "https://sowk.org/";    // use your chosen canonical origin here
+const type        = "website";
+const keywords    = "Batroun guesthouse, Smar Jbeil villa, North Lebanon boutique stay, eco villa Batroun";
+
 ---
 
-<Layout title={title} description={description} image={image} type={type}>
-  <script
-    slot="head"
-    type="application/ld+json"
-    set:html={JSON.stringify(schema)}
-  />
+<Layout title={title} description={description} image={image} url={url} type={type} keywords={keywords}>
+  <Fragment slot="head">
+    <meta name="keywords" content="SOWK, Batroun guesthouse, Smar Jbeil villa, boutique stay Lebanon" />
+    <meta property="og:image:alt" content="SOWK — stone villa with pool and terraces in Smar Jbeil, Batroun" />
+  </Fragment>
   
   <!-- Hero Slider -->
   <section class="hero-swiper" aria-label="SOWK Guesthouse Gallery">

@@ -1,49 +1,39 @@
 ---
-/* ──────────────────────────────────────────────────────────────
-   Universal SEO + social meta for every page on the site
-   • Works for Google, Bing, Facebook, Instagram, LinkedIn, X (Twitter), etc.
-   • Default share image = /images/hero.jpg  (override per page if needed)
-   • Instagram handle surfaced via og:site_name  (sowklb)
-   • Twitter tags included even if you don’t have a Twitter account yet
-     – they ensure clean previews whenever someone shares your URL.
----------------------------------------------------------------- */
 export interface Props {
-  title?: string;           // Page-specific <title>
-  description?: string;     // 50–160 char summary
-  image?: string;           // Path to 1200×630 (≈1.9:1) hero image
-  url?: string;             // Canonical URL (auto-derived if omitted)
+  title?: string;
+  description?: string;
+  image?: string;   // 1200x630+ recommended
+  url?: string;
   type?: "website" | "article";
 }
 
-/* ───── sensible defaults if the page forgets to set front-matter ───── */
+const ORIGIN = (import.meta.env.SITE || "https://sowk.org").replace(/\/$/,"");
+
 const {
-  title = "SOWK | Boutique Guesthouse in Smar Jbeil, Batroun",
-  description = "Unwind at SOWK, a design‑led guesthouse in Smar Jbeil, Batroun. Stone details, terraces, private pool and campfire evenings—calm stays with sunset views.",
-  image = "/images/hero.jpg",
-  url   = new URL(Astro.url.pathname, import.meta.env.SITE).href,
+  title = "SOWK | Boutique Escape in Smar Jbeil, Batroun",
+  description = "Unwind at SOWK, a design-led guesthouse in Smar Jbeil, Batroun. Stone details, terraces, private pool and campfire evenings—calm stays with sunset views.",
+  image = "/images/main-home.jpeg",
+  url   = new URL(Astro.url.pathname, ORIGIN).href,
   type  = "website",
 } = Astro.props;
+
+const absImage = image.startsWith("http") ? image : new URL(image, ORIGIN).href;
 ---
 
-<!-- Everything below is injected into <head> automatically -->
 <title>{title}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={url} />
 
-<!-- ========== Open Graph (FB/IG/LinkedIn/Slack/WhatsApp/etc.) ========== -->
+<!-- Open Graph -->
 <meta property="og:type"        content={type} />
-<meta property="og:site_name"   content="sowklb" />   <!-- IG handle -->
+<meta property="og:site_name"   content="sowklb" />
 <meta property="og:title"       content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image"       content={image} />
+<meta property="og:image"       content={absImage} />
 <meta property="og:url"         content={url} />
 
-<!-- ========== Twitter Card (shows a large image when shared on X) ========== -->
+<!-- Twitter -->
 <meta name="twitter:card"        content="summary_large_image" />
 <meta name="twitter:title"       content={title} />
 <meta name="twitter:description" content={description} />
-<meta name="twitter:image"       content={image} />
-
-<!-- ====== Mobile friendliness & encoding ====== -->
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta charset="utf-8" />
+<meta name="twitter:image"       content={absImage} />

@@ -1,41 +1,61 @@
 ---
 // dynamic activity page  (src/pages/experience/[slug].astro)
-import Layout      from '../../layouts/Default.astro';   // two dots now
-import activities  from '../../data/activities.json';    // two dots now
-import { formatTravelInfo } from '../../utils/formatTravelInfo.ts';
+import Layout from '../../layouts/Default.astro';
+import activities from '../../data/activities.json' assert { type: 'json' };
+import { formatTravelInfo } from '../../utils/formatTravelInfo';
 
 export function getStaticPaths() {
   return activities.map(a => ({ params: { slug: a.slug } }));
 }
 
-const { slug }  = Astro.params;
-const activity  = activities.find(a => a.slug === slug);
+const { slug } = Astro.params;
+const activity = activities.find(a => a.slug === slug);
 if (!activity) throw new Error(`No activity for slug "${slug}"`);
 
-// Collect all available images
-const images = [];
-if (activity.image) images.push(activity.image);
+// Collect all available images (dedupe, keep order)
+const images: string[] = [];
+if (activity.image)  images.push(activity.image);
 if (activity.image2) images.push(activity.image2);
 if (activity.image3) images.push(activity.image3);
 if (activity.image4) images.push(activity.image4);
 if (activity.image5) images.push(activity.image5);
+const uniqueImages = Array.from(new Set(images));
 
 // SEO data preparation
 const pageTitle = `${activity.name} · SOWK`;
-const pageDescription = activity.copy ? 
-  activity.copy.slice(0, 160) + (activity.copy.length > 160 ? '...' : '') : 
-  `Discover ${activity.name} - an amazing experience in ${activity.location || 'Lebanon'}.`;
+const pageDescription = activity.copy
+  ? activity.copy.slice(0, 160) + (activity.copy.length > 160 ? '…' : '')
+  : `Discover ${activity.name} near Batroun and North Lebanon.`;
 const canonicalURL = `https://sowk.org/experience/${slug}`;
-const ogImage = activity.image || '/default-og-image.jpg'; // fallback image
+const ogImage = activity.image || '/main-home.jpg'; // ensure this exists (1200x630+)
+
+// Build sameAs from any known outbound links
+const sameAs = Array.from(new Set([
+  activity.official_website,
+  activity.instagram,
+  activity.wikipedia,
+  activity.wikiloc,
+  activity.blog,
+  activity.link
+].filter(Boolean)));
+
+// JSON-LD entity for the activity itself (NOT the page)
 const structuredData = {
   "@context": "https://schema.org",
-  "@type": "TouristAttraction",
+  "@type": "TouristAttraction",                 // or "Place"/"ThingToDo" if better fit per item
+  "@id": `${canonicalURL}#thing`,
   "name": activity.name,
-  "description": activity.copy,
+  ...(activity.copy ? { "description": activity.copy } : {}),
   "url": canonicalURL,
-  "image": ogImage,
-  ...(activity.location && { "address": activity.location }),
-  ...(activity.official_website && { "sameAs": activity.official_website })
+  "image": (uniqueImages.length ? uniqueImages : [ogImage]).slice(0, 6),
+  ...(sameAs.length ? { "sameAs": sameAs } : {}),
+  ...(activity.location ? {
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": activity.location,
+      "addressCountry": "LB"
+    }
+  } : {})
 };
 ---
 
@@ -46,37 +66,20 @@ const structuredData = {
   url={canonicalURL}
   type="article"
 >
-  <fragment slot="head">
-    <!-- SEO Meta Tags -->
-    <meta name="description" content={pageDescription} />
+  <Fragment slot="head">
+    <!-- Keep ONLY extras that SEO.astro does not already set -->
     <meta name="keywords" content={`${activity.name}, Lebanon travel, experiences, tourism, ${activity.location || ''}, ${activity.category || ''}`} />
     <meta name="author" content="SOWK" />
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href={canonicalURL} />
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content={pageTitle} />
-    <meta property="og:description" content={pageDescription} />
-    <meta property="og:image" content={ogImage} />
-    <meta property="og:url" content={canonicalURL} />
-    <meta property="og:site_name" content="SOWK" />
-    <meta property="og:locale" content="en_US" />
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={pageTitle} />
-    <meta name="twitter:description" content={pageDescription} />
-    <meta name="twitter:image" content={ogImage} />
-
-    <!-- Additional SEO Meta Tags -->
     <meta name="geo.region" content="LB" />
     <meta name="geo.placename" content={activity.location || 'Lebanon'} />
     <meta name="theme-color" content="#c89a2a" />
+    <!-- Optional alt text for social previews -->
+    <meta property="og:image:alt" content={`${activity.name} — experience near Batroun`} />
 
-    <!-- Structured Data (JSON-LD) -->
+    <!-- Structured Data describing the activity (page WebPage+Breadcrumb comes from Layout) -->
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
-  </fragment>
+  </Fragment>
 
   <!-- Breadcrumb Navigation -->
   <nav class="breadcrumb-nav" aria-label="Breadcrumb navigation">

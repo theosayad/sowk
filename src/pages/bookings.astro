@@ -19,7 +19,19 @@ const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
 )}`;
 ---
 
-<Layout title="Bookings · SOWK">
+<Layout
+  title="Bookings | SOWK Guesthouse, Batroun"
+  description="Check availability and request a stay at SOWK Guesthouse in Smar Jbeil, Batroun. Boutique villa with private pool and garden fireplace."
+  url="https://sowk.org/bookings"
+  image="/images/pool_fruits.jpg"
+  type="website"
+  keywords="book guesthouse Batroun, Smar Jbeil accommodation, boutique villa Lebanon"
+>
+
+  <!-- bookings.astro -->
+  <Fragment slot="head">
+    <meta property="og:image:alt" content="SOWK bookings — private pool and stone architecture in Smar Jbeil, Batroun" />
+  </Fragment>
 
   <script is:inline>
     (() => {
